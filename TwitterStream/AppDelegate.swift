@@ -14,7 +14,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        // Set status bar to white
         UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: false)
+        
+        // Remove drop shadow of navigation bar
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        UINavigationBar.appearance().shadowImage = UIImage()
+        
         return true
     }
 

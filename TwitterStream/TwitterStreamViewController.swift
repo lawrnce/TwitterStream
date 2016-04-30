@@ -16,27 +16,33 @@ class TwitterStreamViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        self.searchController = UISearchController(searchResultsController:  nil)
-        
-        self.searchController.searchResultsUpdater = self
-        self.searchController.delegate = self
-        self.searchController.searchBar.delegate = self
-        
-        self.searchController.hidesNavigationBarDuringPresentation = false
-        self.searchController.dimsBackgroundDuringPresentation = true
-        
-        self.navigationItem.titleView = searchController.searchBar
-        
-        self.definesPresentationContext = true
-        
+        setupSearchBar()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    /**
+        MARK: - Setup
+     */
+    
+    /**
+        Setup search bar with white tint.
+     */
+    private func setupSearchBar() {
+        self.searchController = UISearchController(searchResultsController:  nil)
+        self.searchController.searchResultsUpdater = self
+        self.searchController.delegate = self
+        self.searchController.searchBar.delegate = self
+        self.searchController.hidesNavigationBarDuringPresentation = false
+        self.searchController.dimsBackgroundDuringPresentation = true
+        self.searchController.searchBar.tintColor = UIColor.whiteColor()
+        self.navigationItem.titleView = searchController.searchBar
+        self.definesPresentationContext = true
+    }
+    
 }
 
 extension TwitterStreamViewController: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
