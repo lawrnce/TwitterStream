@@ -39,6 +39,7 @@ class TwitterStreamViewController: UIViewController {
         self.searchController.hidesNavigationBarDuringPresentation = false
         self.searchController.dimsBackgroundDuringPresentation = true
         self.searchController.searchBar.tintColor = UIColor.whiteColor()
+        self.searchController.searchBar.placeholder = "Search Twitter"
         self.navigationItem.titleView = searchController.searchBar
         self.definesPresentationContext = true
     }
