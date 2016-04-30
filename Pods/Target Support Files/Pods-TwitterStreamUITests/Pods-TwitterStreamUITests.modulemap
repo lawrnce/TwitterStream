@@ -1,0 +1,6 @@
+framework module Pods_TwitterStreamUITests {
+  umbrella header "Pods-TwitterStreamUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

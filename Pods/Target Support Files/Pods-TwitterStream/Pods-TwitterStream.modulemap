@@ -1,0 +1,6 @@
+framework module Pods_TwitterStream {
+  umbrella header "Pods-TwitterStream-umbrella.h"
+
+  export *
+  module * { export * }
+}

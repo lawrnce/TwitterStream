@@ -1,0 +1,13 @@
+PODS:
+  - Nimble (3.2.0)
+  - SwiftyJSON (2.3.2)
+
+DEPENDENCIES:
+  - Nimble (~> 3.2.0)
+  - SwiftyJSON
+
+SPEC CHECKSUMS:
+  Nimble: 703854335d181df169bbca9c97117b5cf8c47c1d
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+
+COCOAPODS: 0.39.0
