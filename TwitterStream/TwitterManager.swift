@@ -13,11 +13,23 @@ import SwiftyJSON
 
 class TwitterManager: NSObject {
     
-    // For unit testing. Expect data stream to be working. 
-    var dataDidBeginStreaming: Bool!
+    var isConnected: Bool!
+    var isTryingToConnect: Bool!
+    
+    override init() {
+        super.init()
+        self.isConnected = false
+        self.isTryingToConnect = false
+    }
 
-    func initStreamingConnectionForPatter(keyword: String) {
+    /**
+        Creates a real time stream for a keyword.
+     
+        - Parameter keyword: The keyword to stream.
+     */
+    func createStreamConnectionForKeyword(keyword: String) {
         
+        // User has access to Twitter
         if (self.userHasAccessToTwitter() == true) {
             
             // OAuth authentication
@@ -27,22 +39,30 @@ class TwitterManager: NSObject {
             // Get permission to access Twitter
             store.requestAccessToAccountsWithType(twitterAccountType, options: nil, completion: { (granted, error) -> Void in
                 
+                // Error in requesting access
                 if (error != nil) {
                     
+                
+                // Successfully request
                 } else {
                     
+                    // User denies access to Twitter
                     if (granted == false) {
                         
                         
+                    // User grants access to Twitter
                     } else {
                         
                         let twitterAccounts = store.accountsWithAccountType(twitterAccountType)
                         
                         if (twitterAccounts.count > 0) {
                             
+                            // Get last Twitter account
                             let account = twitterAccounts.last as! ACAccount
+                            
+                            // Connect to Twitter endpoint
                             let url = NSURL(string: "https://stream.twitter.com/1.1/statuses/filter.json")
-                            let params = ["track": "anime"]
+                            let params = ["track": keyword]
                             let request = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: .POST, URL: url, parameters: params)
                             request.account = account
                             
@@ -56,13 +76,18 @@ class TwitterManager: NSObject {
                 }
             })
             
-        // No access to twitter
+        // User has no Twitter accounts
         } else {
             
             
         }
     }
     
+    /**
+        Check if Compose View Controller is available for Twitter.
+     
+        - Returns: Boolean value if Twitter can be accessed.
+     */
     func userHasAccessToTwitter() -> Bool {
         return SLComposeViewController.isAvailableForServiceType(SLServiceTypeTwitter)
     }
@@ -71,10 +96,24 @@ class TwitterManager: NSObject {
 extension TwitterManager: NSURLConnectionDataDelegate {
     
     func connection(connection: NSURLConnection, didReceiveData data: NSData) {
-        print(JSON(data: data))
         
-        if (self.dataDidBeginStreaming == false) {
-            self.dataDidBeginStreaming = true
+        // Cast response data to JSON
+        let json = JSON(data: data)
+        
+        // Check if valid JSON
+        if (json != nil) {
+            
+            // Stream is connected
+            self.isConnected = true
+            
+            if (self.isTryingToConnect == true) {
+                self.isTryingToConnect = false
+            }
+            
+            // Parse JSON
+            
+            // Send data to delegate
+            print(json)
         }
     }
     
@@ -83,9 +122,3 @@ extension TwitterManager: NSURLConnectionDataDelegate {
         print(error)
     }
 }
-
-
-
-
-
-
