@@ -22,8 +22,6 @@ class TwitterManager: NSObject {
     
     var delegate: TwitterManagerDelegate?
     
-    var tweetParser: TweetParser!
-    
     override init() {
         super.init()
         self.isConnected = false
@@ -122,20 +120,18 @@ extension TwitterManager: NSURLConnectionDataDelegate {
                 self.isTryingToConnect = false
             }
             
-            // Lazy load parser
-            if (self.tweetParser == nil) {
-                self.tweetParser = TweetParser()
-            }
+            // Init a parser
+            let parser = TweetParser()
             
             // Parse tweet
-            let tweet = self.tweetParser.parseTweetStream(json)
+            let tweet = parser.parseTweetStream(json)
             
             // Notify delegate
             self.delegate?.twitterManager(self, didStreamTweet: tweet)
             
             // TESTING
             if (json["extended_entities"] != nil) {
-                print(json)
+//                print(json)
             }
             
         }

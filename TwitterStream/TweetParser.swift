@@ -19,7 +19,7 @@ class TweetParser: NSObject {
      */
     func parseTweetStream(data: JSON) -> JSON {
         
-        let media = [String]()
+        var media = [[String: String]]()
         
         var urls = [String]()
         
@@ -27,7 +27,7 @@ class TweetParser: NSObject {
         let extended_entities = data["extended_entities"]
         
         if (extended_entities != nil) {
-
+            media = parseExtendedEntities(extended_entities)
         }
         
         // Check for entities in tweet
@@ -42,26 +42,19 @@ class TweetParser: NSObject {
         }
         
         // Parse basic info
-        let tweet = [   "screen_name": data["user"]["screen_name"].stringValue,
+        let tweet : [String: AnyObject] = [   "screen_name": data["user"]["screen_name"].stringValue,
                         "profile_image_url": data["user"]["profile_image_url"].stringValue,
                         "text": data["text"].stringValue,
-                        "entities": urls,
                         "extended_entities": media]
         
         return JSON(tweet)
     }
     
-    /**
-        Parse extended entities into a readable format.
-     
-        - Parameter data: A JSON array of "extended_entites" from a Twitter Stream.
-        - Returns: A parsed JSON representing media.
-     */
-    func parseExtendedEntities(data: JSON) {
-        
-    }
-    
     /** 
+        MARK: - Helper Methods
+     */
+    
+    /**
         Parse entities into a simple format.
      
         - Parameter data: A JSON array of "entities" from a Twitter Stream.
@@ -72,13 +65,63 @@ class TweetParser: NSObject {
     }
     
     /**
-        Parases extended entities for video media.
+        Parse extended entities into a readable format.
+     
+        - Parameter data: A JSON array of "extended_entites" from a Twitter Stream.
+        - Returns: An array dictionaries describing each media file.
+     */
+    func parseExtendedEntities(data: JSON) -> [[String: String]] {
+        
+        var extended_entities = [[String: String]]()
+        
+        for (_, subJson) in data["media"] {
+            
+            // Check media type
+            if (subJson["type"].isExists()) {
+                
+                let type = subJson["type"].stringValue
+                
+                // Check if video
+                if (type == "video") {
+                    extended_entities.append(parseVideo(subJson))
+                    
+                // Check if gif
+                } else if (type == "animated_gif") {
+                    
+                }
+            }
+        }
+        
+        return extended_entities
+    }
+    
+    /**
+        Parases extended entities for video media. Gets the thumbnail and the 
+        HLS streming format.
     
         - Parameter data: A JSON of "extended_entites" from a Twitter Stream.
-        - Returns: A parsed JSON for video.
+        - Returns: A dictionary describing a video file.
      */
-    func parseVideo(data: JSON) {
+    func parseVideo(data: JSON) -> [String: String] {
         
+        var video = [String: String]()
+        
+        // Iterate through video variants
+        for (_, subJson) in data["video_info"]["variants"] {
+            
+            // Get HLS Streaming format video url
+            if (subJson["content_type"].stringValue == "application/x-mpegURL") {
+                video["url"] = subJson["url"].stringValue
+                
+                // Add type
+                video["type"] = "video"
+                
+                // Get thumbnail image url
+                video["thumbnail_url"] = data["media_url"].stringValue
+            }
+        }
+        
+        return video
     }
 }
 

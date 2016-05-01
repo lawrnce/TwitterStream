@@ -66,7 +66,7 @@ class TwitterStreamViewController: UIViewController {
 extension TwitterStreamViewController: TwitterManagerDelegate {
     
     func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: JSON) {
-//        print(tweet)
+        print(tweet)
     }
 }
 
