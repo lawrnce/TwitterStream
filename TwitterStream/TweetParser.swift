@@ -39,6 +39,8 @@ class TweetParser: NSObject {
             tweet["screen_name"] = basicTweet.screenName
             tweet["profile_image_url"] = basicTweet.profileImageURL
             tweet["text"] = basicTweet.text
+        
+        // Error passing
         } catch let error as TweetError {
             throw error
         }
@@ -140,16 +142,12 @@ class TweetParser: NSObject {
             }
         }
         
-        // Check if url entity exists
-        if (data["url"].isExists()) {
-    
-            // parse links
-            for (_, subJson) in data {
+        // parse links
+        for (_, subJson) in data["url"] {
                 
-                // check if link is not missing
-                if (subJson["url"].stringValue != "-1") {
-                    links.append(subJson["url"].stringValue)
-                }
+            // check if link is not missing
+            if (subJson["url"].stringValue != "-1") {
+                links.append(subJson["url"].stringValue)
             }
         }
    

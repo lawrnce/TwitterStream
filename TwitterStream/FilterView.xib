@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FilterView" customModule="TwitterStream" customModuleProvider="target">
+            <connections>
+                <outlet property="gifFilterButton" destination="nGI-6Z-hfM" id="xy3-4F-1cE"/>
+                <outlet property="pauseButton" destination="mEn-dD-AbD" id="qif-cD-K9T"/>
+                <outlet property="photoFilterButton" destination="qBI-01-frd" id="n1r-tL-QvC"/>
+                <outlet property="videoFilterButton" destination="Mhv-xe-Sjh" id="8d8-U0-se4"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="581" height="44"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LFc-ci-6df">
+                    <rect key="frame" x="44" y="0.0" width="537" height="44"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhv-xe-Sjh">
+                            <rect key="frame" x="179" y="0.0" width="179" height="44"/>
+                            <state key="normal" title="Video">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="videoFilterDidPress:" destination="-1" eventType="touchUpInside" id="Mv1-T3-fsP"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nGI-6Z-hfM">
+                            <rect key="frame" x="0.0" y="0.0" width="179" height="44"/>
+                            <state key="normal" title="GIF">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="gifFilterDidPress:" destination="-1" eventType="touchUpInside" id="xpP-b0-2zz"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-01-frd">
+                            <rect key="frame" x="358" y="0.0" width="179" height="44"/>
+                            <state key="normal" title="Photo">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="photoFilterDidPress:" destination="-1" eventType="touchUpInside" id="EgF-77-cpn"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="Mhv-xe-Sjh" firstAttribute="leading" secondItem="nGI-6Z-hfM" secondAttribute="trailing" id="1OA-Lr-1kN"/>
+                        <constraint firstItem="Mhv-xe-Sjh" firstAttribute="centerY" secondItem="LFc-ci-6df" secondAttribute="centerY" id="4E9-Lp-czj"/>
+                        <constraint firstItem="nGI-6Z-hfM" firstAttribute="top" secondItem="LFc-ci-6df" secondAttribute="top" id="9Ic-Fl-9rd"/>
+                        <constraint firstItem="qBI-01-frd" firstAttribute="top" secondItem="LFc-ci-6df" secondAttribute="top" id="9n7-0P-QfC"/>
+                        <constraint firstItem="qBI-01-frd" firstAttribute="leading" secondItem="Mhv-xe-Sjh" secondAttribute="trailing" id="Hbd-ry-yxa"/>
+                        <constraint firstAttribute="bottom" secondItem="nGI-6Z-hfM" secondAttribute="bottom" id="OZH-0A-WSb"/>
+                        <constraint firstItem="Mhv-xe-Sjh" firstAttribute="width" secondItem="LFc-ci-6df" secondAttribute="width" multiplier="1/3" id="Rb4-og-3aE"/>
+                        <constraint firstAttribute="trailing" secondItem="qBI-01-frd" secondAttribute="trailing" id="aPI-Nt-q9X"/>
+                        <constraint firstItem="nGI-6Z-hfM" firstAttribute="width" secondItem="LFc-ci-6df" secondAttribute="width" multiplier="1/3" id="aey-K1-k8f"/>
+                        <constraint firstItem="Mhv-xe-Sjh" firstAttribute="centerX" secondItem="LFc-ci-6df" secondAttribute="centerX" id="frC-Ic-bG9"/>
+                        <constraint firstAttribute="bottom" secondItem="Mhv-xe-Sjh" secondAttribute="bottom" id="hVD-mg-vpY"/>
+                        <constraint firstItem="Mhv-xe-Sjh" firstAttribute="top" secondItem="LFc-ci-6df" secondAttribute="top" id="hxo-pK-8vO"/>
+                        <constraint firstItem="nGI-6Z-hfM" firstAttribute="leading" secondItem="LFc-ci-6df" secondAttribute="leading" id="ocd-mE-Fe0"/>
+                        <constraint firstAttribute="bottom" secondItem="qBI-01-frd" secondAttribute="bottom" id="vVg-99-j8x"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="hxo-pK-8vO"/>
+                        </mask>
+                    </variation>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEn-dD-AbD">
+                    <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="44" id="WjR-YF-OQh"/>
+                        <constraint firstAttribute="height" constant="44" id="mPL-4x-bRR"/>
+                    </constraints>
+                    <state key="normal" title="&gt;">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="0.7725490196" green="0.2666666667" blue="0.43529411759999997" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="mEn-dD-AbD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="6YH-Tt-eRt"/>
+                <constraint firstAttribute="trailing" secondItem="LFc-ci-6df" secondAttribute="trailing" id="a33-Wg-snZ"/>
+                <constraint firstItem="mEn-dD-AbD" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="fVA-Ks-iNV"/>
+                <constraint firstAttribute="bottom" secondItem="LFc-ci-6df" secondAttribute="bottom" id="io2-SR-3zm"/>
+                <constraint firstItem="LFc-ci-6df" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="sgT-bL-TSx"/>
+                <constraint firstItem="LFc-ci-6df" firstAttribute="leading" secondItem="mEn-dD-AbD" secondAttribute="trailing" id="vsg-aF-FME"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="140.5" y="107"/>
+        </view>
+    </objects>
+</document>

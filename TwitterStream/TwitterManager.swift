@@ -134,15 +134,6 @@ extension TwitterManager: NSURLConnectionDataDelegate {
             } catch let error {
                 print("There was an error: ", error)
             }
-          
-            // TESTING
-//            if (json["extended_entities"].isExists()) {
-//                
-//                if (json["extended_entities"]["media"]["type"] == "animated_gif") {
-//                    print(json)
-//                }
-//            }
-            
         }
     }
     

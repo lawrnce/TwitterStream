@@ -8,8 +8,17 @@
 
 import UIKit
 
+enum TweetFilter {
+    case Gif
+    case Video
+    case Photo
+}
+
 class TwitterStreamViewController: UIViewController {
 
+    // Filter view
+    @IBOutlet weak var filterView: FilterView!
+    
     // Table view to display the streams
     @IBOutlet weak var tableView: UITableView!
     
@@ -19,13 +28,17 @@ class TwitterStreamViewController: UIViewController {
     // Search bar
     var searchController: UISearchController!
     
-    // Array
+    // Array of tweets
     var tweets: [[String: AnyObject]]!
+    
+    // Boolean values of current filter
+    var filter: (gif: Bool, video: Bool, photo: Bool)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTwitterManager()
         setupSearchBar()
+        setupFilterView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -45,7 +58,17 @@ class TwitterStreamViewController: UIViewController {
         self.twitterManager.delegate = self
         
         // Testing
-        self.twitterManager.createStreamConnectionForKeyword("photo")
+        self.twitterManager.createStreamConnectionForKeyword("politics")
+    }
+    
+    /**
+        Setup filter view. Initially accept all types.
+     */
+    private func setupFilterView() {
+        self.filter = (true, true, true)
+        self.filterView.delegate = self
+        
+        // set images for state
     }
      
     /**
@@ -81,6 +104,32 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
 extension TwitterStreamViewController: UISearchControllerDelegate, UISearchBarDelegate {
     
 
+}
+
+/**
+    Filter view delegate
+ */
+extension TwitterStreamViewController: FilterViewDelegate {
+    
+    /**
+        Called when user toggles a filter
+     */
+    func filterView(filterView: FilterView, didToggleFilter filter: TweetFilter) {
+        
+        // toggle filter
+        switch (filter) {
+            case .Gif:
+                self.filter!.gif = !self.filter!.gif
+            case .Video:
+                self.filter!.video = !self.filter!.video
+            case .Photo:
+                self.filter!.photo = !self.filter!.photo
+        }
+        
+        // update filter view
+        
+        // update table view
+    }
 }
 
 /**

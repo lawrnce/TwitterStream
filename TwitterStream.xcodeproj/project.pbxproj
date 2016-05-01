@@ -12,6 +12,8 @@
 		E1849736B0E41DC6143C7B5E /* Pods_TwitterStreamTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5DCD1944318ED4FCF3DA575 /* Pods_TwitterStreamTests.framework */; };
 		E60570FC1CD477D0006B5E4F /* TweetParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60570FB1CD477D0006B5E4F /* TweetParser.swift */; };
 		E60570FF1CD47839006B5E4F /* TwitterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60570FE1CD47839006B5E4F /* TwitterTests.swift */; };
+		E6765F431CD6752C004A373F /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6765F421CD6752C004A373F /* FilterView.swift */; };
+		E6765F451CD6754E004A373F /* FilterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E6765F441CD6754E004A373F /* FilterView.xib */; };
 		E6B668B61CD46C17000992FE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B668B51CD46C17000992FE /* AppDelegate.swift */; };
 		E6B668B81CD46C17000992FE /* TwitterStreamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B668B71CD46C17000992FE /* TwitterStreamViewController.swift */; };
 		E6B668BB1CD46C17000992FE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E6B668B91CD46C17000992FE /* Main.storyboard */; };
@@ -51,6 +53,8 @@
 		DC715C463987E306B004438D /* Pods_TwitterStream.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TwitterStream.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E60570FB1CD477D0006B5E4F /* TweetParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetParser.swift; sourceTree = "<group>"; };
 		E60570FE1CD47839006B5E4F /* TwitterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitterTests.swift; sourceTree = "<group>"; };
+		E6765F421CD6752C004A373F /* FilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
+		E6765F441CD6754E004A373F /* FilterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterView.xib; sourceTree = "<group>"; };
 		E6B668B21CD46C17000992FE /* TwitterStream.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterStream.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6B668B51CD46C17000992FE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E6B668B71CD46C17000992FE /* TwitterStreamViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterStreamViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +131,15 @@
 			name = Twitter;
 			sourceTree = "<group>";
 		};
+		E6765F461CD67552004A373F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E6765F421CD6752C004A373F /* FilterView.swift */,
+				E6765F441CD6754E004A373F /* FilterView.xib */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		E69F0B641CD5D29500D7761B /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -162,6 +175,7 @@
 			children = (
 				E6B668B51CD46C17000992FE /* AppDelegate.swift */,
 				E69F0B641CD5D29500D7761B /* View Controllers */,
+				E6765F461CD67552004A373F /* Views */,
 				E60570FD1CD477D4006B5E4F /* Twitter */,
 				E6B668B91CD46C17000992FE /* Main.storyboard */,
 				E6B668BC1CD46C17000992FE /* Assets.xcassets */,
@@ -302,6 +316,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6765F451CD6754E004A373F /* FilterView.xib in Resources */,
 				E6B668C01CD46C17000992FE /* LaunchScreen.storyboard in Resources */,
 				E6B668BD1CD46C17000992FE /* Assets.xcassets in Resources */,
 				E6B668BB1CD46C17000992FE /* Main.storyboard in Resources */,
@@ -455,6 +470,7 @@
 				E6B668B81CD46C17000992FE /* TwitterStreamViewController.swift in Sources */,
 				E6B668E41CD46C3B000992FE /* TwitterManager.swift in Sources */,
 				E60570FC1CD477D0006B5E4F /* TweetParser.swift in Sources */,
+				E6765F431CD6752C004A373F /* FilterView.swift in Sources */,
 				E6B668B61CD46C17000992FE /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
