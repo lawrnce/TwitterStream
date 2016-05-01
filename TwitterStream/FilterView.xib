@@ -9,8 +9,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FilterView" customModule="TwitterStream" customModuleProvider="target">
             <connections>
                 <outlet property="gifFilterButton" destination="nGI-6Z-hfM" id="xy3-4F-1cE"/>
-                <outlet property="pauseButton" destination="mEn-dD-AbD" id="qif-cD-K9T"/>
                 <outlet property="photoFilterButton" destination="qBI-01-frd" id="n1r-tL-QvC"/>
+                <outlet property="playbackButton" destination="mEn-dD-AbD" id="W4d-6x-3Gy"/>
                 <outlet property="videoFilterButton" destination="Mhv-xe-Sjh" id="8d8-U0-se4"/>
             </connections>
         </placeholder>
@@ -28,7 +28,7 @@
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="videoFilterDidPress:" destination="-1" eventType="touchUpInside" id="Mv1-T3-fsP"/>
+                                <action selector="videoFilterButtonDidPress:" destination="-1" eventType="touchUpInside" id="nGM-Y0-DoT"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nGI-6Z-hfM">
@@ -37,7 +37,7 @@
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="gifFilterDidPress:" destination="-1" eventType="touchUpInside" id="xpP-b0-2zz"/>
+                                <action selector="gifFilterButtonDidPress:" destination="-1" eventType="touchUpInside" id="3gD-79-Ewt"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-01-frd">
@@ -46,7 +46,7 @@
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="photoFilterDidPress:" destination="-1" eventType="touchUpInside" id="EgF-77-cpn"/>
+                                <action selector="photoFilterButtonDidPress:" destination="-1" eventType="touchUpInside" id="vzv-wc-jkT"/>
                             </connections>
                         </button>
                     </subviews>
@@ -81,6 +81,9 @@
                     <state key="normal" title="&gt;">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="playbackButtonDidPress:" destination="-1" eventType="touchUpInside" id="CTu-Vc-2fn"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" red="0.7725490196" green="0.2666666667" blue="0.43529411759999997" alpha="1" colorSpace="calibratedRGB"/>

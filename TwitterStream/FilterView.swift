@@ -13,6 +13,7 @@ import UIKit
  */
 protocol FilterViewDelegate {
     func filterView(filterView: FilterView, didToggleFilter filter: TweetFilter)
+    func didTogglePlayback()
 }
 
 @IBDesignable class FilterView: UIView {
@@ -23,15 +24,24 @@ protocol FilterViewDelegate {
     var view: UIView!
     
     // outlets
-    @IBOutlet weak var pauseButton: UIButton!
+    @IBOutlet weak var playbackButton: UIButton!
     @IBOutlet weak var videoFilterButton: UIButton!
     @IBOutlet weak var gifFilterButton: UIButton!
     @IBOutlet weak var photoFilterButton: UIButton!
     
     /**
+        Set image for playback state
+     */
+    func setPlaybackButtonImageForState(state: Bool) {
+        let imageName = state ? "PlaybackButtonImagePlaying" : "PlaybackButtonImagePaused"
+        let image = UIImage(named: imageName)
+        self.playbackButton.setImage(image, forState: .Normal)
+    }
+    
+    /**
         Set the button image for the filter state.
      */
-    func setImageForFilter(filter: TweetFilter, forState state: Bool) {
+    func setFilterButtonImageForFilter(filter: TweetFilter, forState state: Bool) {
         switch (filter) {
             case .Gif:
                 let imageName = state ? "GifFilterImageOn" : "GifFilterImageOff"
@@ -53,15 +63,19 @@ protocol FilterViewDelegate {
     /**
         Actions
      */
-    @IBAction func gifFilterDidPress(sender: AnyObject) {
+    @IBAction func playbackButtonDidPress(sender: AnyObject) {
+        self.delegate?.didTogglePlayback()
+    }
+    
+    @IBAction func gifFilterButtonDidPress(sender: AnyObject) {
         self.delegate?.filterView(self, didToggleFilter: .Gif)
     }
     
-    @IBAction func videoFilterDidPress(sender: AnyObject) {
+    @IBAction func videoFilterButtonDidPress(sender: AnyObject) {
         self.delegate?.filterView(self, didToggleFilter: .Video)
     }
     
-    @IBAction func photoFilterDidPress(sender: AnyObject) {
+    @IBAction func photoFilterButtonDidPress(sender: AnyObject) {
         self.delegate?.filterView(self, didToggleFilter: .Photo)
     }
     

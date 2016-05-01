@@ -112,7 +112,7 @@ extension TwitterStreamViewController: UISearchControllerDelegate, UISearchBarDe
 extension TwitterStreamViewController: FilterViewDelegate {
     
     /**
-        Called when user toggles a filter
+        Called when user toggles a filter.
      */
     func filterView(filterView: FilterView, didToggleFilter filter: TweetFilter) {
         
@@ -129,6 +129,13 @@ extension TwitterStreamViewController: FilterViewDelegate {
         // update filter view
         
         // update table view
+    }
+    
+    /**
+        Called when user toggles playback.
+     */
+    func didTogglePlayback() {
+        
     }
 }
 
