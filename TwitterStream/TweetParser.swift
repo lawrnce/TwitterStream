@@ -16,14 +16,29 @@ class TweetParser: NSObject {
         Also parses entities and extended_entities for videos, gifs, and images.
     
         - Parameter data: The raw tweet data from a Twitter Stream.
-        - Returns: A dictionary representing a tweet.
+        - Returns: A dictionary representing a tweet. Nil if invalid data.
      */
-    func parseTweetStream(data: JSON) -> [String: AnyObject] {
+    func parseTweetStream(data: JSON) -> [String: AnyObject]? {
         
-        // Create objects first so even if empty, dictionary contains empty instead of nil
+        // Dictionary representing the tweet
+        var tweet = [String: AnyObject]()
+        
+        // Check if basic info is valid
+        if let basicTweet: (screenName: String, profileImageURL: String, text: String) = checkBasicInfo(data) {
+            
+            tweet["screen_name"] = basicTweet.screenName
+            tweet["profile_image_url"] = basicTweet.profileImageURL
+            tweet["text"] = basicTweet.text
+        
+        // not valid basic info
+        } else {
+            return nil
+        }
+        
+        // Create objects so even if empty, dictionary contains empty instead of nil
         var media = [[String: String]]()
         var photos = [[String: String]]()
-        var urls = [String]()
+        var links = [String]()
         
         // Tag each tweet for filtering
         var tags = [String]()
@@ -41,20 +56,16 @@ class TweetParser: NSObject {
         if (data["entities"].isExists()) {
             let entities: (photos: [[String: String]], links: [String], tags: [String]) = parseEntities(data["entities"])
             photos = entities.photos
-            urls = entities.links
+            links = entities.links
             tags += entities.tags
         }
         
-        // Parse basic info
-        let tweet : [String: AnyObject] = [
-                        "tags": tags,
-                        "screen_name": data["user"]["screen_name"].stringValue,
-                        "profile_image_url": data["user"]["profile_image_url"].stringValue,
-                        "text": data["text"].stringValue,
-                        "media": media,
-                        "photos": photos,
-                        "links" :urls]
-        
+        // Add entities to tweet
+        tweet["media"] = media
+        tweet["photos"] = photos
+        tweet["links"] = links
+        tweet["tags"] = tags
+   
         return tweet
     }
     
@@ -62,6 +73,16 @@ class TweetParser: NSObject {
         MARK: - Helper Methods
      */
     
+    /**
+        Checks if valid basic info. Sometimes data from Twitter stream is missing.
+        
+        - Parameter data: Raw JSON data from a Twitter Stream.
+        - Returns: A triple containing screen name, profile image url, and text. Nil if invalid.
+     */
+    private func checkBasicInfo(data: JSON) -> (screenName: String, profileImageURL: String, text: String)? {
+        
+    }
+     
     /**
         Parses entities as links or photos.
      

@@ -124,10 +124,15 @@ extension TwitterManager: NSURLConnectionDataDelegate {
             let parser = TweetParser()
             
             // Parse tweet
-            let tweet = parser.parseTweetStream(json)
+            if let tweet = parser.parseTweetStream(json) {
+                
+                // Notify delegate
+                self.delegate?.twitterManager(self, didStreamTweet: tweet)
+            }
             
-            // Notify delegate
-            self.delegate?.twitterManager(self, didStreamTweet: tweet)
+            
+            
+            
             
             // TESTING
 //            if (json["extended_entities"].isExists()) {
