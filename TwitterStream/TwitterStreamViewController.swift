@@ -7,15 +7,20 @@
 //
 
 import UIKit
-import SwiftyJSON
 
 class TwitterStreamViewController: UIViewController {
 
+    // Table view to display the streams
     @IBOutlet weak var tableView: UITableView!
     
+    // Twitter Stream
     var twitterManager: TwitterManager!
     
+    // Search bar
     var searchController: UISearchController!
+    
+    // Array
+    var tweets: [[String: AnyObject]]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +45,7 @@ class TwitterStreamViewController: UIViewController {
         self.twitterManager.delegate = self
         
         // Testing
-        self.twitterManager.createStreamConnectionForKeyword("gif")
+        self.twitterManager.createStreamConnectionForKeyword("video")
     }
      
     /**
@@ -65,24 +70,8 @@ class TwitterStreamViewController: UIViewController {
  */
 extension TwitterStreamViewController: TwitterManagerDelegate {
     
-    func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: JSON) {
-//        if (tweet["extended_entities"].isEmpty == false && tweet["entities"].isEmpty == false) {
-////            print(tweet["text"].stringValue)
-//            print(tweet)
-//           
-//        }
-        
-        if (tweet["extended_entities"].isEmpty == false) {
-            
-            for (_, subJson) in tweet["extended_entities"] {
-                print(subJson["url"].stringValue)
-            }
-            
-//            print(tweet)
-        
-        }
-    
-//         print(tweet["extended_entities"])
+    func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: [String: AnyObject]) {
+        print(tweet)
     }
 }
 
