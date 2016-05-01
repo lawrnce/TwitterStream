@@ -11,7 +11,7 @@
                 <outlet property="gifFilterButton" destination="nGI-6Z-hfM" id="xy3-4F-1cE"/>
                 <outlet property="photoFilterButton" destination="qBI-01-frd" id="n1r-tL-QvC"/>
                 <outlet property="playbackButton" destination="mEn-dD-AbD" id="W4d-6x-3Gy"/>
-                <outlet property="videoFilterButton" destination="Mhv-xe-Sjh" id="8d8-U0-se4"/>
+                <outlet property="videoFilterButton" destination="Mhv-xe-Sjh" id="LRf-1D-qdp"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -20,29 +20,29 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LFc-ci-6df">
-                    <rect key="frame" x="44" y="0.0" width="537" height="44"/>
+                    <rect key="frame" x="52" y="0.0" width="529" height="40"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhv-xe-Sjh">
-                            <rect key="frame" x="179" y="0.0" width="179" height="44"/>
-                            <state key="normal" title="Video">
+                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhv-xe-Sjh">
+                            <rect key="frame" x="176" y="-1" width="177" height="41"/>
+                            <state key="normal">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="videoFilterButtonDidPress:" destination="-1" eventType="touchUpInside" id="nGM-Y0-DoT"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nGI-6Z-hfM">
-                            <rect key="frame" x="0.0" y="0.0" width="179" height="44"/>
-                            <state key="normal" title="GIF">
+                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nGI-6Z-hfM">
+                            <rect key="frame" x="0.0" y="0.0" width="176" height="40"/>
+                            <state key="normal">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="gifFilterButtonDidPress:" destination="-1" eventType="touchUpInside" id="3gD-79-Ewt"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-01-frd">
-                            <rect key="frame" x="358" y="0.0" width="179" height="44"/>
-                            <state key="normal" title="Photo">
+                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-01-frd">
+                            <rect key="frame" x="353" y="0.0" width="176" height="40"/>
+                            <state key="normal">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -72,13 +72,13 @@
                         </mask>
                     </variation>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEn-dD-AbD">
-                    <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
+                <button opaque="NO" contentMode="scaleAspectFit" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEn-dD-AbD">
+                    <rect key="frame" x="8" y="-1" width="44" height="45"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="44" id="WjR-YF-OQh"/>
-                        <constraint firstAttribute="height" constant="44" id="mPL-4x-bRR"/>
+                        <constraint firstAttribute="height" constant="40" id="mPL-4x-bRR"/>
                     </constraints>
-                    <state key="normal" title="&gt;">
+                    <state key="normal">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -86,17 +86,24 @@
                     </connections>
                 </button>
             </subviews>
-            <color key="backgroundColor" red="0.7725490196" green="0.2666666667" blue="0.43529411759999997" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="mEn-dD-AbD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="6YH-Tt-eRt"/>
+                <constraint firstItem="mEn-dD-AbD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="6YH-Tt-eRt"/>
+                <constraint firstAttribute="bottom" secondItem="mEn-dD-AbD" secondAttribute="bottom" constant="4" id="VRz-qy-Jce"/>
                 <constraint firstAttribute="trailing" secondItem="LFc-ci-6df" secondAttribute="trailing" id="a33-Wg-snZ"/>
                 <constraint firstItem="mEn-dD-AbD" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="fVA-Ks-iNV"/>
-                <constraint firstAttribute="bottom" secondItem="LFc-ci-6df" secondAttribute="bottom" id="io2-SR-3zm"/>
+                <constraint firstAttribute="bottom" secondItem="LFc-ci-6df" secondAttribute="bottom" constant="4" id="io2-SR-3zm"/>
+                <constraint firstItem="mEn-dD-AbD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="pWq-K9-GlM"/>
                 <constraint firstItem="LFc-ci-6df" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="sgT-bL-TSx"/>
                 <constraint firstItem="LFc-ci-6df" firstAttribute="leading" secondItem="mEn-dD-AbD" secondAttribute="trailing" id="vsg-aF-FME"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="fVA-Ks-iNV"/>
+                </mask>
+            </variation>
             <point key="canvasLocation" x="140.5" y="107"/>
         </view>
     </objects>

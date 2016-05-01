@@ -29,6 +29,44 @@ protocol FilterViewDelegate {
     @IBOutlet weak var gifFilterButton: UIButton!
     @IBOutlet weak var photoFilterButton: UIButton!
     
+    
+    // inspectable
+    @IBInspectable dynamic var playbackButtonImage: UIImage? {
+        get {
+            return playbackButton.imageForState(.Normal)
+        }
+        set(image) {
+            playbackButton.setImage(image, forState: .Normal)
+        }
+    }
+
+    @IBInspectable dynamic var gifFilterButtonImage: UIImage? {
+        get {
+            return gifFilterButton.imageForState(.Normal)
+        }
+        set(image) {
+            gifFilterButton.setImage(image, forState: .Normal)
+        }
+    }
+
+    @IBInspectable dynamic var videoFilterButtonImage: UIImage? {
+        get {
+            return videoFilterButton.imageForState(.Normal)
+        }
+        set(image) {
+            videoFilterButton.setImage(image, forState: .Normal)
+        }
+    }
+
+    @IBInspectable dynamic var photoFilterButtonImage: UIImage? {
+        get {
+            return photoFilterButton.imageForState(.Normal)
+        }
+        set(image) {
+            photoFilterButton.setImage(image, forState: .Normal)
+        }
+    }
+
     /**
         Set image for playback state
      */
@@ -45,18 +83,15 @@ protocol FilterViewDelegate {
         switch (filter) {
             case .Gif:
                 let imageName = state ? "GifFilterImageOn" : "GifFilterImageOff"
-                let image = UIImage(named: imageName)
-                self.gifFilterButton.setImage(image, forState: .Normal)
+                self.gifFilterButtonImage = UIImage(named: imageName)
             
             case .Video:
                 let imageName = state ? "VideoFilterImageOn" : "VideoFilterImageOff"
-                let image = UIImage(named: imageName)
-                self.videoFilterButton.setImage(image, forState: .Normal)
+                self.videoFilterButtonImage = UIImage(named: imageName)
             
             case .Photo:
                 let imageName = state ? "PhotoFilterImageOn" : "PhotoFilterImageOff"
-                let image = UIImage(named: imageName)
-                self.photoFilterButton.setImage(image, forState: .Normal)
+                self.photoFilterButtonImage = UIImage(named: imageName)
         }
     }
     

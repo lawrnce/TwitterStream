@@ -23,6 +23,12 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="q4a-Ds-GRR"/>
                                 </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="playbackButtonImage" value="PlaybackButtonImagePlaying"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="gifFilterButtonImage" value="GifFilterImageOn"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="videoFilterButtonImage" value="VideoFilterImageOn"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="photoFilterButtonImage" value="PhotoFilterImageOn"/>
+                                </userDefinedRuntimeAttributes>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8w0-Yi-eT3">
                                 <rect key="frame" x="0.0" y="44" width="375" height="559"/>
@@ -84,4 +90,10 @@
             <point key="canvasLocation" x="131" y="463"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="GifFilterImageOn" width="49" height="31"/>
+        <image name="PhotoFilterImageOn" width="87" height="31"/>
+        <image name="PlaybackButtonImagePlaying" width="22" height="29"/>
+        <image name="VideoFilterImageOn" width="78" height="31"/>
+    </resources>
 </document>

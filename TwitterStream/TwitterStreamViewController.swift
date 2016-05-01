@@ -31,6 +31,9 @@ class TwitterStreamViewController: UIViewController {
     // Array of tweets
     var tweets: [[String: AnyObject]]!
     
+    // Playback is initially false
+    var playback: Bool = false
+    
     // Boolean values of current filter
     var filter: (gif: Bool, video: Bool, photo: Bool)!
     
@@ -67,8 +70,6 @@ class TwitterStreamViewController: UIViewController {
     private func setupFilterView() {
         self.filter = (true, true, true)
         self.filterView.delegate = self
-        
-        // set images for state
     }
      
     /**
@@ -120,10 +121,13 @@ extension TwitterStreamViewController: FilterViewDelegate {
         switch (filter) {
             case .Gif:
                 self.filter!.gif = !self.filter!.gif
+                self.filterView.setFilterButtonImageForFilter(filter, forState: self.filter!.gif)
             case .Video:
                 self.filter!.video = !self.filter!.video
+                self.filterView.setFilterButtonImageForFilter(filter, forState: self.filter!.video)
             case .Photo:
                 self.filter!.photo = !self.filter!.photo
+                self.filterView.setFilterButtonImageForFilter(filter, forState: self.filter!.photo)
         }
         
         // update filter view
@@ -136,6 +140,21 @@ extension TwitterStreamViewController: FilterViewDelegate {
      */
     func didTogglePlayback() {
         
+        // Playback can only be toggled if connected to stream
+        if (self.twitterManager.isConnected == true) {
+            
+            self.playback = !self.playback
+            self.filterView.setPlaybackButtonImageForState(self.playback)
+            
+            // Resume Stream
+            if (self.playback == true) {
+                
+            
+            // Pause Stream
+            } else {
+                
+            }
+        }
     }
 }
 
