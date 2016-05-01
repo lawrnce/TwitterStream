@@ -22,11 +22,41 @@ class TwitterManager: NSObject {
     
     var delegate: TwitterManagerDelegate?
     
+    // retain the keyword for pause and resume
+    private var currentKeyword: String!
+    
+    private var currentConnection: NSURLConnection!
+    
+    private var currentRequest: SLRequest!
+    
     override init() {
         super.init()
         self.isConnected = false
         self.isTryingToConnect = false
     }
+    
+    /**
+        NSURLConnection cannot be paused. So we cancel it.
+     */
+    func pauseStream() {
+        print("Paused connection")
+//        self.currentConnection.cancel()
+        self.isConnected = false
+        self.isTryingToConnect = false
+        
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.currentConnection.cancel()
+            self.currentConnection = nil
+        })
+    }
+    
+    /**
+        Create a new connection with the same keyword.
+     */
+    func resumeStream() {
+        createStreamConnectionForKeyword(self.currentKeyword)
+    }
+    
 
     /**
         Creates a real time stream for a keyword.
@@ -74,8 +104,9 @@ class TwitterManager: NSObject {
                             request.account = account
                             
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                let connection = NSURLConnection(request: request.preparedURLRequest(), delegate: self)
-                                connection?.start()
+                                self.currentConnection = NSURLConnection(request: request.preparedURLRequest(), delegate: self)
+                                self.currentConnection?.start()
+                                self.currentKeyword = keyword
                             })
                             
                         }
@@ -118,6 +149,7 @@ extension TwitterManager: NSURLConnectionDataDelegate {
             
             if (self.isTryingToConnect == true) {
                 self.isTryingToConnect = false
+                print("Connected to stream")
             }
             
             // Init a parser
@@ -135,6 +167,14 @@ extension TwitterManager: NSURLConnectionDataDelegate {
                 print("There was an error: ", error)
             }
         }
+    }
+    
+    func connection(connection: NSURLConnection, didCancelAuthenticationChallenge challenge: NSURLAuthenticationChallenge) {
+        
+    }
+    
+    func connectionDidFinishLoading(connection: NSURLConnection) {
+        
     }
     
     func connection(connection: NSURLConnection, didFailWithError error: NSError) {

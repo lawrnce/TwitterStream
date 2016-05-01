@@ -62,7 +62,7 @@ class TwitterStreamViewController: UIViewController {
         self.twitterManager.delegate = self
         
         // Testing
-        self.twitterManager.createStreamConnectionForKeyword("politics")
+        self.twitterManager.createStreamConnectionForKeyword("anime")
     }
     
     /**
@@ -152,11 +152,11 @@ extension TwitterStreamViewController: FilterViewDelegate {
             
             // Resume Stream
             if (self.playback == true) {
-                
+                self.twitterManager.resumeStream()
             
             // Pause Stream
             } else {
-                
+                self.twitterManager.pauseStream()
             }
         }
     }
