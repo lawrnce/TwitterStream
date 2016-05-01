@@ -19,33 +19,28 @@ class TweetParser: NSObject {
      */
     func parseTweetStream(data: JSON) -> JSON {
         
+        // Create objects first so even if empty, JSON contains empty instead of nil
         var media = [[String: String]]()
-        
         var urls = [String]()
         
-        // Check for extended_entities
-        let extended_entities = data["extended_entities"]
-        
-        if (extended_entities != nil) {
-            media = parseExtendedEntities(extended_entities)
+        // Parse extended entities if exist
+        // Video, animated gifs
+        if (data["extended_entities"].isExists()) {
+            media = parseExtendedEntities(data["extended_entities"])
         }
         
-        // Check for entities in tweet
-        let entities_urls = data["entities"]["urls"]
-        
-        if (entities_urls.isEmpty == false) {
-            
-            // Iterate through entities
-            for (_, subJson) in entities_urls {
-                urls.append(subJson["url"].stringValue)
-            }
+        // Parse url entities if exist
+        // links, photos
+        if (data["entities"]["urls"].isExists()) {
+            urls = parseURLEntities(data["entities"]["urls"])
         }
         
         // Parse basic info
         let tweet : [String: AnyObject] = [   "screen_name": data["user"]["screen_name"].stringValue,
                         "profile_image_url": data["user"]["profile_image_url"].stringValue,
                         "text": data["text"].stringValue,
-                        "extended_entities": media]
+                        "extended_entities": media,
+                        "entities": urls]
         
         return JSON(tweet)
     }
@@ -55,13 +50,19 @@ class TweetParser: NSObject {
      */
     
     /**
-        Parse entities into a simple format.
+        Parse url entities into a simple array.
      
         - Parameter data: A JSON array of "entities" from a Twitter Stream.
-        - Returns: An array of urls.
+        - Returns: An array of string urls.
      */
-    func parseEntities(data: JSON) {
+    func parseURLEntities(data: JSON) -> [String] {
+        var entities = [String]()
         
+        for (_, subJson) in data {
+            entities.append(subJson["url"].stringValue)
+        }
+        
+        return entities
     }
     
     /**
@@ -120,19 +121,6 @@ class TweetParser: NSObject {
                 video["thumbnail_url"] = data["media_url"].stringValue
             }
         }
-        
         return video
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
