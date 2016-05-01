@@ -11,10 +11,18 @@ import Social
 import Accounts
 import SwiftyJSON
 
+protocol TwitterManagerDelegate {
+    func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: JSON)
+}
+
 class TwitterManager: NSObject {
     
     var isConnected: Bool!
     var isTryingToConnect: Bool!
+    
+    var delegate: TwitterManagerDelegate?
+    
+    var tweetParser: TweetParser!
     
     override init() {
         super.init()
@@ -62,7 +70,8 @@ class TwitterManager: NSObject {
                             
                             // Connect to Twitter endpoint
                             let url = NSURL(string: "https://stream.twitter.com/1.1/statuses/filter.json")
-                            let params = ["track": keyword]
+                            let params = [  "track": keyword,
+                                            "filter_level": "low"]
                             let request = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: .POST, URL: url, parameters: params)
                             request.account = account
                             
@@ -95,6 +104,9 @@ class TwitterManager: NSObject {
 
 extension TwitterManager: NSURLConnectionDataDelegate {
     
+    /**
+        When data is received, parse it to a JSON and notifiy delegate.
+     */
     func connection(connection: NSURLConnection, didReceiveData data: NSData) {
         
         // Cast response data to JSON
@@ -110,10 +122,16 @@ extension TwitterManager: NSURLConnectionDataDelegate {
                 self.isTryingToConnect = false
             }
             
-            // Parse JSON
+            // Lazy load parser
+            if (self.tweetParser == nil) {
+                self.tweetParser = TweetParser()
+            }
             
-            // Send data to delegate
-            print(json)
+            // Parse tweet
+            let tweet = self.tweetParser.parseTweetStream(json)
+            
+            // Notify delegate
+            self.delegate?.twitterManager(self, didStreamTweet: tweet)
         }
     }
     

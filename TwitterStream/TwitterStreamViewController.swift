@@ -7,15 +7,19 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class TwitterStreamViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
+    var twitterManager: TwitterManager!
+    
     var searchController: UISearchController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTwitterManager()
         setupSearchBar()
     }
 
@@ -29,11 +33,21 @@ class TwitterStreamViewController: UIViewController {
      */
     
     /**
+        Setup Twitter Manager
+     */
+    private func setupTwitterManager() {
+        self.twitterManager = TwitterManager()
+        self.twitterManager.delegate = self
+        
+        // Testing
+        self.twitterManager.createStreamConnectionForKeyword("anime")
+    }
+     
+    /**
         Setup search bar with white tint.
      */
     private func setupSearchBar() {
         self.searchController = UISearchController(searchResultsController:  nil)
-        self.searchController.searchResultsUpdater = self
         self.searchController.delegate = self
         self.searchController.searchBar.delegate = self
         self.searchController.hidesNavigationBarDuringPresentation = false
@@ -46,13 +60,27 @@ class TwitterStreamViewController: UIViewController {
     
 }
 
-extension TwitterStreamViewController: UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate {
+/**
+    Twitter Manager Delegate - Handles all streaming releated notifications
+ */
+extension TwitterStreamViewController: TwitterManagerDelegate {
     
-    func updateSearchResultsForSearchController(searchController: UISearchController) {
-        
+    func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: JSON) {
+        print(tweet)
     }
 }
 
+/**
+    Search Bar Delegate - Processes search terms
+ */
+extension TwitterStreamViewController: UISearchControllerDelegate, UISearchBarDelegate {
+    
+
+}
+
+/**
+    Table View Data Source
+ */
 extension TwitterStreamViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -64,7 +92,9 @@ extension TwitterStreamViewController: UITableViewDataSource {
     }
 }
 
+/**
+    Table View Delegate
+ */
 extension TwitterStreamViewController: UITableViewDelegate {
     
 }
-
