@@ -22,6 +22,7 @@ class TweetParser: NSObject {
         
         // Create objects first so even if empty, dictionary contains empty instead of nil
         var media = [[String: String]]()
+        var photos = [[String: String]]()
         var urls = [String]()
         
         // Tag each tweet for filtering
@@ -35,20 +36,24 @@ class TweetParser: NSObject {
             tags += extended_entities.tags
         }
         
-        // Parse url entities if exist
+        // Parse entities
         // eg: links, photos
-        if (data["entities"]["urls"].isExists()) {
-            urls = parseURLEntities(data["entities"]["urls"])
+        if (data["entities"].isExists()) {
+            let entities: (photos: [[String: String]], links: [String], tags: [String]) = parseEntities(data["entities"])
+            photos = entities.photos
+            urls = entities.links
+            tags += entities.tags
         }
         
         // Parse basic info
         let tweet : [String: AnyObject] = [
                         "tags": tags,
-                        "screen_name": data["user"]["screen_name"].string!,
-                        "profile_image_url": data["user"]["profile_image_url"].string!,
-                        "text": data["text"].string!,
-                        "extended_entities": media,
-                        "entities": urls]
+                        "screen_name": data["user"]["screen_name"].stringValue,
+                        "profile_image_url": data["user"]["profile_image_url"].stringValue,
+                        "text": data["text"].stringValue,
+                        "media": media,
+                        "photos": photos,
+                        "links" :urls]
         
         return tweet
     }
@@ -61,16 +66,74 @@ class TweetParser: NSObject {
         Parses entities as links or photos.
      
         - Parameter data: A JSON array of "entities" from a Twitter Stream.
-        - Returns: An array of string urls.
+        - Returns: A tupe containg array of photo dictionaries and array of links.
      */
-    func parseURLEntities(data: JSON) -> [String] {
-        var entities = [String]()
+    private func parseEntities(data: JSON) -> (photos: [[String: String]], links: [String], tags: [String]) {
         
-        for (_, subJson) in data {
-            entities.append(subJson["url"].stringValue)
+        var photos = [[String: String]]()
+        var links = [String]()
+        var tags = [String]()
+        
+        // Check if media entity exsits
+        if (data["media"].isExists()) {
+            
+            // parse photos
+            for (_, subJson) in data["media"] {
+                if let photo = parsePhoto(subJson) {
+                    photos.append(photo)
+                }
+            }
         }
         
-        return entities
+        // Check if url entity exists
+        if (data["url"].isExists()) {
+    
+            // parse links
+            for (_, subJson) in data {
+                
+                // check if link is not missing
+                if (subJson["url"].stringValue != "-1") {
+                    links.append(subJson["url"].stringValue)
+                }
+            }
+        }
+   
+        // set tags
+        if photos.count > 0 {
+            tags.append("photo")
+        }
+        
+        if links.count > 0 {
+            tags.append("link")
+        }
+        
+        return (photos, links, tags)
+    }
+    
+    /**
+        Parses an entity in the "media" subJSON. This will always be a photo.
+
+        - Parameter data: An element of the "media" subJSON in "entities."
+        - Returns: A dictionary representing a photo. nil if photo was invalid.
+     */
+    private func parsePhoto(data: JSON) -> [String: String]? {
+        
+        var photo: [String: String]!
+        
+        // Get only media with tag "photo"
+        // "-1" means url is missing.
+        if (data["type"] == "photo" && data["media_url"].stringValue != "-1") {
+            
+            photo = [String: String]()
+
+            // set type
+            photo["type"] = "photo"
+            
+            // set image url
+            photo["url"] = data["media_url"].stringValue
+        }
+        
+        return photo
     }
     
     /**
@@ -79,17 +142,24 @@ class TweetParser: NSObject {
         - Parameter data: A JSON array of "extended_entites" from a Twitter Stream.
         - Returns: A tuple containing an array dictionaries describing each media file and any tags.
      */
-    func parseExtendedEntities(data: JSON) -> (media: [[String: String]], tags: [String]) {
+    private func parseExtendedEntities(data: JSON) -> (media: [[String: String]], tags: [String]) {
+        
+        // use a set so that when we convert to array
+        // any duplicates are discarded
+        var tagSet = Set<String>()
         
         var media = [[String: String]]()
-        var tags = [String]()
         
         // iterate through the media and parse any media entities and get its tag
         for (_, subJson) in data["media"] {
-            let entity: (media_entity: [String: String], tag: String)  = parseMedia(subJson)
-            media.append(entity.media_entity)
-            tags.append(entity.tag)
+            if let entity: (media_entity: [String: String], tag: String) = parseMedia(subJson) {
+                media.append(entity.media_entity)
+                tagSet.insert(entity.tag)
+            }
         }
+        
+        // remove any repeating tags
+        let tags = Array(tagSet)
         
         return (media, tags)
     }
@@ -97,10 +167,10 @@ class TweetParser: NSObject {
     /**
         Parases an extended entity as a video or gif.
      
-        - Parameter data: An element of the "media" array in "extended_entities".
-        - Returns: A tuple containing a dictionary describing a media file and a tag.
+        - Parameter data: An element of the "media" subJSON in "extended_entities."
+        - Returns: A optional tuple containing a dictionary describing a media file and a tag.
      */
-    func parseMedia(data: JSON) -> (media_entity: [String: String], tag: String) {
+    private func parseMedia(data: JSON) -> (media_entity: [String: String], tag: String)? {
         
         var media = [String: String]()
         var tag: String!
@@ -108,25 +178,43 @@ class TweetParser: NSObject {
         // Iterate through variants
         for (_, subJson) in data["video_info"]["variants"] {
             
-            // Check content typ for mp4 && bit rate 832000 (video) or 0 (gif)
-            if (subJson["content_type"].stringValue == "video/mp4" && subJson["bitrate"].int < 832001) {
+            // Check that "type" field is filled
+            if let type = data["type"].string {
                 
-                let type = data["type"].stringValue
+                // Check if thumbnail image is missing
+                if (data["media_url"].stringValue == "-1") {
+                    break
+                }
                 
-                // Add type
-                media["type"] = type
-                
-                // Add tag for filtering
-                tag = type
-                
-                // Get thumbnail image url
-                media["thumbnail_url"] = data["media_url"].stringValue
-                
-                // Get content url
-                media["url"] = subJson["url"].stringValue
+                // Check content typ for mp4 && bit rate 832000 (video) or 0 (gif)
+                if (subJson["content_type"].stringValue == "video/mp4" && subJson["bitrate"].int < 832001) {
+                    
+                    // Check if media url is missing
+                    if (subJson["url"].stringValue == "-1") {
+                        break
+                    }
+                    
+                    // Add type
+                    media["type"] = type
+                    
+                    // Add tag for filtering
+                    tag = type
+                    
+                    // Get thumbnail image url
+                    media["thumbnail_url"] = data["media_url"].stringValue
+                    
+                    // Get content url
+                    media["url"] = subJson["url"].stringValue
+                }
+
             }
         }
-        
-        return (media, tag)
+
+        // if the tag is empty, then no media was parsed
+        if (tag == nil) {
+            return nil
+        } else {
+            return (media, tag)
+        }
     }
 }
