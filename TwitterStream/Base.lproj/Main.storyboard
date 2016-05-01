@@ -28,6 +28,7 @@
                                     <userDefinedRuntimeAttribute type="image" keyPath="gifFilterButtonImage" value="GifFilterImageOn"/>
                                     <userDefinedRuntimeAttribute type="image" keyPath="videoFilterButtonImage" value="VideoFilterImageOn"/>
                                     <userDefinedRuntimeAttribute type="image" keyPath="photoFilterButtonImage" value="PhotoFilterImageOn"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="textFilterButtonImage" value="TextFilterImageOn"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8w0-Yi-eT3">
@@ -91,9 +92,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="GifFilterImageOn" width="49" height="31"/>
-        <image name="PhotoFilterImageOn" width="87" height="31"/>
-        <image name="PlaybackButtonImagePlaying" width="22" height="29"/>
-        <image name="VideoFilterImageOn" width="78" height="31"/>
+        <image name="GifFilterImageOn" width="48" height="20"/>
+        <image name="PhotoFilterImageOn" width="71" height="20"/>
+        <image name="PlaybackButtonImagePlaying" width="18" height="23"/>
+        <image name="TextFilterImageOn" width="57" height="20"/>
+        <image name="VideoFilterImageOn" width="65" height="20"/>
     </resources>
 </document>

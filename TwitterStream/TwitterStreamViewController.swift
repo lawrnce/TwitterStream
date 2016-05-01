@@ -10,6 +10,7 @@ import UIKit
 
 enum TweetFilter {
     case Gif
+    case Text
     case Video
     case Photo
 }
@@ -35,7 +36,7 @@ class TwitterStreamViewController: UIViewController {
     var playback: Bool = false
     
     // Boolean values of current filter
-    var filter: (gif: Bool, video: Bool, photo: Bool)!
+    var filter: (gif: Bool, text: Bool, video: Bool, photo: Bool)!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,7 +69,7 @@ class TwitterStreamViewController: UIViewController {
         Setup filter view. Initially accept all types.
      */
     private func setupFilterView() {
-        self.filter = (true, true, true)
+        self.filter = (true, true, true, true)
         self.filterView.delegate = self
     }
      
@@ -122,6 +123,9 @@ extension TwitterStreamViewController: FilterViewDelegate {
             case .Gif:
                 self.filter!.gif = !self.filter!.gif
                 self.filterView.setFilterButtonImageForFilter(filter, forState: self.filter!.gif)
+            case .Text:
+                self.filter!.text = !self.filter!.text
+                self.filterView.setFilterButtonImageForFilter(filter, forState: self.filter!.text)
             case .Video:
                 self.filter!.video = !self.filter!.video
                 self.filterView.setFilterButtonImageForFilter(filter, forState: self.filter!.video)

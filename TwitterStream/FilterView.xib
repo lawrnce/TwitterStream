@@ -11,6 +11,7 @@
                 <outlet property="gifFilterButton" destination="nGI-6Z-hfM" id="xy3-4F-1cE"/>
                 <outlet property="photoFilterButton" destination="qBI-01-frd" id="n1r-tL-QvC"/>
                 <outlet property="playbackButton" destination="mEn-dD-AbD" id="W4d-6x-3Gy"/>
+                <outlet property="textFilterButton" destination="Efc-RS-vxI" id="oWt-WN-Y7W"/>
                 <outlet property="videoFilterButton" destination="Mhv-xe-Sjh" id="LRf-1D-qdp"/>
             </connections>
         </placeholder>
@@ -20,19 +21,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LFc-ci-6df">
-                    <rect key="frame" x="52" y="0.0" width="529" height="40"/>
+                    <rect key="frame" x="44" y="0.0" width="537" height="40"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhv-xe-Sjh">
-                            <rect key="frame" x="176" y="-1" width="177" height="41"/>
-                            <state key="normal">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="videoFilterButtonDidPress:" destination="-1" eventType="touchUpInside" id="nGM-Y0-DoT"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nGI-6Z-hfM">
-                            <rect key="frame" x="0.0" y="0.0" width="176" height="40"/>
+                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nGI-6Z-hfM">
+                            <rect key="frame" x="0.0" y="0.0" width="117" height="40"/>
                             <state key="normal">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -40,8 +32,23 @@
                                 <action selector="gifFilterButtonDidPress:" destination="-1" eventType="touchUpInside" id="3gD-79-Ewt"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-01-frd">
-                            <rect key="frame" x="353" y="0.0" width="176" height="40"/>
+                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Efc-RS-vxI">
+                            <rect key="frame" x="117" y="0.0" width="118" height="40"/>
+                            <connections>
+                                <action selector="textFilterButtonDidPress:" destination="-1" eventType="touchUpInside" id="Iyf-xz-h2g"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhv-xe-Sjh">
+                            <rect key="frame" x="235" y="0.0" width="151" height="40"/>
+                            <state key="normal">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="videoFilterButtonDidPress:" destination="-1" eventType="touchUpInside" id="nGM-Y0-DoT"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-01-frd">
+                            <rect key="frame" x="386" y="0.0" width="134" height="40"/>
                             <state key="normal">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -52,14 +59,24 @@
                     </subviews>
                     <constraints>
                         <constraint firstItem="Mhv-xe-Sjh" firstAttribute="leading" secondItem="nGI-6Z-hfM" secondAttribute="trailing" id="1OA-Lr-1kN"/>
+                        <constraint firstItem="qBI-01-frd" firstAttribute="leading" secondItem="Mhv-xe-Sjh" secondAttribute="trailing" id="3cg-gQ-EmM"/>
                         <constraint firstItem="Mhv-xe-Sjh" firstAttribute="centerY" secondItem="LFc-ci-6df" secondAttribute="centerY" id="4E9-Lp-czj"/>
                         <constraint firstItem="nGI-6Z-hfM" firstAttribute="top" secondItem="LFc-ci-6df" secondAttribute="top" id="9Ic-Fl-9rd"/>
                         <constraint firstItem="qBI-01-frd" firstAttribute="top" secondItem="LFc-ci-6df" secondAttribute="top" id="9n7-0P-QfC"/>
+                        <constraint firstItem="qBI-01-frd" firstAttribute="width" secondItem="LFc-ci-6df" secondAttribute="width" multiplier="4/16" id="F7Z-Au-fqk"/>
+                        <constraint firstAttribute="bottom" secondItem="Efc-RS-vxI" secondAttribute="bottom" id="HU1-WP-fVP"/>
                         <constraint firstItem="qBI-01-frd" firstAttribute="leading" secondItem="Mhv-xe-Sjh" secondAttribute="trailing" id="Hbd-ry-yxa"/>
                         <constraint firstAttribute="bottom" secondItem="nGI-6Z-hfM" secondAttribute="bottom" id="OZH-0A-WSb"/>
-                        <constraint firstItem="Mhv-xe-Sjh" firstAttribute="width" secondItem="LFc-ci-6df" secondAttribute="width" multiplier="1/3" id="Rb4-og-3aE"/>
+                        <constraint firstItem="Efc-RS-vxI" firstAttribute="leading" secondItem="nGI-6Z-hfM" secondAttribute="trailing" id="RZd-PZ-R5A"/>
+                        <constraint firstItem="Mhv-xe-Sjh" firstAttribute="width" secondItem="LFc-ci-6df" secondAttribute="width" multiplier="4.5/16" id="Rb4-og-3aE"/>
+                        <constraint firstItem="Mhv-xe-Sjh" firstAttribute="leading" secondItem="Efc-RS-vxI" secondAttribute="trailing" constant="-46" id="Riq-Y9-Roj"/>
+                        <constraint firstItem="Efc-RS-vxI" firstAttribute="leading" secondItem="Mhv-xe-Sjh" secondAttribute="trailing" id="Vho-Mm-OPu"/>
+                        <constraint firstItem="Mhv-xe-Sjh" firstAttribute="top" secondItem="LFc-ci-6df" secondAttribute="top" id="Zhz-Dp-Vcn"/>
+                        <constraint firstItem="Mhv-xe-Sjh" firstAttribute="leading" secondItem="Efc-RS-vxI" secondAttribute="trailing" id="aCP-xR-qiV"/>
+                        <constraint firstItem="Efc-RS-vxI" firstAttribute="top" secondItem="LFc-ci-6df" secondAttribute="top" id="aMi-lh-13o"/>
                         <constraint firstAttribute="trailing" secondItem="qBI-01-frd" secondAttribute="trailing" id="aPI-Nt-q9X"/>
-                        <constraint firstItem="nGI-6Z-hfM" firstAttribute="width" secondItem="LFc-ci-6df" secondAttribute="width" multiplier="1/3" id="aey-K1-k8f"/>
+                        <constraint firstItem="nGI-6Z-hfM" firstAttribute="width" secondItem="LFc-ci-6df" secondAttribute="width" multiplier="3.5/16" id="aey-K1-k8f"/>
+                        <constraint firstItem="Efc-RS-vxI" firstAttribute="width" secondItem="LFc-ci-6df" secondAttribute="width" multiplier="3.5/16" id="ao2-MD-0bo"/>
                         <constraint firstItem="Mhv-xe-Sjh" firstAttribute="centerX" secondItem="LFc-ci-6df" secondAttribute="centerX" id="frC-Ic-bG9"/>
                         <constraint firstAttribute="bottom" secondItem="Mhv-xe-Sjh" secondAttribute="bottom" id="hVD-mg-vpY"/>
                         <constraint firstItem="Mhv-xe-Sjh" firstAttribute="top" secondItem="LFc-ci-6df" secondAttribute="top" id="hxo-pK-8vO"/>
@@ -68,14 +85,21 @@
                     </constraints>
                     <variation key="default">
                         <mask key="constraints">
+                            <exclude reference="Vho-Mm-OPu"/>
+                            <exclude reference="1OA-Lr-1kN"/>
+                            <exclude reference="4E9-Lp-czj"/>
+                            <exclude reference="Riq-Y9-Roj"/>
+                            <exclude reference="frC-Ic-bG9"/>
                             <exclude reference="hxo-pK-8vO"/>
+                            <exclude reference="Hbd-ry-yxa"/>
+                            <exclude reference="aPI-Nt-q9X"/>
                         </mask>
                     </variation>
                 </view>
-                <button opaque="NO" contentMode="scaleAspectFit" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEn-dD-AbD">
-                    <rect key="frame" x="8" y="-1" width="44" height="45"/>
+                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEn-dD-AbD">
+                    <rect key="frame" x="4" y="0.0" width="40" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="44" id="WjR-YF-OQh"/>
+                        <constraint firstAttribute="width" constant="40" id="WjR-YF-OQh"/>
                         <constraint firstAttribute="height" constant="40" id="mPL-4x-bRR"/>
                     </constraints>
                     <state key="normal">
@@ -88,7 +112,7 @@
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="mEn-dD-AbD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="6YH-Tt-eRt"/>
+                <constraint firstItem="mEn-dD-AbD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="4" id="6YH-Tt-eRt"/>
                 <constraint firstAttribute="bottom" secondItem="mEn-dD-AbD" secondAttribute="bottom" constant="4" id="VRz-qy-Jce"/>
                 <constraint firstAttribute="trailing" secondItem="LFc-ci-6df" secondAttribute="trailing" id="a33-Wg-snZ"/>
                 <constraint firstItem="mEn-dD-AbD" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="fVA-Ks-iNV"/>

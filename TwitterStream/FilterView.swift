@@ -27,6 +27,7 @@ protocol FilterViewDelegate {
     @IBOutlet weak var playbackButton: UIButton!
     @IBOutlet weak var videoFilterButton: UIButton!
     @IBOutlet weak var gifFilterButton: UIButton!
+    @IBOutlet weak var textFilterButton: UIButton!
     @IBOutlet weak var photoFilterButton: UIButton!
     
     
@@ -46,6 +47,15 @@ protocol FilterViewDelegate {
         }
         set(image) {
             gifFilterButton.setImage(image, forState: .Normal)
+        }
+    }
+    
+    @IBInspectable dynamic var textFilterButtonImage: UIImage? {
+        get {
+            return textFilterButton.imageForState(.Normal)
+        }
+        set(image) {
+            textFilterButton.setImage(image, forState: .Normal)
         }
     }
 
@@ -85,6 +95,10 @@ protocol FilterViewDelegate {
                 let imageName = state ? "GifFilterImageOn" : "GifFilterImageOff"
                 self.gifFilterButtonImage = UIImage(named: imageName)
             
+            case .Text:
+                let imageName = state ? "TextFilterImageOn" : "TextFilterImageOff"
+                self.textFilterButtonImage = UIImage(named: imageName)
+            
             case .Video:
                 let imageName = state ? "VideoFilterImageOn" : "VideoFilterImageOff"
                 self.videoFilterButtonImage = UIImage(named: imageName)
@@ -104,6 +118,10 @@ protocol FilterViewDelegate {
     
     @IBAction func gifFilterButtonDidPress(sender: AnyObject) {
         self.delegate?.filterView(self, didToggleFilter: .Gif)
+    }
+    
+    @IBAction func textFilterButtonDidPress(sender: AnyObject) {
+        self.delegate?.filterView(self, didToggleFilter: .Text)
     }
     
     @IBAction func videoFilterButtonDidPress(sender: AnyObject) {
