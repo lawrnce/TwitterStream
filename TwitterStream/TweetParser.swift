@@ -9,6 +9,16 @@
 import Foundation
 import SwiftyJSON
 
+/**
+    Tweet Error Types
+ */
+enum TweetError: ErrorType {
+    case TweetScreenNameError
+    case TweetProfileImageURLError
+    case TweetTextError
+}
+
+
 class TweetParser: NSObject {
 
     /**
@@ -18,21 +28,19 @@ class TweetParser: NSObject {
         - Parameter data: The raw tweet data from a Twitter Stream.
         - Returns: A dictionary representing a tweet. Nil if invalid data.
      */
-    func parseTweetStream(data: JSON) -> [String: AnyObject]? {
+    func parseTweetStream(data: JSON) throws -> [String: AnyObject] {
         
         // Dictionary representing the tweet
         var tweet = [String: AnyObject]()
         
-        // Check if basic info is valid
-        if let basicTweet: (screenName: String, profileImageURL: String, text: String) = checkBasicInfo(data) {
-            
+        // Try to parse basic tweet info
+        do {
+            let basicTweet: (screenName: String, profileImageURL: String, text: String) = try parseBasicInfo(data)
             tweet["screen_name"] = basicTweet.screenName
             tweet["profile_image_url"] = basicTweet.profileImageURL
             tweet["text"] = basicTweet.text
-        
-        // not valid basic info
-        } else {
-            return nil
+        } catch let error as TweetError {
+            throw error
         }
         
         // Create objects so even if empty, dictionary contains empty instead of nil
@@ -79,10 +87,36 @@ class TweetParser: NSObject {
         - Parameter data: Raw JSON data from a Twitter Stream.
         - Returns: A triple containing screen name, profile image url, and text. Nil if invalid.
      */
-    private func checkBasicInfo(data: JSON) -> (screenName: String, profileImageURL: String, text: String)? {
+    private func parseBasicInfo(data: JSON) throws -> (screenName: String, profileImageURL: String, text: String) {
         
+        var screenName: String!
+        var profileImageURL: String!
+        var text: String!
+        
+         // Check valid screen name
+        if (data["user"]["screen_name"].isExists() && data["user"]["screen_name"].stringValue != "-1") {
+            screenName = data["user"]["screen_name"].stringValue
+        } else {
+            throw TweetError.TweetScreenNameError
+        }
+        
+        // Check valid profile image url
+        if (data["user"]["profile_image_url"].isExists() && data["user"]["profile_image_url"].stringValue != "-1") {
+            profileImageURL = data["user"]["profile_image_url"].stringValue
+        } else {
+            throw TweetError.TweetProfileImageURLError
+        }
+        
+        // Check valid text
+        if (data["text"].isExists() && data["text"].stringValue != "-1") {
+            text = data["text"].stringValue
+        } else {
+            throw TweetError.TweetTextError
+        }
+
+        return (screenName, profileImageURL, text)
     }
-     
+    
     /**
         Parses entities as links or photos.
      
