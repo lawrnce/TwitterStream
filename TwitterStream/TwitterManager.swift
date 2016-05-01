@@ -132,6 +132,9 @@ extension TwitterManager: NSURLConnectionDataDelegate {
             
             // Notify delegate
             self.delegate?.twitterManager(self, didStreamTweet: tweet)
+            
+            // TESTING
+//            print(json)
         }
     }
     

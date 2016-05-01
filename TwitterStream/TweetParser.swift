@@ -18,11 +18,25 @@ class TweetParser: NSObject {
         - Returns: A JSON of basic tweet data.
      */
     func parseTweetStream(data: JSON) -> JSON {
-        let tweet = [   "screen_name": data["user"]["screen_name"],
-                        "profile_image_url": data["user"]["profile_image_url"],
-                        "text": data["text"]]
         
+        var urls = [String]()
         
+        // Check for entities in tweet
+        let entities_urls = data["entities"]["urls"]
+        
+        if (entities_urls.isEmpty == false) {
+            
+            // Iterate through entities
+            for (_, subJson) in entities_urls {
+                urls.append(subJson["url"].stringValue)
+            }
+        }
+        
+        // Parse basic info
+        let tweet = [   "screen_name": data["user"]["screen_name"].stringValue,
+                        "profile_image_url": data["user"]["profile_image_url"].stringValue,
+                        "text": data["text"].stringValue,
+                        "entities_urls": urls]
         
         return JSON(tweet)
     }

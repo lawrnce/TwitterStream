@@ -40,7 +40,7 @@ class TwitterStreamViewController: UIViewController {
         self.twitterManager.delegate = self
         
         // Testing
-        self.twitterManager.createStreamConnectionForKeyword("anime")
+        self.twitterManager.createStreamConnectionForKeyword("GIF")
     }
      
     /**
