@@ -40,7 +40,7 @@ class TwitterStreamViewController: UIViewController {
         self.twitterManager.delegate = self
         
         // Testing
-        self.twitterManager.createStreamConnectionForKeyword("GIF")
+        self.twitterManager.createStreamConnectionForKeyword("VIDEO")
     }
      
     /**
@@ -66,7 +66,7 @@ class TwitterStreamViewController: UIViewController {
 extension TwitterStreamViewController: TwitterManagerDelegate {
     
     func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: JSON) {
-        print(tweet)
+//        print(tweet)
     }
 }
 

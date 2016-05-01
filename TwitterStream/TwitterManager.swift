@@ -134,7 +134,10 @@ extension TwitterManager: NSURLConnectionDataDelegate {
             self.delegate?.twitterManager(self, didStreamTweet: tweet)
             
             // TESTING
-//            print(json)
+            if (json["extended_entities"] != nil) {
+                print(json)
+            }
+            
         }
     }
     

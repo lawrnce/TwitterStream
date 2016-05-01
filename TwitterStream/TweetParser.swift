@@ -19,7 +19,16 @@ class TweetParser: NSObject {
      */
     func parseTweetStream(data: JSON) -> JSON {
         
+        let media = [String]()
+        
         var urls = [String]()
+        
+        // Check for extended_entities
+        let extended_entities = data["extended_entities"]
+        
+        if (extended_entities != nil) {
+
+        }
         
         // Check for entities in tweet
         let entities_urls = data["entities"]["urls"]
@@ -36,8 +45,51 @@ class TweetParser: NSObject {
         let tweet = [   "screen_name": data["user"]["screen_name"].stringValue,
                         "profile_image_url": data["user"]["profile_image_url"].stringValue,
                         "text": data["text"].stringValue,
-                        "entities_urls": urls]
+                        "entities": urls,
+                        "extended_entities": media]
         
         return JSON(tweet)
     }
+    
+    /**
+        Parse extended entities into a readable format.
+     
+        - Parameter data: A JSON array of "extended_entites" from a Twitter Stream.
+        - Returns: A parsed JSON representing media.
+     */
+    func parseExtendedEntities(data: JSON) {
+        
+    }
+    
+    /** 
+        Parse entities into a simple format.
+     
+        - Parameter data: A JSON array of "entities" from a Twitter Stream.
+        - Returns: An array of urls.
+     */
+    func parseEntities(data: JSON) {
+        
+    }
+    
+    /**
+        Parases extended entities for video media.
+    
+        - Parameter data: A JSON of "extended_entites" from a Twitter Stream.
+        - Returns: A parsed JSON for video.
+     */
+    func parseVideo(data: JSON) {
+        
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
