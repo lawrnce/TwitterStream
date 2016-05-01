@@ -130,9 +130,12 @@ extension TwitterManager: NSURLConnectionDataDelegate {
             self.delegate?.twitterManager(self, didStreamTweet: tweet)
             
             // TESTING
-            if (json["extended_entities"] != nil) {
-//                print(json)
-            }
+//            if (json["extended_entities"].isExists()) {
+//                
+//                if (json["extended_entities"]["media"]["type"] == "animated_gif") {
+//                    print(json)
+//                }
+//            }
             
         }
     }

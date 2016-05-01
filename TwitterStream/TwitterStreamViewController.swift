@@ -40,7 +40,7 @@ class TwitterStreamViewController: UIViewController {
         self.twitterManager.delegate = self
         
         // Testing
-        self.twitterManager.createStreamConnectionForKeyword("VIDEO")
+        self.twitterManager.createStreamConnectionForKeyword("gif")
     }
      
     /**
@@ -66,9 +66,23 @@ class TwitterStreamViewController: UIViewController {
 extension TwitterStreamViewController: TwitterManagerDelegate {
     
     func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: JSON) {
-        if (tweet["extended_entities"].isEmpty == false && tweet["entities"].isEmpty == false) {
-            print(tweet)
+//        if (tweet["extended_entities"].isEmpty == false && tweet["entities"].isEmpty == false) {
+////            print(tweet["text"].stringValue)
+//            print(tweet)
+//           
+//        }
+        
+        if (tweet["extended_entities"].isEmpty == false) {
+            
+            for (_, subJson) in tweet["extended_entities"] {
+                print(subJson["url"].stringValue)
+            }
+            
+//            print(tweet)
+        
         }
+    
+//         print(tweet["extended_entities"])
     }
 }
 

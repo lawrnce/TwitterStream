@@ -36,9 +36,9 @@ class TweetParser: NSObject {
         }
         
         // Parse basic info
-        let tweet : [String: AnyObject] = [   "screen_name": data["user"]["screen_name"].stringValue,
-                        "profile_image_url": data["user"]["profile_image_url"].stringValue,
-                        "text": data["text"].stringValue,
+        let tweet : [String: AnyObject] = [   "screen_name": data["user"]["screen_name"].string!,
+                        "profile_image_url": data["user"]["profile_image_url"].string!,
+                        "text": data["text"].string!,
                         "extended_entities": media,
                         "entities": urls]
         
@@ -76,51 +76,43 @@ class TweetParser: NSObject {
         var extended_entities = [[String: String]]()
         
         for (_, subJson) in data["media"] {
-            
-            // Check media type
-            if (subJson["type"].isExists()) {
-                
-                let type = subJson["type"].stringValue
-                
-                // Check if video
-                if (type == "video") {
-                    extended_entities.append(parseVideo(subJson))
-                    
-                // Check if gif
-                } else if (type == "animated_gif") {
-                    
-                }
-            }
+            extended_entities.append(parseMedia(subJson))
         }
         
         return extended_entities
     }
     
     /**
-        Parases extended entities for video media. Gets the thumbnail and the 
-        HLS streming format.
-    
+        Parases extended entities for videos or gifs.
+     
         - Parameter data: A JSON of "extended_entites" from a Twitter Stream.
         - Returns: A dictionary describing a video file.
      */
-    func parseVideo(data: JSON) -> [String: String] {
+    func parseMedia(data: JSON) -> [String: String] {
         
-        var video = [String: String]()
+        var media = [String: String]()
         
-        // Iterate through video variants
+        // Iterate through variants
         for (_, subJson) in data["video_info"]["variants"] {
             
-            // Get HLS Streaming format video url
-            if (subJson["content_type"].stringValue == "application/x-mpegURL") {
-                video["url"] = subJson["url"].stringValue
+            // Check content typ for mp4 && bit rate 832000 (video) or 0 (gif)
+            if (subJson["content_type"].stringValue == "video/mp4" && subJson["content_type"].int < 832001) {
                 
                 // Add type
-                video["type"] = "video"
+                media["type"] = data["type"].stringValue
                 
                 // Get thumbnail image url
-                video["thumbnail_url"] = data["media_url"].stringValue
+                media["thumbnail_url"] = data["media_url"].stringValue
+                
+                // Get content url
+                media["url"] = subJson["url"].stringValue
             }
         }
-        return video
+        
+        return media
     }
 }
+
+
+
+
