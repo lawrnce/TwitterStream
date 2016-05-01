@@ -96,14 +96,12 @@
                         </mask>
                     </variation>
                 </view>
-                <button opaque="NO" contentMode="scaleAspectFit" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEn-dD-AbD">
+                <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEn-dD-AbD">
                     <rect key="frame" x="4" y="0.0" width="40" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="40" id="WjR-YF-OQh"/>
                         <constraint firstAttribute="height" constant="40" id="mPL-4x-bRR"/>
                     </constraints>
-                    <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="4"/>
-                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="4"/>
                     <state key="normal">
                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -120,7 +118,7 @@
             <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="mEn-dD-AbD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="4" id="6YH-Tt-eRt"/>
-                <constraint firstAttribute="bottom" secondItem="mEn-dD-AbD" secondAttribute="bottom" id="VRz-qy-Jce"/>
+                <constraint firstAttribute="bottom" secondItem="mEn-dD-AbD" secondAttribute="bottom" constant="4" id="VRz-qy-Jce"/>
                 <constraint firstAttribute="trailing" secondItem="LFc-ci-6df" secondAttribute="trailing" id="a33-Wg-snZ"/>
                 <constraint firstItem="mEn-dD-AbD" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="fVA-Ks-iNV"/>
                 <constraint firstAttribute="bottom" secondItem="LFc-ci-6df" secondAttribute="bottom" constant="4" id="io2-SR-3zm"/>

@@ -12,7 +12,7 @@ import UIKit
     Notifies the delegate of state change.
  */
 protocol FilterViewDelegate {
-    func filterView(filterView: FilterView, didToggleFilter filter: TweetFilter)
+    func filterView(filterView: FilterView, didToggleFilterForType type: TweetType)
     func didTogglePlayback()
 }
 
@@ -89,23 +89,20 @@ protocol FilterViewDelegate {
     /**
         Set the button image for the filter state.
      */
-    func setFilterButtonImageForFilter(filter: TweetFilter, forState state: Bool) {
+    func setFilterButtonImageForFilterType(filter: TweetType, forState state: Bool) {
         switch (filter) {
-            case .Gif:
-                let imageName = state ? "GifFilterImageOn" : "GifFilterImageOff"
-                self.gifFilterButtonImage = UIImage(named: imageName)
-            
-            case .Text:
-                let imageName = state ? "TextFilterImageOn" : "TextFilterImageOff"
-                self.textFilterButtonImage = UIImage(named: imageName)
-            
-            case .Video:
-                let imageName = state ? "VideoFilterImageOn" : "VideoFilterImageOff"
-                self.videoFilterButtonImage = UIImage(named: imageName)
-            
-            case .Photo:
-                let imageName = state ? "PhotoFilterImageOn" : "PhotoFilterImageOff"
-                self.photoFilterButtonImage = UIImage(named: imageName)
+        case .Gif:
+            let imageName = state ? "GifFilterImageOn" : "GifFilterImageOff"
+            self.gifFilterButtonImage = UIImage(named: imageName)
+        case .Text:
+            let imageName = state ? "TextFilterImageOn" : "TextFilterImageOff"
+            self.textFilterButtonImage = UIImage(named: imageName)
+        case .Video:
+            let imageName = state ? "VideoFilterImageOn" : "VideoFilterImageOff"
+            self.videoFilterButtonImage = UIImage(named: imageName)
+        case .Photo:
+            let imageName = state ? "PhotoFilterImageOn" : "PhotoFilterImageOff"
+            self.photoFilterButtonImage = UIImage(named: imageName)
         }
     }
     
@@ -117,19 +114,19 @@ protocol FilterViewDelegate {
     }
     
     @IBAction func gifFilterButtonDidPress(sender: AnyObject) {
-        self.delegate?.filterView(self, didToggleFilter: .Gif)
+        self.delegate?.filterView(self, didToggleFilterForType: .Gif)
     }
     
     @IBAction func textFilterButtonDidPress(sender: AnyObject) {
-        self.delegate?.filterView(self, didToggleFilter: .Text)
+        self.delegate?.filterView(self, didToggleFilterForType: .Text)
     }
     
     @IBAction func videoFilterButtonDidPress(sender: AnyObject) {
-        self.delegate?.filterView(self, didToggleFilter: .Video)
+        self.delegate?.filterView(self, didToggleFilterForType: .Video)
     }
     
     @IBAction func photoFilterButtonDidPress(sender: AnyObject) {
-        self.delegate?.filterView(self, didToggleFilter: .Photo)
+        self.delegate?.filterView(self, didToggleFilterForType: .Photo)
     }
     
     /**
