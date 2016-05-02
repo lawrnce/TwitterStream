@@ -44,6 +44,9 @@
                             </mask>
                         </variation>
                     </textView>
+                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="QQM-nZ-YQi">
+                        <rect key="frame" x="226" y="173" width="20" height="20"/>
+                    </activityIndicatorView>
                     <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CFZ-Gf-SSd">
                         <rect key="frame" x="8" y="61" width="457" height="150"/>
                         <constraints>
@@ -63,6 +66,8 @@
                     <constraint firstItem="CFZ-Gf-SSd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="9hW-il-HNG"/>
                     <constraint firstAttribute="bottom" secondItem="CFZ-Gf-SSd" secondAttribute="bottom" constant="8" id="CQ6-tJ-vkF"/>
                     <constraint firstAttribute="trailing" secondItem="CFZ-Gf-SSd" secondAttribute="trailing" constant="8" id="FTk-SJ-8Lq"/>
+                    <constraint firstItem="QQM-nZ-YQi" firstAttribute="centerY" secondItem="CFZ-Gf-SSd" secondAttribute="centerY" id="d2k-rM-3f6"/>
+                    <constraint firstItem="QQM-nZ-YQi" firstAttribute="centerX" secondItem="CFZ-Gf-SSd" secondAttribute="centerX" id="fnt-8g-4L8"/>
                     <constraint firstItem="lTJ-xA-DR0" firstAttribute="top" secondItem="wIH-0Y-71i" secondAttribute="bottom" id="gpQ-OH-z0B"/>
                     <constraint firstItem="wIH-0Y-71i" firstAttribute="leading" secondItem="eM8-Tb-XK1" secondAttribute="trailing" constant="8" id="hYH-zu-rBD"/>
                     <constraint firstItem="eM8-Tb-XK1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="iTn-hG-ifL"/>
@@ -77,6 +82,7 @@
                 </variation>
             </tableViewCellContentView>
             <connections>
+                <outlet property="activityIndicatorView" destination="QQM-nZ-YQi" id="f45-hI-TsE"/>
                 <outlet property="mediaView" destination="CFZ-Gf-SSd" id="xId-Qw-y76"/>
                 <outlet property="profileImageView" destination="eM8-Tb-XK1" id="Yn9-Ei-ufU"/>
                 <outlet property="screenNameLabel" destination="wIH-0Y-71i" id="P9h-g7-nDE"/>

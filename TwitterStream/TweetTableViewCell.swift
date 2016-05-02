@@ -16,6 +16,7 @@ class TweetTableViewCell: UITableViewCell {
     @IBOutlet weak var screenNameLabel: UILabel!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var mediaView: UIView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
     // Media
     var videoItem: AVPlayerItem!
@@ -38,6 +39,7 @@ class TweetTableViewCell: UITableViewCell {
         Cell data on reuse
      */
     override func prepareForReuse() {
+        
         if (self.profileImageView.image != nil) {
             profileImageView.image = nil
         }
@@ -47,7 +49,6 @@ class TweetTableViewCell: UITableViewCell {
         if (self.textView.text?.isEmpty == false) {
             self.textView.text = ""
         }
-        
         for subview in self.mediaView.subviews {
             subview.removeFromSuperview()
         }
@@ -57,20 +58,11 @@ class TweetTableViewCell: UITableViewCell {
                 sublayer.removeFromSuperlayer()
             }
         }
-        
-//        if (self.videoPlayer != nil) {
-//            self.videoPlayer = nil
-//        }
-//        if (self.videoItem != nil) {
-//            self.videoItem = nil
-//        }
-//        if (self.avLayer != nil) {
-//            self.avLayer.removeFromSuperlayer()
-//            self.avLayer = nil
-//        }
-//        if (self.photoImageView != nil) {
-//            self.photoImageView.image = nil
-//            self.photoImageView = nil
-//        }
+        if (self.videoPlayer != nil) {
+            self.videoPlayer = nil
+        }
+        if (self.videoItem != nil) {
+            self.videoItem = nil
+        }
     }
 }

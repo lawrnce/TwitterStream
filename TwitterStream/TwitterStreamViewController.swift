@@ -118,7 +118,7 @@ class TwitterStreamViewController: UIViewController {
         setupTweetQueue()
         
         // Testing
-        self.twitterManager.createStreamConnectionForKeyword("gif")
+        self.twitterManager.createStreamConnectionForKeyword("popular")
     }
     
     /**
