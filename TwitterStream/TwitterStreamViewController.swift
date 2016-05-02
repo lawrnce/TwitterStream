@@ -83,7 +83,19 @@ class TwitterStreamViewController: UIViewController {
     
    
     // MARK: - Data
-     
+    
+    /**
+        Restarts the stream with a new term.
+     */
+    private func newStreamWithKeyword(keyword: String) {
+        flushCache()
+        self.tweets = nil
+        self.currentList = nil
+        self.filterView.resetUIState()
+        self.tableView.reloadData()
+        self.twitterManager.createStreamConnectionForKeyword(keyword)
+    }
+    
     /**
         When a new keyword is being streamed. Flushes the cache.
      */
@@ -116,9 +128,6 @@ class TwitterStreamViewController: UIViewController {
         self.twitterManager = TwitterManager()
         self.twitterManager.delegate = self
         setupTweetQueue()
-        
-        // Testing
-        self.twitterManager.createStreamConnectionForKeyword("gif")
     }
     
     /**
@@ -152,10 +161,15 @@ class TwitterStreamViewController: UIViewController {
         self.searchController.searchBar.delegate = self
         self.searchController.hidesNavigationBarDuringPresentation = false
         self.searchController.dimsBackgroundDuringPresentation = true
-        self.searchController.searchBar.tintColor = UIColor.whiteColor()
         self.searchController.searchBar.placeholder = "Search Twitter"
         self.navigationItem.titleView = searchController.searchBar
         self.definesPresentationContext = true
+        
+        // Set cancel button color
+        self.searchController.searchBar.tintColor = UIColor.whiteColor()
+        
+        // Set cursor color
+        self.searchController.searchBar.subviews[0].subviews.flatMap(){ $0 as? UITextField }.first?.tintColor = UIColor.blueColor()
     }
     
     
@@ -179,8 +193,10 @@ class TwitterStreamViewController: UIViewController {
             
         // Animate if user is near the top
         } else {
-            self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Fade)
-            self.tableView.reloadData()
+            if (self.currentList != nil) {
+                self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Fade)
+                self.tableView.reloadData()
+            }
         }
     }
     
@@ -256,7 +272,23 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
 // Processes search terms
 extension TwitterStreamViewController: UISearchControllerDelegate, UISearchBarDelegate {
     
-
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+//        self.twitterManager.pauseStream()
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+//        self.twitterManager.resumeStream()
+    }
+    
+    /**
+        Take search term as "track" in HTTP stream.
+     */
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        let searchTerm = searchBar.text!
+        self.searchController.searchBar.placeholder = "\"" + searchTerm + "\""
+        self.searchController.active = false
+        newStreamWithKeyword(searchTerm)
+    }
 }
 
 
