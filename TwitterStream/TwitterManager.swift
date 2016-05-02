@@ -12,7 +12,7 @@ import Accounts
 import SwiftyJSON
 
 protocol TwitterManagerDelegate {
-    func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: [String: AnyObject])
+    func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: JSON)
 }
 
 class TwitterManager: NSObject {

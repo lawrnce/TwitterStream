@@ -38,11 +38,11 @@ class TweetsModelTests: XCTestCase {
         self.tweets.insertTweet([String: String](), forType: .Text)   // 5
         self.tweets.insertTweet([String: String](), forType: .Video)  // 6
         
-        // filter text and video
-        let filter = (false, true, true, false)
+        // filter gif text
+        let filter = (true, true, false, false)
         
         let filteredList = self.tweets.filterTweets(filter)
         
-        expect(filteredList).to(equal([0, 3, 5, 6]))
+        expect(filteredList).to(equal([0, 1, 2, 3, 5]))
     }
 }

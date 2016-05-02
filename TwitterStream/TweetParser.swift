@@ -26,9 +26,9 @@ class TweetParser: NSObject {
         Also parses entities and extended_entities for videos, gifs, and images.
     
         - Parameter data: The raw tweet data from a Twitter Stream.
-        - Returns: A dictionary representing a tweet. Nil if invalid data.
+        - Returns: A JSON representing a tweet.
      */
-    func parseTweetStream(data: JSON) throws -> [String: AnyObject] {
+    func parseTweetStream(data: JSON) throws -> JSON {
         
         // Dictionary representing the tweet
         var tweet = [String: AnyObject]()
@@ -76,7 +76,7 @@ class TweetParser: NSObject {
         tweet["links"] = links
         tweet["tags"] = tags
    
-        return tweet
+        return JSON(tweet)
     }
     
     /** 

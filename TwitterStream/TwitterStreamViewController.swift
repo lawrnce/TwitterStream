@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftyJSON
 
 class TwitterStreamViewController: UIViewController {
 
@@ -30,9 +31,6 @@ class TwitterStreamViewController: UIViewController {
     
     // Playback is initially false
     var playback: Bool = false
-    
-    // Boolean values of current filter
-    var filter: (gif: Bool, text: Bool, video: Bool, photo: Bool)!
     
     // Tweet processing is handled on this queue
     var tweetQueue: dispatch_queue_t!
@@ -59,6 +57,7 @@ class TwitterStreamViewController: UIViewController {
     private func setupTwitterManager() {
         self.twitterManager = TwitterManager()
         self.twitterManager.delegate = self
+        setupTweetQueue()
         
         // Testing
         self.twitterManager.createStreamConnectionForKeyword("anime")
@@ -68,7 +67,6 @@ class TwitterStreamViewController: UIViewController {
         Setup filter view. Initially accept all types.
      */
     private func setupFilterView() {
-        self.filter = (true, true, true, true)
         self.filterView.delegate = self
     }
     
@@ -104,10 +102,27 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
     /**
         On receiving a tweet. Process it in the background.
      */
-    func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: [String: AnyObject]) {
+    func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: JSON) {
         
+        // lazy load a tweets data structure
+        if (self.tweets == nil) {
+            self.tweets = TweetsModel()
+            self.currentList = [Int]()
+        }
+        
+        // Insert tweet
         dispatch_async(self.tweetQueue) { () -> Void in
-            print(tweet)
+            
+            self.tweets.insertTweet(tweet, completion: { (filtered, key) -> () in
+                
+                // Current filter allows new tweet
+                if (filtered == true) {
+                    
+                    // Append to current list
+                    self.currentList.append(key!)
+                    print(key!)
+                }
+            })
         }
     }
 }
@@ -130,30 +145,29 @@ extension TwitterStreamViewController: FilterViewDelegate {
      */
     func filterView(filterView: FilterView, didToggleFilterForType type: TweetType) {
         
-        // toggle filter
-        switch (type) {
-        case .Gif:
-            self.filter!.gif = !self.filter!.gif
-            self.filterView.setFilterButtonImageForFilterType(type, forState: self.filter!.gif)
-        case .Text:
-            self.filter!.text = !self.filter!.text
-            self.filterView.setFilterButtonImageForFilterType(type, forState: self.filter!.text)
-        case .Video:
-            self.filter!.video = !self.filter!.video
-            self.filterView.setFilterButtonImageForFilterType(type, forState: self.filter!.video)
-        case .Photo:
-            self.filter!.photo = !self.filter!.photo
-            self.filterView.setFilterButtonImageForFilterType(type, forState: self.filter!.photo)
+        // Ignore filter control if no tweets
+        guard self.tweets != nil else {
+            return
         }
         
-        // get filtered tweets
+        // Access tweets on tweet queue
         dispatch_async(self.tweetQueue) { () -> Void in
             
-            self.currentList = self.tweets.filterTweets(self.filter)
+            // Ignore user action if type has no tweets
+            guard self.tweets.countForType(type) != 0 else {
+                return
+            }
+    
+            // Toggle tweets filter
+            self.tweets.toggleFilterForType(type)
+            self.currentList = self.tweets.getFilteredTweets()
+            
+            let filterState = self.tweets.filterStateForType(type)
             
             // update ui
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 
+                self.filterView.setFilterButtonImageForFilterType(type, forState: filterState)
             })
         }
     }
