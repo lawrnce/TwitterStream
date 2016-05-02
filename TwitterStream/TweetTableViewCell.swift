@@ -16,6 +16,8 @@ class TweetTableViewCell: UITableViewCell {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var mediaView: UIView!
     
+    
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -35,9 +37,9 @@ class TweetTableViewCell: UITableViewCell {
 //            profileImageView.image = nil
 //        }
 //        
-//        if (screenNameLabel.text?.isEmpty == false) {
-//            screenNameLabel.text = ""
-//        }
+        if (screenNameLabel.text?.isEmpty == false) {
+            screenNameLabel.text = ""
+        }
         
     }
 }

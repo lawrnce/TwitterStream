@@ -23,8 +23,8 @@ typealias TweetFilter = (gif: Bool, text: Bool, video: Bool, photo: Bool)
  */
 class TweetsModel: NSObject {
 
-    // Map each tweet to an integer key.
-    private var tweetHash: [Int: JSON]!
+    // Map each tweet to an integer string key.
+    private var tweetHash: [Int: (data: JSON, type: TweetType)]!
     
     // List of gif tweets
     private var gifList: [Int]!
@@ -43,12 +43,22 @@ class TweetsModel: NSObject {
     
     override init() {
         super.init()
-        self.tweetHash = [Int: JSON]()
+        self.tweetHash = [Int: (data: JSON, type: TweetType)]()
         self.textList = [Int]()
         self.gifList = [Int]()
         self.videoList = [Int]()
         self.photoList = [Int]()
         self.filter = (true, true, true, true)
+    }
+    
+    /**
+        Returns the tweet data for the key.
+     
+        - Parameter key: The tweet's key.
+        - Returns: A tuple containing a JSON of the data and its type.
+     */
+    func tweetForKey(key: Int) -> (data: JSON, type: TweetType) {
+        return (self.tweetHash?[key])!
     }
     
     /**
@@ -124,8 +134,8 @@ class TweetsModel: NSObject {
         // Get next key for hash
         let key = self.tweetHash.count
         
-        // Set tweet hash
-        self.tweetHash[key] = tweet
+        // Set tweet hash and type
+        self.tweetHash[key] = (tweet, type)
         
         // Append key to type list.
         // If first tweet for type, turn on filter UI.
@@ -190,7 +200,7 @@ class TweetsModel: NSObject {
         }
         
         // order keys
-        keys.sortInPlace({ $0 < $1 })
+        keys.sortInPlace({ $0 > $1 })
         
         return keys
     }

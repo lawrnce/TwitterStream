@@ -145,6 +145,7 @@ class TwitterStreamViewController: UIViewController {
             
         // Animated if user is near the top
         } else {
+//            self.tableView.reloadData()
             self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Fade)
         }
     }
@@ -174,9 +175,9 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
                 // Current filter allows new tweet
                 if (filtered == true) {
                     
-                    // update ui
+                    // Update table
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        self.currentList.append(key!)
+                        self.currentList.insert(key!, atIndex: 0)
                         self.animateNewTweetIfNeeded()
                     })
                 }
@@ -269,9 +270,26 @@ extension TwitterStreamViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(kTweetTableViewCellReuseIdentifier, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(kTweetTableViewCellReuseIdentifier, forIndexPath: indexPath) as! TweetTableViewCell
         
-        cell.backgroundColor = UIColor.cyanColor()
+        let key = self.currentList[indexPath.row]
+        
+        let tweet: (data: JSON, type: TweetType) = self.tweets.tweetForKey(key)
+        
+        switch(tweet.type) {
+        case .Gif:
+            cell.backgroundColor = UIColor.cyanColor()
+            cell.screenNameLabel.text = "GIF"
+        case .Text:
+            cell.backgroundColor = UIColor.redColor()
+            cell.screenNameLabel.text = "TEXT"
+        case .Video:
+            cell.backgroundColor = UIColor.purpleColor()
+            cell.screenNameLabel.text = "VIDEO"
+        case .Photo:
+            cell.backgroundColor = UIColor.greenColor()
+            cell.screenNameLabel.text = "PHOTO"
+        }
         
         return cell
     }
@@ -282,4 +300,7 @@ extension TwitterStreamViewController: UITableViewDataSource {
  */
 extension TwitterStreamViewController: UITableViewDelegate {
     
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 100.0
+    }
 }
