@@ -21,10 +21,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LFc-ci-6df">
-                    <rect key="frame" x="44" y="0.0" width="537" height="40"/>
+                    <rect key="frame" x="60" y="0.0" width="521" height="40"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nGI-6Z-hfM">
-                            <rect key="frame" x="0.0" y="0.0" width="117" height="40"/>
+                            <rect key="frame" x="0.0" y="0.0" width="114" height="40"/>
                             <state key="normal">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -33,13 +33,13 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Efc-RS-vxI">
-                            <rect key="frame" x="117" y="0.0" width="118" height="40"/>
+                            <rect key="frame" x="114" y="0.0" width="114" height="40"/>
                             <connections>
                                 <action selector="textFilterButtonDidPress:" destination="-1" eventType="touchUpInside" id="Iyf-xz-h2g"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mhv-xe-Sjh">
-                            <rect key="frame" x="235" y="0.0" width="151" height="40"/>
+                            <rect key="frame" x="228" y="0.0" width="147" height="40"/>
                             <state key="normal">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -48,7 +48,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-01-frd">
-                            <rect key="frame" x="386" y="0.0" width="134" height="40"/>
+                            <rect key="frame" x="375" y="0.0" width="130" height="40"/>
                             <state key="normal">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -97,9 +97,9 @@
                     </variation>
                 </view>
                 <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mEn-dD-AbD">
-                    <rect key="frame" x="4" y="0.0" width="40" height="40"/>
+                    <rect key="frame" x="0.0" y="0.0" width="60" height="40"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="40" id="WjR-YF-OQh"/>
+                        <constraint firstAttribute="width" constant="60" id="WjR-YF-OQh"/>
                         <constraint firstAttribute="height" constant="40" id="mPL-4x-bRR"/>
                     </constraints>
                     <state key="normal">
@@ -117,7 +117,7 @@
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="mEn-dD-AbD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="4" id="6YH-Tt-eRt"/>
+                <constraint firstItem="mEn-dD-AbD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="6YH-Tt-eRt"/>
                 <constraint firstAttribute="bottom" secondItem="mEn-dD-AbD" secondAttribute="bottom" constant="4" id="VRz-qy-Jce"/>
                 <constraint firstAttribute="trailing" secondItem="LFc-ci-6df" secondAttribute="trailing" id="a33-Wg-snZ"/>
                 <constraint firstItem="mEn-dD-AbD" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="fVA-Ks-iNV"/>

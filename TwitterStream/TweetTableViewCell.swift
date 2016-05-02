@@ -47,20 +47,30 @@ class TweetTableViewCell: UITableViewCell {
         if (self.textView.text?.isEmpty == false) {
             self.textView.text = ""
         }
-        if (self.videoPlayer != nil) {
-            self.videoPlayer.pause()
-            self.videoPlayer = nil
+        
+        for subview in self.mediaView.subviews {
+            subview.removeFromSuperview()
         }
-        if (self.videoItem != nil) {
-            self.videoItem = nil
+        
+        if let sublayers = self.mediaView.layer.sublayers {
+            for sublayer in sublayers {
+                sublayer.removeFromSuperlayer()
+            }
         }
-        if (self.avLayer != nil) {
-            self.avLayer.removeFromSuperlayer()
-            self.avLayer = nil
-        }
-        if (self.photoImageView != nil) {
-            self.photoImageView.image = nil
-            self.photoImageView = nil
-        }
+        
+//        if (self.videoPlayer != nil) {
+//            self.videoPlayer = nil
+//        }
+//        if (self.videoItem != nil) {
+//            self.videoItem = nil
+//        }
+//        if (self.avLayer != nil) {
+//            self.avLayer.removeFromSuperlayer()
+//            self.avLayer = nil
+//        }
+//        if (self.photoImageView != nil) {
+//            self.photoImageView.image = nil
+//            self.photoImageView = nil
+//        }
     }
 }

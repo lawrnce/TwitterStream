@@ -180,6 +180,7 @@ class TwitterStreamViewController: UIViewController {
         // Animate if user is near the top
         } else {
             self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Fade)
+            self.tableView.reloadData()
         }
     }
     
@@ -187,7 +188,7 @@ class TwitterStreamViewController: UIViewController {
         Set a player to loop for a gif.
      */
     private func loopVideo(videoPlayer: AVPlayer) {
-        NSNotificationCenter.defaultCenter().addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil, queue: nil) { notification in
+        NSNotificationCenter.defaultCenter().addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: videoPlayer.currentItem, queue: nil) { notification in
             videoPlayer.seekToTime(kCMTimeZero)
             videoPlayer.play()
         }
@@ -394,8 +395,9 @@ extension TwitterStreamViewController: UITableViewDataSource {
                         cell.videoItem = AVPlayerItem(URL: file)
                         cell.videoPlayer = AVPlayer(playerItem: cell.videoItem)
                         cell.avLayer = AVPlayerLayer(player: cell.videoPlayer)
-                        cell.avLayer.frame = cell.mediaView.frame
-                        cell.contentView.layer.addSublayer(cell.avLayer)
+                        cell.avLayer.videoGravity = AVLayerVideoGravityResizeAspect
+                        cell.avLayer.frame = cell.mediaView.bounds
+                        cell.mediaView.layer.addSublayer(cell.avLayer)
                         
                         // play and loop
                         cell.videoPlayer.play()
@@ -412,9 +414,9 @@ extension TwitterStreamViewController: UITableViewDataSource {
 //            cell.backgroundColor = UIColor.purpleColor()
             break
         case .Photo:
-            cell.photoImageView = UIImageView(frame: cell.mediaView.frame)
+            cell.photoImageView = UIImageView(frame: cell.mediaView.bounds)
             cell.photoImageView.contentMode = .ScaleAspectFit
-            cell.contentView.addSubview(cell.photoImageView)
+            cell.mediaView.addSubview(cell.photoImageView)
             cell.photoImageView.hnk_setImageFromURL(NSURL(string: tweet.data["photos"].arrayValue.first!["url"].stringValue)!)
         }
     
