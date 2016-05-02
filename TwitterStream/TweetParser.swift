@@ -259,7 +259,6 @@ class TweetParser: NSObject {
                     // Get content url
                     media["url"] = subJson["url"].stringValue
                 }
-
             }
         }
 

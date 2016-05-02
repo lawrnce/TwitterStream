@@ -164,7 +164,7 @@ extension TwitterManager: NSURLConnectionDataDelegate {
                 self.delegate?.twitterManager(self, didStreamTweet: tweet)
                 
             } catch let error {
-                print("There was an error: ", error)
+                print("Ignored invalid tweet: ", error)
             }
         }
     }

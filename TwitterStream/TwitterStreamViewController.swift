@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import MediaPlayer
 import SwiftyJSON
 import Haneke
 
@@ -63,7 +64,40 @@ class TwitterStreamViewController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    // MARK: - Selectors
+    // MARK: - Navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        // Video segue
+        if (segue.identifier == "showVideo") {
+
+            let destinationVC = segue.destinationViewController as! VideoPlayerViewController
+            destinationVC.url = sender as! NSURL
+            
+        // Photo segue
+        } else if (segue.identifier == "showPhoto") {
+            
+        }
+    }
+    
+    // MARK: - Key Value Observing
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        
+        // Gif player
+        if (object?.classForCoder == AVPlayer.self && keyPath == "status") {
+            if ((object as! AVPlayer).status == .ReadyToPlay) {
+                (object as! AVPlayer).play()
+            }
+        }
+    }
+    
+    // MARK: - Notifications
+    
+    /**
+        Setup Notifications
+    */
+    private func setupNotification() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firstTweetOfType:", name: kFIRST_TWEET_FOR_TYPE_NOTIFICATION, object: nil)
+    }
     
     /**
         Called when the first of a new tweet type is streamed.
@@ -79,6 +113,16 @@ class TwitterStreamViewController: UIViewController {
         
         // update UI
         self.filterView.setFilterButtonImageForFilterType(type!, forState: true)
+    }
+    
+    /**
+        AV Player notifications
+     */
+    private func loopVideoPlayer(videoPlayer: AVPlayer) {
+        NSNotificationCenter.defaultCenter().addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: videoPlayer.currentItem, queue: nil) { notification in
+            videoPlayer.seekToTime(kCMTimeZero)
+            videoPlayer.play()
+        }
     }
     
    
@@ -147,20 +191,6 @@ class TwitterStreamViewController: UIViewController {
      */
     private func setupFilterView() {
         self.filterView.delegate = self
-    }
-    
-    /**
-        Setup Notifications
-     */
-    private func setupNotification() {
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firstTweetOfType:", name: kFIRST_TWEET_FOR_TYPE_NOTIFICATION, object: nil)
-    }
-    
-    private func loopVideoPlayer(videoPlayer: AVPlayer) {
-        NSNotificationCenter.defaultCenter().addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: videoPlayer.currentItem, queue: nil) { notification in
-            videoPlayer.seekToTime(kCMTimeZero)
-            videoPlayer.play()
-        }
     }
     
     /**
@@ -233,7 +263,6 @@ class TwitterStreamViewController: UIViewController {
                 if (type == .Gif) {
                     self.tableView.reloadData()
                 }
-//                self.tableView.reloadData()
             }
         }
     }
@@ -248,7 +277,6 @@ class TwitterStreamViewController: UIViewController {
      */
     private func getGifUrlFromData(data: SwiftyJSON.JSON) -> NSURL? {
         
-        // iterate through the json
         for (_, subJson) in data["media"] {
             
             // if type is gif
@@ -259,11 +287,30 @@ class TwitterStreamViewController: UIViewController {
         
         return nil
     }
+    
+    /**
+        Returns the url for a video.
+        - Parameter data: The "media" entry in the tweet JSON.
+        - Returns: A tuple containing the thumbnail image url and the video file url.
+     */
+    private func getVideoUrlsFromData(data: SwiftyJSON.JSON) -> (url: NSURL, thumbnailURL: NSURL)? {
+        
+        for (_, subJson) in data["media"] {
+            
+            // if type is video
+            if (subJson["type"] == "video") {
+                let videoURL = NSURL(string: subJson["url"].stringValue)!
+                let thumbnailURL = NSURL(string: subJson["thumbnail_url"].stringValue)!
+                return (videoURL, thumbnailURL)
+            }
+        }
+        
+        return nil
+    }
 }
 
 // MARK: - Twitter Manager Delegate
 // Handles all streaming releated notifications
-
 extension TwitterStreamViewController: TwitterManagerDelegate {
     
     /**
@@ -428,15 +475,20 @@ extension TwitterStreamViewController: UITableViewDataSource {
                       
                         // Create video item
                         let videoPlayer = AVPlayer(URL: file)
-                        cell.gifPlayerLayer = AVPlayerLayer(player: videoPlayer)
+                        let playerLayer = AVPlayerLayer(player: videoPlayer)
                         
-                        // Set and play
-                        cell.gifPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspect
-                        cell.gifPlayerLayer.frame = cell.mediaView.bounds
-                        cell.mediaView.layer.addSublayer(cell.gifPlayerLayer)
-                        cell.activityIndicatorView.stopAnimating()
-                        videoPlayer.play()
+                        // Set player
+                        playerLayer.videoGravity = AVLayerVideoGravityResizeAspect
+                        playerLayer.frame = cell.mediaView.bounds
+                        cell.mediaView.layer.addSublayer(playerLayer)
+                     
+                        // Set KVO and Notification
+                        videoPlayer.addObserver(self, forKeyPath: "status", options: .New, context: nil)
                         self.loopVideoPlayer(videoPlayer)
+                    })
+                
+                    .onFailure({ (error) -> () in
+                        print("GIF Failure: ", error)
                     })
             }
             
@@ -444,9 +496,32 @@ extension TwitterStreamViewController: UITableViewDataSource {
             
             cell.activityIndicatorView.stopAnimating()
             cell.mediaView.hidden = true
+            
         case .Video:
-//            cell.backgroundColor = UIColor.purpleColor()
-            break
+
+            cell.mediaView.hidden = false
+            
+            // Get thumbnail and content url
+            if let urls: (url: NSURL, thumbnailURL: NSURL) = self.getVideoUrlsFromData(tweet.data) {
+   
+                // Fetch thumbnail
+                self.imageCache.fetch(URL: urls.thumbnailURL)
+                    .onSuccess({ (image) -> () in
+                        
+                        // Set thumbnail image
+                        let imageView = UIImageView(frame: cell.mediaView.bounds)
+                        imageView.contentMode = .ScaleAspectFit
+                        imageView.image = image
+                        cell.mediaView.addSubview(imageView)
+                        
+                        // Set video url and play button
+                        cell.videoURL = urls.url
+                        cell.delegate = self
+                        cell.playButton.hidden = false
+                        cell.activityIndicatorView.stopAnimating()
+                    })
+            }
+            
         case .Photo:
             
             // Show media view and fetch image
@@ -483,5 +558,16 @@ extension TwitterStreamViewController: UITableViewDelegate {
         } else {
             return kMEDIA_TWEET_BASE_HEIGHT
         }
+    }
+}
+
+// MARK: - Tweet table view cell delegate
+extension TwitterStreamViewController: TweetTableViewCellDelegate {
+    
+    /**
+        Download and play the video file.
+     */
+    func tweetTableViewCell(tweetTableViewCell: TweetTableViewCell, didPressPlayButton url: NSURL) {
+        self.performSegueWithIdentifier("showVideo", sender: url)
     }
 }
