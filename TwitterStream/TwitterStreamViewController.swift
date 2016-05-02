@@ -37,6 +37,7 @@ class TwitterStreamViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTableView()
         setupNotification()
         setupTwitterManager()
         setupSearchBar()
@@ -71,6 +72,13 @@ class TwitterStreamViewController: UIViewController {
      */
     
     /**
+        Setup Table View
+     */
+    private func setupTableView() {
+        self.tableView.registerNib(UINib(nibName: "TweetTableViewCell", bundle: nil), forCellReuseIdentifier: kTweetTableViewCellReuseIdentifier)
+    }
+    
+    /**
         Setup Twitter Manager
      */
     private func setupTwitterManager() {
@@ -79,7 +87,7 @@ class TwitterStreamViewController: UIViewController {
         setupTweetQueue()
         
         // Testing
-        self.twitterManager.createStreamConnectionForKeyword("anime")
+        self.twitterManager.createStreamConnectionForKeyword("gif")
     }
     
     /**
@@ -119,6 +127,27 @@ class TwitterStreamViewController: UIViewController {
         self.definesPresentationContext = true
     }
     
+    /**
+        MARK: - Animations
+     */
+    private func animateNewTweetIfNeeded() {
+        
+        // Do not scroll the table view is user is not near the top
+        if(self.tableView.contentOffset.y > 20.0) {
+            
+            let beforeContentSize = self.tableView.contentSize
+            self.tableView.reloadData()
+            let afterContentSize = self.tableView.contentSize
+            let afterContentOffset = self.tableView.contentOffset
+            let newContentOffset = CGPointMake(afterContentOffset.x, afterContentOffset.y + afterContentSize.height - beforeContentSize.height)
+            
+            self.tableView.setContentOffset(newContentOffset, animated: false)
+            
+        // Animated if user is near the top
+        } else {
+            self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Fade)
+        }
+    }
 }
 
 /**
@@ -145,9 +174,11 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
                 // Current filter allows new tweet
                 if (filtered == true) {
                     
-                    // Append to current list
-                    self.currentList.append(key!)
-                    print(key!)
+                    // update ui
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        self.currentList.append(key!)
+                        self.animateNewTweetIfNeeded()
+                    })
                 }
             })
         }
@@ -187,14 +218,14 @@ extension TwitterStreamViewController: FilterViewDelegate {
     
             // Toggle tweets filter
             self.tweets.toggleFilterForType(type)
-            self.currentList = self.tweets.getFilteredTweets()
-            
+            let newList = self.tweets.getFilteredTweets()
             let filterState = self.tweets.filterStateForType(type)
             
             // update ui
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                
+                self.currentList = newList
                 self.filterView.setFilterButtonImageForFilterType(type, forState: filterState)
+                self.tableView.reloadData()
             })
         }
     }
@@ -228,11 +259,21 @@ extension TwitterStreamViewController: FilterViewDelegate {
 extension TwitterStreamViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        
+        guard self.currentList != nil else {
+            return 0
+        }
+        
+        return self.currentList.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier(kTweetTableViewCellReuseIdentifier, forIndexPath: indexPath)
+        
+        cell.backgroundColor = UIColor.cyanColor()
+        
+        return cell
     }
 }
 
