@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -45,10 +46,10 @@
                         </variation>
                     </textView>
                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="QQM-nZ-YQi">
-                        <rect key="frame" x="226" y="173" width="20" height="20"/>
+                        <rect key="frame" x="226" y="193" width="20" height="20"/>
                     </activityIndicatorView>
-                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CFZ-Gf-SSd">
-                        <rect key="frame" x="8" y="61" width="457" height="150"/>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CFZ-Gf-SSd">
+                        <rect key="frame" x="4" y="112" width="465" height="181"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="282" id="3LC-PI-evN"/>
                             <constraint firstAttribute="height" constant="150" id="h9a-ux-XLa"/>
@@ -56,24 +57,26 @@
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="3LC-PI-evN"/>
+                                <exclude reference="h9a-ux-XLa"/>
                             </mask>
                         </variation>
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="CFZ-Gf-SSd" firstAttribute="top" secondItem="lTJ-xA-DR0" secondAttribute="bottom" id="6FG-2S-7dn"/>
+                    <constraint firstItem="QQM-nZ-YQi" firstAttribute="centerY" secondItem="CFZ-Gf-SSd" secondAttribute="centerY" id="5LH-OP-V8J"/>
+                    <constraint firstItem="CFZ-Gf-SSd" firstAttribute="top" secondItem="lTJ-xA-DR0" secondAttribute="bottom" constant="4" id="6FG-2S-7dn"/>
                     <constraint firstAttribute="trailing" secondItem="lTJ-xA-DR0" secondAttribute="trailing" constant="2" id="9YU-nU-MjZ"/>
-                    <constraint firstItem="CFZ-Gf-SSd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="9hW-il-HNG"/>
+                    <constraint firstItem="CFZ-Gf-SSd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="4" id="9hW-il-HNG"/>
                     <constraint firstAttribute="bottom" secondItem="CFZ-Gf-SSd" secondAttribute="bottom" constant="8" id="CQ6-tJ-vkF"/>
-                    <constraint firstAttribute="trailing" secondItem="CFZ-Gf-SSd" secondAttribute="trailing" constant="8" id="FTk-SJ-8Lq"/>
-                    <constraint firstItem="QQM-nZ-YQi" firstAttribute="centerY" secondItem="CFZ-Gf-SSd" secondAttribute="centerY" id="d2k-rM-3f6"/>
-                    <constraint firstItem="QQM-nZ-YQi" firstAttribute="centerX" secondItem="CFZ-Gf-SSd" secondAttribute="centerX" id="fnt-8g-4L8"/>
+                    <constraint firstAttribute="trailing" secondItem="CFZ-Gf-SSd" secondAttribute="trailing" constant="4" id="FTk-SJ-8Lq"/>
                     <constraint firstItem="lTJ-xA-DR0" firstAttribute="top" secondItem="wIH-0Y-71i" secondAttribute="bottom" id="gpQ-OH-z0B"/>
                     <constraint firstItem="wIH-0Y-71i" firstAttribute="leading" secondItem="eM8-Tb-XK1" secondAttribute="trailing" constant="8" id="hYH-zu-rBD"/>
                     <constraint firstItem="eM8-Tb-XK1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="iTn-hG-ifL"/>
                     <constraint firstItem="lTJ-xA-DR0" firstAttribute="leading" secondItem="eM8-Tb-XK1" secondAttribute="trailing" constant="4" id="m06-G3-hNa"/>
                     <constraint firstItem="wIH-0Y-71i" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="mzM-Nr-fLO"/>
+                    <constraint firstItem="QQM-nZ-YQi" firstAttribute="centerX" secondItem="CFZ-Gf-SSd" secondAttribute="centerX" id="oIV-6z-YMh"/>
                     <constraint firstItem="eM8-Tb-XK1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="wzV-Gl-cqt"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="CFZ-Gf-SSd" secondAttribute="bottom" constant="4" id="yyF-Na-Vdc"/>
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">

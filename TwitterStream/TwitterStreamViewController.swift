@@ -406,10 +406,13 @@ extension TwitterStreamViewController: UITableViewDataSource {
         
         // Set text
         cell.textView.text = tweet.data["text"].stringValue
+        cell.textView.sizeToFit()
         
         // Set media for type
         switch(tweet.type) {
         case .Gif:
+            
+            cell.mediaView.hidden = false
             
             // Get gif url
             if let url = getGifUrlFromData(tweet.data) {
@@ -424,38 +427,38 @@ extension TwitterStreamViewController: UITableViewDataSource {
                         let file = self.getUrlForCachedKey(url.absoluteString)
                       
                         // Create video item
-                        let videoItem = AVPlayerItem(URL: file)
-                        let videoPlayer = AVPlayer(playerItem: videoItem)
-                        cell.avLayer = AVPlayerLayer(player: videoPlayer)
-                        cell.avLayer.videoGravity = AVLayerVideoGravityResizeAspect
-                        cell.avLayer.frame = cell.mediaView.bounds
-                        cell.mediaView.layer.addSublayer(cell.avLayer)
-                        cell.activityIndicatorView.stopAnimating()
+                        let videoPlayer = AVPlayer(URL: file)
+                        cell.gifPlayerLayer = AVPlayerLayer(player: videoPlayer)
                         
-                        // play
-                        cell.layoutIfNeeded()
+                        // Set and play
+                        cell.gifPlayerLayer.videoGravity = AVLayerVideoGravityResizeAspect
+                        cell.gifPlayerLayer.frame = cell.mediaView.bounds
+                        cell.mediaView.layer.addSublayer(cell.gifPlayerLayer)
+                        cell.activityIndicatorView.stopAnimating()
                         videoPlayer.play()
                         self.loopVideoPlayer(videoPlayer)
                     })
-                
             }
+            
         case .Text:
-            break
+            
+            cell.activityIndicatorView.stopAnimating()
+            cell.mediaView.hidden = true
         case .Video:
 //            cell.backgroundColor = UIColor.purpleColor()
             break
         case .Photo:
             
-            // Create photo view and add it
-            cell.photoImageView = UIImageView(frame: cell.mediaView.bounds)
-            cell.photoImageView.contentMode = .ScaleAspectFit
-            cell.mediaView.addSubview(cell.photoImageView)
-            
-            // Fetch and cache image
+            // Show media view and fetch image
+            cell.mediaView.hidden = false
             self.imageCache.fetch(URL: NSURL(string: tweet.data["photos"].arrayValue.first!["url"].stringValue)!)
                 .onSuccess({ (image) -> () in
+                    
+                    let imageView = UIImageView(frame: cell.mediaView.bounds)
+                    imageView.contentMode = .ScaleAspectFit
+                    imageView.image = image
+                    cell.mediaView.addSubview(imageView)
                     cell.activityIndicatorView.stopAnimating()
-                    cell.photoImageView.image = image
                 })
         }
     
