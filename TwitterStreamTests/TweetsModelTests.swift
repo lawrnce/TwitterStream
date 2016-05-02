@@ -7,12 +7,16 @@
 //
 
 import XCTest
+import Nimble
+@testable import TwitterStream
 
 class TweetsModelTests: XCTestCase {
     
+    var tweets: TweetsModel!
+    
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        self.tweets = TweetsModel()
     }
     
     override func tearDown() {
@@ -20,16 +24,25 @@ class TweetsModelTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    /**
+        Test tweet filtering.
+     */
+    func test_tweets_model_filters_order_ascending() {
+        
+        // add dummy tweet data
+        self.tweets.insertTweet([String: String](), forType: .Text)   // 0
+        self.tweets.insertTweet([String: String](), forType: .Gif)    // 1
+        self.tweets.insertTweet([String: String](), forType: .Gif)    // 2
+        self.tweets.insertTweet([String: String](), forType: .Text)   // 3
+        self.tweets.insertTweet([String: String](), forType: .Photo)  // 4
+        self.tweets.insertTweet([String: String](), forType: .Text)   // 5
+        self.tweets.insertTweet([String: String](), forType: .Video)  // 6
+        
+        // filter text and video
+        let filter = (false, true, true, false)
+        
+        let filteredList = self.tweets.filterTweets(filter)
+        
+        expect(filteredList).to(equal([0, 3, 5, 6]))
     }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    
 }

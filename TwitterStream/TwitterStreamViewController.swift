@@ -146,9 +146,16 @@ extension TwitterStreamViewController: FilterViewDelegate {
             self.filterView.setFilterButtonImageForFilterType(type, forState: self.filter!.photo)
         }
         
-        // update filter view
-        
-        // update table view
+        // get filtered tweets
+        dispatch_async(self.tweetQueue) { () -> Void in
+            
+            self.currentList = self.tweets.filterTweets(self.filter)
+            
+            // update ui
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                
+            })
+        }
     }
     
     /**
