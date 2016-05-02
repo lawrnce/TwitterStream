@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Haneke
 
 class TwitterStreamViewController: UIViewController {
 
@@ -26,6 +27,12 @@ class TwitterStreamViewController: UIViewController {
     // Twitter Stream
     var twitterManager: TwitterManager!
     
+    // Image cache
+    var imageCache: Cache<UIImage>!
+    
+    // Media cache
+    var mediaCache: Cache<NSData>!
+    
     // Search bar
     var searchController: UISearchController!
     
@@ -37,6 +44,7 @@ class TwitterStreamViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupCache()
         setupTableView()
         setupNotification()
         setupTwitterManager()
@@ -66,10 +74,30 @@ class TwitterStreamViewController: UIViewController {
         // update UI
         self.filterView.setFilterButtonImageForFilterType(type!, forState: true)
     }
+    
+    /**
+        MARK: - Data
+     */
+     
+    /**
+        When a new keyword is being streamed. Flushes the cache.
+     */
+    private func flushCache() {
+        self.imageCache.removeAll()
+        self.mediaCache.removeAll()
+    }
      
     /**
         MARK: - Setup
      */
+     
+    /**
+        Setup cache
+     */
+    private func setupCache() {
+        self.imageCache = Shared.imageCache
+        self.mediaCache = Shared.dataCache
+    }
     
     /**
         Setup Table View
@@ -159,7 +187,7 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
     /**
         On receiving a tweet. Process it in the background.
      */
-    func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: JSON) {
+    func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: SwiftyJSON.JSON) {
         
         // lazy load a tweets data structure
         if (self.tweets == nil) {
@@ -272,24 +300,27 @@ extension TwitterStreamViewController: UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCellWithIdentifier(kTweetTableViewCellReuseIdentifier, forIndexPath: indexPath) as! TweetTableViewCell
         
-        let key = self.currentList[indexPath.row]
+        // Get tweet data from the TweetsModel
+        let tweet: (data: SwiftyJSON.JSON, type: TweetType) = self.tweets.tweetForKey(self.currentList[indexPath.row])
         
-        let tweet: (data: JSON, type: TweetType) = self.tweets.tweetForKey(key)
+        // Fetch profile image
+        // Haneke will cache it for later
+        cell.profileImageView.hnk_setImageFromURL(NSURL(string: tweet.data["profile_image_url"].stringValue)!)
+        
+        // Set screen name
+        cell.screenNameLabel.text = tweet.data["screen_name"].stringValue
         
         switch(tweet.type) {
         case .Gif:
             cell.backgroundColor = UIColor.cyanColor()
-            cell.screenNameLabel.text = "\(key) GIF"
         case .Text:
             cell.backgroundColor = UIColor.redColor()
-            cell.screenNameLabel.text = "\(key) TEXT"
         case .Video:
             cell.backgroundColor = UIColor.purpleColor()
-            cell.screenNameLabel.text = "\(key) VIDEO"
         case .Photo:
             cell.backgroundColor = UIColor.greenColor()
-            cell.screenNameLabel.text = "\(key) PHOTO"
         }
+    
         return cell
     }
 }
@@ -300,6 +331,15 @@ extension TwitterStreamViewController: UITableViewDataSource {
 extension TwitterStreamViewController: UITableViewDelegate {
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 100.0
+        
+        // Get type of tweet
+        let type = self.tweets.typeForKey(self.currentList[indexPath.row])
+        
+        // Return cell height
+        if (type == .Text) {
+            return kTEXT_TWEET_CELL_HEIGHT
+        } else {
+            return kMEDIA_TWEET_CELL_HEIGHT
+        }
     }
 }

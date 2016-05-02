@@ -6,7 +6,7 @@
 //  Copyright © 2016 LawrenceTran. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 /** 
     Notifications
@@ -17,3 +17,5 @@ let kFIRST_TWEET_FOR_TYPE_NOTIFICATION = "com.lawrnce.FirstTweetForTypeNotificat
     Table view constants
  */
 let kTweetTableViewCellReuseIdentifier = "com.lawrnce.TweetTableViewCellReuseIdentifier"
+let kTEXT_TWEET_CELL_HEIGHT = CGFloat(120.0)
+let kMEDIA_TWEET_CELL_HEIGHT = CGFloat(220.0)

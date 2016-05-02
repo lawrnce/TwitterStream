@@ -15,32 +15,32 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="eM8-Tb-XK1">
-                        <rect key="frame" x="8" y="8" width="60" height="60"/>
+                        <rect key="frame" x="8" y="8" width="44" height="44"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="60" id="Pwz-XU-1yW"/>
-                            <constraint firstAttribute="height" constant="60" id="sJQ-lB-bMR"/>
+                            <constraint firstAttribute="width" constant="44" id="Pwz-XU-1yW"/>
+                            <constraint firstAttribute="height" constant="44" id="sJQ-lB-bMR"/>
                         </constraints>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Screen Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wIH-0Y-71i">
-                        <rect key="frame" x="76" y="8" width="89" height="21"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Screen Name" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wIH-0Y-71i">
+                        <rect key="frame" x="60" y="8" width="102" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="A6H-LR-SSM"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="14"/>
+                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="lTJ-xA-DR0">
-                        <rect key="frame" x="76" y="37" width="389" height="128"/>
+                        <rect key="frame" x="60" y="37" width="405" height="100"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="128" id="BWE-Vb-z2P"/>
+                            <constraint firstAttribute="height" constant="100" id="BWE-Vb-z2P"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                     </textView>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CFZ-Gf-SSd">
-                        <rect key="frame" x="8" y="173" width="457" height="124"/>
+                        <rect key="frame" x="8" y="145" width="457" height="152"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="282" id="3LC-PI-evN"/>

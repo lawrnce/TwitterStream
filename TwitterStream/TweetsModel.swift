@@ -52,13 +52,23 @@ class TweetsModel: NSObject {
     }
     
     /**
-        Returns the tweet data for the key.
+        Returns the tweet data for a key.
      
-        - Parameter key: The tweet's key.
+        - Parameter key: A tweet's key.
         - Returns: A tuple containing a JSON of the data and its type.
      */
     func tweetForKey(key: Int) -> (data: JSON, type: TweetType) {
         return (self.tweetHash?[key])!
+    }
+    
+    /**
+        Returns the tweet type for a key.
+     
+        - Parameter key: A tweet's key.
+        - Returns: A tweet type.
+     */
+    func typeForKey(key: Int) -> TweetType {
+        return (self.tweetHash?[key])!.type
     }
     
     /**
