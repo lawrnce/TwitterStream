@@ -144,10 +144,10 @@
 		E6765F461CD67552004A373F /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E6765F421CD6752C004A373F /* FilterView.swift */,
-				E6765F441CD6754E004A373F /* FilterView.xib */,
 				E6A911911CD6F8B9008FD4B3 /* TweetTableViewCell.swift */,
 				E6A911921CD6F8B9008FD4B3 /* TweetTableViewCell.xib */,
+				E6765F421CD6752C004A373F /* FilterView.swift */,
+				E6765F441CD6754E004A373F /* FilterView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";

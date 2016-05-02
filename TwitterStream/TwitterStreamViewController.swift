@@ -97,6 +97,18 @@ class TwitterStreamViewController: UIViewController {
     }
     
     /**
+        Returns the file url of an item in the cache.
+     
+        - Parameter key: The key for the item in the cache.
+        - Returns: The file url of the cached item.
+     */
+    private func getUrlForCachedKey(key: String) -> NSURL {
+        let path = NSURL(string: DiskCache.basePath())!.URLByAppendingPathComponent("shared-data/original")
+        let cached = DiskCache(path: path.absoluteString).pathForKey(key)
+        return NSURL(fileURLWithPath: cached)
+    }
+    
+    /**
         When a new keyword is being streamed. Flushes the cache.
      */
     private func flushCache() {
@@ -212,7 +224,16 @@ class TwitterStreamViewController: UIViewController {
         // Animate if user is near the top
         } else {
             if (self.currentList != nil) {
+                
+                self.tableView.beginUpdates()
                 self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Fade)
+                self.tableView.endUpdates()
+                
+                // Sometimes Gifs will not play initially without reload
+                if (type == .Gif) {
+                    self.tableView.reloadData()
+                }
+//                self.tableView.reloadData()
             }
         }
     }
@@ -399,16 +420,22 @@ extension TwitterStreamViewController: UITableViewDataSource {
                     // Downloaded
                     .onSuccess({ (data) -> () in
                         
-                        // url of cached data
-                        let path = NSURL(string: DiskCache.basePath())!.URLByAppendingPathComponent("shared-data/original")
-                        let cached = DiskCache(path: path.absoluteString).pathForKey(url.absoluteString)
-                        let file = NSURL(fileURLWithPath: cached)
+                        // get file url
+                        let file = self.getUrlForCachedKey(url.absoluteString)
                       
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            cell.setGifWithURL(file)
-                            self.loopVideoPlayer(cell.videoPlayer)
-                        })
+                        // Create video item
+                        let videoItem = AVPlayerItem(URL: file)
+                        let videoPlayer = AVPlayer(playerItem: videoItem)
+                        cell.avLayer = AVPlayerLayer(player: videoPlayer)
+                        cell.avLayer.videoGravity = AVLayerVideoGravityResizeAspect
+                        cell.avLayer.frame = cell.mediaView.bounds
+                        cell.mediaView.layer.addSublayer(cell.avLayer)
+                        cell.activityIndicatorView.stopAnimating()
                         
+                        // play
+                        cell.layoutIfNeeded()
+                        videoPlayer.play()
+                        self.loopVideoPlayer(videoPlayer)
                     })
                 
             }

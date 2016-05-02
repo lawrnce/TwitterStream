@@ -19,8 +19,6 @@ class TweetTableViewCell: UITableViewCell {
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
     // Media
-    var videoItem: AVPlayerItem!
-    var videoPlayer: AVPlayer!
     var avLayer: AVPlayerLayer!
     
     // photo
@@ -33,20 +31,16 @@ class TweetTableViewCell: UITableViewCell {
      */
     func setGifWithURL(url: NSURL) {
         // setup video player
-        self.videoItem = AVPlayerItem(URL: url)
-        self.videoPlayer = AVPlayer(playerItem: self.videoItem)
-        self.avLayer = AVPlayerLayer(player: self.videoPlayer)
-        self.avLayer.videoGravity = AVLayerVideoGravityResizeAspect
-        self.avLayer.frame = self.mediaView.bounds
-        self.mediaView.layer.addSublayer(self.avLayer)
-        self.activityIndicatorView.stopAnimating()
-        
-        // play
-        self.videoPlayer.play()
-//        NSNotificationCenter.defaultCenter().addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: videoPlayer.currentItem, queue: nil) { notification in
-//            self.videoPlayer.seekToTime(kCMTimeZero)
-//            self.videoPlayer.play()
-//        }
+//        self.videoItem = AVPlayerItem(URL: url)
+//        self.videoPlayer = AVPlayer(playerItem: self.videoItem)
+//        self.avLayer = AVPlayerLayer(player: self.videoPlayer)
+//        self.avLayer.videoGravity = AVLayerVideoGravityResizeAspect
+//        self.avLayer.frame = self.mediaView.bounds
+//        self.mediaView.layer.addSublayer(self.avLayer)
+//        self.activityIndicatorView.stopAnimating()
+//        
+//        // play
+//        self.videoPlayer.play()
     }
     
     /**
@@ -76,11 +70,10 @@ class TweetTableViewCell: UITableViewCell {
      */
     override func prepareForReuse() {
         
-        if (self.videoPlayer != nil) {
-            NSNotificationCenter.defaultCenter().removeObserver(self.videoPlayer.currentItem!)
-            self.videoPlayer = nil
-            self.videoItem = nil
-        }
+//        if (self.videoPlayer != nil) {
+//            NSNotificationCenter.defaultCenter().removeObserver(self.videoPlayer.currentItem!)
+//            self.videoPlayer = nil
+//        }
         
         self.activityIndicatorView.startAnimating()
         
@@ -104,6 +97,7 @@ class TweetTableViewCell: UITableViewCell {
             for sublayer in sublayers {
                 sublayer.removeFromSuperlayer()
             }
+            self.avLayer = nil
         }
 
     }
