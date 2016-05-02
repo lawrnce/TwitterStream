@@ -76,7 +76,17 @@ protocol FilterViewDelegate {
             photoFilterButton.setImage(image, forState: .Normal)
         }
     }
-
+    
+    /**
+        Set initial UI images
+     */
+    func resetUIState(){
+        self.gifFilterButtonImage = UIImage(named: "GifFilterImageEmpty")
+        self.textFilterButtonImage = UIImage(named: "TextFilterImageEmpty")
+        self.videoFilterButtonImage = UIImage(named: "VideoFilterImageEmpty")
+        self.photoFilterButtonImage = UIImage(named: "PhotoFilterImageEmpty")
+    }
+     
     /**
         Set image for playback state
      */
