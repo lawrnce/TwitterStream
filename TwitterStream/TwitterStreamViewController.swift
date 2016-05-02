@@ -279,18 +279,17 @@ extension TwitterStreamViewController: UITableViewDataSource {
         switch(tweet.type) {
         case .Gif:
             cell.backgroundColor = UIColor.cyanColor()
-            cell.screenNameLabel.text = "GIF"
+            cell.screenNameLabel.text = "\(key) GIF"
         case .Text:
             cell.backgroundColor = UIColor.redColor()
-            cell.screenNameLabel.text = "TEXT"
+            cell.screenNameLabel.text = "\(key) TEXT"
         case .Video:
             cell.backgroundColor = UIColor.purpleColor()
-            cell.screenNameLabel.text = "VIDEO"
+            cell.screenNameLabel.text = "\(key) VIDEO"
         case .Photo:
             cell.backgroundColor = UIColor.greenColor()
-            cell.screenNameLabel.text = "PHOTO"
+            cell.screenNameLabel.text = "\(key) PHOTO"
         }
-        
         return cell
     }
 }

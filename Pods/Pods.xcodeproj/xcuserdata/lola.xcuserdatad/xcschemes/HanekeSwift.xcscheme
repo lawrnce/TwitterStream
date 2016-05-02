@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '85A60329DA77B3788F6B9777'
-               BlueprintName = 'Pods-TwitterStreamTests'
+               BlueprintIdentifier = '67996223D25347C4DB29C9CE'
+               BlueprintName = 'HanekeSwift'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'Pods_TwitterStreamTests.framework'>
+               BuildableName = 'Haneke.framework'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

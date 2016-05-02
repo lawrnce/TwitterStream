@@ -9,6 +9,7 @@ end
 
 target 'TwitterStream' do
   pod 'SwiftyJSON'
+  pod 'HanekeSwift'
 end
 
 target 'TwitterStreamTests' do

@@ -84,8 +84,10 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-TwitterStream/Haneke.framework"
   install_framework "Pods-TwitterStream/SwiftyJSON.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-TwitterStream/Haneke.framework"
   install_framework "Pods-TwitterStream/SwiftyJSON.framework"
 fi
