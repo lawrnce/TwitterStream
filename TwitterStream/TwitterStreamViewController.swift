@@ -61,8 +61,12 @@ class TwitterStreamViewController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
+    // MARK: - Selectors
+    
     /**
-        MARK: - Selectors
+        Called when the first of a new tweet type is streamed.
+    
+        - Parameter notification: The notification containing the tweet type.
      */
     func firstTweetOfType(notification: NSNotification) {
         
@@ -75,9 +79,8 @@ class TwitterStreamViewController: UIViewController {
         self.filterView.setFilterButtonImageForFilterType(type!, forState: true)
     }
     
-    /**
-        MARK: - Data
-     */
+   
+    // MARK: - Data
      
     /**
         When a new keyword is being streamed. Flushes the cache.
@@ -86,10 +89,8 @@ class TwitterStreamViewController: UIViewController {
         self.imageCache.removeAll()
         self.mediaCache.removeAll()
     }
-     
-    /**
-        MARK: - Setup
-     */
+    
+    // MARK: - Setup
      
     /**
         Setup cache
@@ -155,8 +156,11 @@ class TwitterStreamViewController: UIViewController {
         self.definesPresentationContext = true
     }
     
+    
+    // MARK: - Animations
+    
     /**
-        MARK: - Animations
+        Animates a new cell into table if user is scrolled near the top.
      */
     private func animateNewTweetIfNeeded() {
         
@@ -171,17 +175,16 @@ class TwitterStreamViewController: UIViewController {
             
             self.tableView.setContentOffset(newContentOffset, animated: false)
             
-        // Animated if user is near the top
+        // Animate if user is near the top
         } else {
-//            self.tableView.reloadData()
             self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Fade)
         }
     }
 }
 
-/**
-    Twitter Manager Delegate - Handles all streaming releated notifications
- */
+// MARK: - Twitter Manager Delegate
+// Handles all streaming releated notifications
+
 extension TwitterStreamViewController: TwitterManagerDelegate {
     
     /**
@@ -214,17 +217,15 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
     }
 }
 
-/**
-    Search Bar Delegate - Processes search terms
- */
+// MARK: - Search Bar Delegate
+// Processes search terms
 extension TwitterStreamViewController: UISearchControllerDelegate, UISearchBarDelegate {
     
 
 }
 
-/**
-    Filter view delegate
- */
+
+// MARK: - Filter view delegate
 extension TwitterStreamViewController: FilterViewDelegate {
     
     /**
@@ -282,9 +283,7 @@ extension TwitterStreamViewController: FilterViewDelegate {
     }
 }
 
-/**
-    Table View Data Source
- */
+// MARK: - Table View Data Source
 extension TwitterStreamViewController: UITableViewDataSource {
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -310,36 +309,41 @@ extension TwitterStreamViewController: UITableViewDataSource {
         // Set screen name
         cell.screenNameLabel.text = tweet.data["screen_name"].stringValue
         
-        switch(tweet.type) {
-        case .Gif:
-            cell.backgroundColor = UIColor.cyanColor()
-        case .Text:
-            cell.backgroundColor = UIColor.redColor()
-        case .Video:
-            cell.backgroundColor = UIColor.purpleColor()
-        case .Photo:
-            cell.backgroundColor = UIColor.greenColor()
-        }
+        // Set text
+        cell.textView.text = tweet.data["text"].stringValue
+        
+        // TESTING
+//        switch(tweet.type) {
+//        case .Gif:
+//            cell.backgroundColor = UIColor.cyanColor()
+//        case .Text:
+//            cell.backgroundColor = UIColor.redColor()
+//        case .Video:
+//            cell.backgroundColor = UIColor.purpleColor()
+//        case .Photo:
+//            cell.backgroundColor = UIColor.greenColor()
+//        }
     
         return cell
     }
 }
 
-/**
-    Table View Delegate
- */
+// MARK: - Table View Delegate
 extension TwitterStreamViewController: UITableViewDelegate {
     
+    /**
+        Approximate the cell's height
+     */
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
-        // Get type of tweet
+        // Get type
         let type = self.tweets.typeForKey(self.currentList[indexPath.row])
         
         // Return cell height
         if (type == .Text) {
-            return kTEXT_TWEET_CELL_HEIGHT
+            return kTEXT_TWEET_BASE_HEIGHT
         } else {
-            return kMEDIA_TWEET_CELL_HEIGHT
+            return kMEDIA_TWEET_BASE_HEIGHT
         }
     }
 }

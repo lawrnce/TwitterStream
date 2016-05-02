@@ -19,6 +19,8 @@ class TweetTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        self.clipsToBounds = true
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

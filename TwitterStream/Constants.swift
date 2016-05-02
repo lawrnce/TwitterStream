@@ -17,5 +17,15 @@ let kFIRST_TWEET_FOR_TYPE_NOTIFICATION = "com.lawrnce.FirstTweetForTypeNotificat
     Table view constants
  */
 let kTweetTableViewCellReuseIdentifier = "com.lawrnce.TweetTableViewCellReuseIdentifier"
-let kTEXT_TWEET_CELL_HEIGHT = CGFloat(120.0)
-let kMEDIA_TWEET_CELL_HEIGHT = CGFloat(220.0)
+
+/**
+    Table view cell layout constants
+ */
+let kTWEET_CELL_PADDING = CGFloat(8.0)
+let kTWEET_SCREEN_NAME_HEIGHT = CGFloat(20.0)
+let kTWEET_MEDIA_ITEM_HEIGHT = CGFloat(150.0)
+let kTWEET_TEXT_VIEW_WIDTH = CGFloat(80)
+
+let kTWEET_TEXT_VIEW_SIZE = CGSize(width: kTWEET_TEXT_VIEW_WIDTH, height: 50.0)
+let kTEXT_TWEET_BASE_HEIGHT = kTWEET_CELL_PADDING * 2.0 + kTWEET_SCREEN_NAME_HEIGHT + kTWEET_TEXT_VIEW_WIDTH
+let kMEDIA_TWEET_BASE_HEIGHT = kTWEET_CELL_PADDING * 2.0 + kTWEET_SCREEN_NAME_HEIGHT + kTWEET_MEDIA_ITEM_HEIGHT + kTWEET_TEXT_VIEW_WIDTH

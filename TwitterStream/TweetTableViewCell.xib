@@ -22,28 +22,33 @@
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Screen Name" textAlignment="natural" lineBreakMode="tailTruncation" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wIH-0Y-71i">
-                        <rect key="frame" x="60" y="8" width="102" height="21"/>
+                        <rect key="frame" x="60" y="8" width="102" height="20"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="21" id="A6H-LR-SSM"/>
+                            <constraint firstAttribute="height" constant="20" id="A6H-LR-SSM"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="16"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="lTJ-xA-DR0">
-                        <rect key="frame" x="60" y="37" width="405" height="100"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="lTJ-xA-DR0">
+                        <rect key="frame" x="56" y="28" width="415" height="80"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="100" id="BWE-Vb-z2P"/>
+                            <constraint firstAttribute="height" constant="80" id="BWE-Vb-z2P"/>
+                            <constraint firstAttribute="height" constant="80" id="i4D-8r-0Gu"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="BWE-Vb-z2P"/>
+                            </mask>
+                        </variation>
                     </textView>
-                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CFZ-Gf-SSd">
-                        <rect key="frame" x="8" y="145" width="457" height="152"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CFZ-Gf-SSd">
+                        <rect key="frame" x="8" y="61" width="457" height="150"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="282" id="3LC-PI-evN"/>
+                            <constraint firstAttribute="height" constant="150" id="h9a-ux-XLa"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -53,18 +58,23 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="CFZ-Gf-SSd" firstAttribute="top" secondItem="lTJ-xA-DR0" secondAttribute="bottom" constant="8" id="6FG-2S-7dn"/>
-                    <constraint firstAttribute="trailing" secondItem="lTJ-xA-DR0" secondAttribute="trailing" constant="8" id="9YU-nU-MjZ"/>
+                    <constraint firstItem="CFZ-Gf-SSd" firstAttribute="top" secondItem="lTJ-xA-DR0" secondAttribute="bottom" id="6FG-2S-7dn"/>
+                    <constraint firstAttribute="trailing" secondItem="lTJ-xA-DR0" secondAttribute="trailing" constant="2" id="9YU-nU-MjZ"/>
                     <constraint firstItem="CFZ-Gf-SSd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="9hW-il-HNG"/>
                     <constraint firstAttribute="bottom" secondItem="CFZ-Gf-SSd" secondAttribute="bottom" constant="8" id="CQ6-tJ-vkF"/>
                     <constraint firstAttribute="trailing" secondItem="CFZ-Gf-SSd" secondAttribute="trailing" constant="8" id="FTk-SJ-8Lq"/>
-                    <constraint firstItem="lTJ-xA-DR0" firstAttribute="top" secondItem="wIH-0Y-71i" secondAttribute="bottom" constant="8" id="gpQ-OH-z0B"/>
+                    <constraint firstItem="lTJ-xA-DR0" firstAttribute="top" secondItem="wIH-0Y-71i" secondAttribute="bottom" id="gpQ-OH-z0B"/>
                     <constraint firstItem="wIH-0Y-71i" firstAttribute="leading" secondItem="eM8-Tb-XK1" secondAttribute="trailing" constant="8" id="hYH-zu-rBD"/>
                     <constraint firstItem="eM8-Tb-XK1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="iTn-hG-ifL"/>
-                    <constraint firstItem="lTJ-xA-DR0" firstAttribute="leading" secondItem="eM8-Tb-XK1" secondAttribute="trailing" constant="8" id="m06-G3-hNa"/>
+                    <constraint firstItem="lTJ-xA-DR0" firstAttribute="leading" secondItem="eM8-Tb-XK1" secondAttribute="trailing" constant="4" id="m06-G3-hNa"/>
                     <constraint firstItem="wIH-0Y-71i" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="mzM-Nr-fLO"/>
                     <constraint firstItem="eM8-Tb-XK1" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="wzV-Gl-cqt"/>
                 </constraints>
+                <variation key="default">
+                    <mask key="constraints">
+                        <exclude reference="CQ6-tJ-vkF"/>
+                    </mask>
+                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="mediaView" destination="CFZ-Gf-SSd" id="xId-Qw-y76"/>
