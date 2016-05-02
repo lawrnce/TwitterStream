@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class TweetTableViewCell: UITableViewCell {
 
@@ -16,30 +17,50 @@ class TweetTableViewCell: UITableViewCell {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var mediaView: UIView!
     
+    // Media
+    var videoItem: AVPlayerItem!
+    var videoPlayer: AVPlayer!
+    var avLayer: AVPlayerLayer!
+    
+    // photo
+    var photoImageView: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
-        self.clipsToBounds = true
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     /**
         Cell data on reuse
      */
     override func prepareForReuse() {
-        if profileImageView.image != nil {
+        if (self.profileImageView.image != nil) {
             profileImageView.image = nil
         }
-//
-        if (screenNameLabel.text?.isEmpty == false) {
-            screenNameLabel.text = ""
+        if (self.screenNameLabel.text?.isEmpty == false) {
+            self.screenNameLabel.text = ""
         }
-        
+        if (self.textView.text?.isEmpty == false) {
+            self.textView.text = ""
+        }
+        if (self.videoPlayer != nil) {
+            self.videoPlayer.pause()
+            self.videoPlayer = nil
+        }
+        if (self.videoItem != nil) {
+            self.videoItem = nil
+        }
+        if (self.avLayer != nil) {
+            self.avLayer.removeFromSuperlayer()
+            self.avLayer = nil
+        }
+        if (self.photoImageView != nil) {
+            self.photoImageView.image = nil
+            self.photoImageView = nil
+        }
     }
 }

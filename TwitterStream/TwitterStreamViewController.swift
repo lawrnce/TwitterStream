@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 import SwiftyJSON
 import Haneke
 
@@ -50,6 +51,7 @@ class TwitterStreamViewController: UIViewController {
         setupTwitterManager()
         setupSearchBar()
         setupFilterView()
+        flushCache()
     }
 
     override func didReceiveMemoryWarning() {
@@ -179,6 +181,64 @@ class TwitterStreamViewController: UIViewController {
         } else {
             self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Fade)
         }
+    }
+    
+    /**
+        Set a player to loop for a gif.
+     */
+    private func loopVideo(videoPlayer: AVPlayer) {
+        NSNotificationCenter.defaultCenter().addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil, queue: nil) { notification in
+            videoPlayer.seekToTime(kCMTimeZero)
+            videoPlayer.play()
+        }
+    }
+    
+    // MARK: - Helpers
+    
+    /**
+        Return the url for an animated gif.
+    
+        - Parameter data: The "media" entry in the tweet JSON.
+        - Returns: A NSURL of the gif.
+     */
+    private func getGifUrlFromData(data: SwiftyJSON.JSON) -> NSURL? {
+        
+        // iterate through the json
+        for (_, subJson) in data["media"] {
+            
+            // if type is gif
+            if (subJson["type"] == "animated_gif") {
+                return NSURL(string: subJson["url"].stringValue)
+            }
+        }
+        
+        return nil
+    }
+    
+    /**
+        Returns a url for a media type.
+     
+        - Parameter data: The tweet data.
+        -
+        - Returns: A NSURL of the media.
+     */
+    private func getUrlFromData(data: SwiftyJSON.JSON, forType type: TweetType) -> NSURL? {
+        
+        if (type == .Gif) {
+            
+            for (_, subJson) in data["media"] {
+                
+                // if type is gif
+                if (subJson["type"] == "animated_gif") {
+                    return NSURL(string: subJson["url"].stringValue)
+                }
+            }
+            
+        } else if (type == .Photo) {
+            return NSURL(string: data["photos"].arrayValue.first!["url"].stringValue)
+        }
+
+        return nil
     }
 }
 
@@ -312,17 +372,51 @@ extension TwitterStreamViewController: UITableViewDataSource {
         // Set text
         cell.textView.text = tweet.data["text"].stringValue
         
-        // TESTING
-//        switch(tweet.type) {
-//        case .Gif:
-//            cell.backgroundColor = UIColor.cyanColor()
-//        case .Text:
-//            cell.backgroundColor = UIColor.redColor()
-//        case .Video:
+        // Set media for type
+        switch(tweet.type) {
+        case .Gif:
+            
+            // Get gif url
+            if let url = getGifUrlFromData(tweet.data) {
+                
+                // Fetch and cache data
+                self.mediaCache.fetch(URL: url)
+                    
+                    // Downloaded
+                    .onSuccess({ (data) -> () in
+                        
+                        // url of cached data
+                        let path = NSURL(string: DiskCache.basePath())!.URLByAppendingPathComponent("shared-data/original")
+                        let cached = DiskCache(path: path.absoluteString).pathForKey(url.absoluteString)
+                        let file = NSURL(fileURLWithPath: cached)
+                        
+                        // setup video player
+                        cell.videoItem = AVPlayerItem(URL: file)
+                        cell.videoPlayer = AVPlayer(playerItem: cell.videoItem)
+                        cell.avLayer = AVPlayerLayer(player: cell.videoPlayer)
+                        cell.avLayer.frame = cell.mediaView.frame
+                        cell.contentView.layer.addSublayer(cell.avLayer)
+                        
+                        // play and loop
+                        cell.videoPlayer.play()
+                        self.loopVideo(cell.videoPlayer)
+                    })
+                    // Error
+                    .onFailure({ (error) -> () in
+                    
+                    })
+            }
+        case .Text:
+            break
+        case .Video:
 //            cell.backgroundColor = UIColor.purpleColor()
-//        case .Photo:
-//            cell.backgroundColor = UIColor.greenColor()
-//        }
+            break
+        case .Photo:
+            cell.photoImageView = UIImageView(frame: cell.mediaView.frame)
+            cell.photoImageView.contentMode = .ScaleAspectFit
+            cell.contentView.addSubview(cell.photoImageView)
+            cell.photoImageView.hnk_setImageFromURL(NSURL(string: tweet.data["photos"].arrayValue.first!["url"].stringValue)!)
+        }
     
         return cell
     }
@@ -332,7 +426,7 @@ extension TwitterStreamViewController: UITableViewDataSource {
 extension TwitterStreamViewController: UITableViewDelegate {
     
     /**
-        Approximate the cell's height
+        Set the cell's height
      */
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         
