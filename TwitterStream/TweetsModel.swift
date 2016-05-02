@@ -136,7 +136,7 @@ class TweetsModel: NSObject {
                                 If the current filter allows the new tweet, the key is 
                                 passed to the block.
      */
-    func insertTweet(tweet: JSON, completion: (filtered: Bool, key: Int?) -> ()) {
+    func insertTweet(tweet: JSON, completion: (filtered: Bool, key: Int?, type: TweetType?) -> ()) {
         
         // Get tweet type
         let type = getTypeForTweet(tweet)
@@ -175,7 +175,7 @@ class TweetsModel: NSObject {
         // Determine if new tweet falls within current filter
         // If so pass the key to completion handler
         if (filterStateForType(type) == true) {
-            completion(filtered: true, key: key)
+            completion(filtered: true, key: key, type: type)
         }
     }
     

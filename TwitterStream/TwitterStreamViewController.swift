@@ -144,6 +144,12 @@ class TwitterStreamViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "firstTweetOfType:", name: kFIRST_TWEET_FOR_TYPE_NOTIFICATION, object: nil)
     }
     
+    private func loopVideoPlayer(videoPlayer: AVPlayer) {
+        NSNotificationCenter.defaultCenter().addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: videoPlayer.currentItem, queue: nil) { notification in
+            videoPlayer.seekToTime(kCMTimeZero)
+            videoPlayer.play()
+        }
+    }
     
     /**
         Setup tweet processing queue. This is the queue were we add and filter tweets.
@@ -178,35 +184,36 @@ class TwitterStreamViewController: UIViewController {
     /**
         Animates a new cell into table if user is scrolled near the top.
      */
-    private func animateNewTweetIfNeeded() {
+    private func animateNewTweetIfNeededForType(type: TweetType) {
         
         // Do not scroll the table view is user is not near the top
         if(self.tableView.contentOffset.y > 20.0) {
             
-            let beforeContentSize = self.tableView.contentSize
-            self.tableView.reloadData()
-            let afterContentSize = self.tableView.contentSize
-            let afterContentOffset = self.tableView.contentOffset
-            let newContentOffset = CGPointMake(afterContentOffset.x, afterContentOffset.y + afterContentSize.height - beforeContentSize.height)
+            // Get table view offset
+            var tableViewOffset = self.tableView.contentOffset
             
-            self.tableView.setContentOffset(newContentOffset, animated: false)
+            // Get off set for new cells
+            tableViewOffset.y += (type == .Text) ? kTEXT_TWEET_BASE_HEIGHT : kMEDIA_TWEET_BASE_HEIGHT
+            
+            // Turn off animations when updating
+            UIView.setAnimationsEnabled(false)
+            
+            // Add cell to table
+            self.tableView.beginUpdates()
+            self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .None)
+            
+            self.tableView.endUpdates()
+            
+            // Resume animations
+            UIView.setAnimationsEnabled(true)
+            
+            self.tableView.setContentOffset(tableViewOffset, animated: false)
             
         // Animate if user is near the top
         } else {
             if (self.currentList != nil) {
                 self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: 0, inSection: 0)], withRowAnimation: .Fade)
-                self.tableView.reloadData()
             }
-        }
-    }
-    
-    /**
-        Set a player to loop for a gif.
-     */
-    private func loopVideo(videoPlayer: AVPlayer) {
-        NSNotificationCenter.defaultCenter().addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: videoPlayer.currentItem, queue: nil) { notification in
-            videoPlayer.seekToTime(kCMTimeZero)
-            videoPlayer.play()
         }
     }
     
@@ -252,7 +259,7 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
         // Insert tweet
         dispatch_async(self.tweetQueue) { () -> Void in
             
-            self.tweets.insertTweet(tweet, completion: { (filtered, key) -> () in
+            self.tweets.insertTweet(tweet, completion: { (filtered, key, type) -> () in
                 
                 // Current filter allows new tweet
                 if (filtered == true) {
@@ -260,7 +267,7 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
                     // Update table
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.currentList.insert(key!, atIndex: 0)
-                        self.animateNewTweetIfNeeded()
+                        self.animateNewTweetIfNeededForType(type!)
                     })
                 }
             })
@@ -396,19 +403,12 @@ extension TwitterStreamViewController: UITableViewDataSource {
                         let path = NSURL(string: DiskCache.basePath())!.URLByAppendingPathComponent("shared-data/original")
                         let cached = DiskCache(path: path.absoluteString).pathForKey(url.absoluteString)
                         let file = NSURL(fileURLWithPath: cached)
+                      
+                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                            cell.setGifWithURL(file)
+                            self.loopVideoPlayer(cell.videoPlayer)
+                        })
                         
-                        // setup video player
-                        cell.videoItem = AVPlayerItem(URL: file)
-                        cell.videoPlayer = AVPlayer(playerItem: cell.videoItem)
-                        cell.avLayer = AVPlayerLayer(player: cell.videoPlayer)
-                        cell.avLayer.videoGravity = AVLayerVideoGravityResizeAspect
-                        cell.avLayer.frame = cell.mediaView.bounds
-                        cell.mediaView.layer.addSublayer(cell.avLayer)
-                        cell.activityIndicatorView.stopAnimating()
-                        
-                        // play and loop
-                        cell.videoPlayer.play()
-                        self.loopVideo(cell.videoPlayer)
                     })
                 
             }

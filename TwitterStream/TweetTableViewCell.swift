@@ -26,6 +26,41 @@ class TweetTableViewCell: UITableViewCell {
     // photo
     var photoImageView: UIImageView!
     
+    // MARK: - GIF
+    
+    /**
+        Creates the AV items required to loop a gif.
+     */
+    func setGifWithURL(url: NSURL) {
+        // setup video player
+        self.videoItem = AVPlayerItem(URL: url)
+        self.videoPlayer = AVPlayer(playerItem: self.videoItem)
+        self.avLayer = AVPlayerLayer(player: self.videoPlayer)
+        self.avLayer.videoGravity = AVLayerVideoGravityResizeAspect
+        self.avLayer.frame = self.mediaView.bounds
+        self.mediaView.layer.addSublayer(self.avLayer)
+        self.activityIndicatorView.stopAnimating()
+        
+        // play
+        self.videoPlayer.play()
+//        NSNotificationCenter.defaultCenter().addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: videoPlayer.currentItem, queue: nil) { notification in
+//            self.videoPlayer.seekToTime(kCMTimeZero)
+//            self.videoPlayer.play()
+//        }
+    }
+    
+    /**
+        Set a player to loop for a gif.
+     */
+    private func loopVideo(videoPlayer: AVPlayer) {
+
+    }
+    
+    // MARK: - VIDEO
+    
+    
+    // MARK: - PHOTO
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -41,17 +76,26 @@ class TweetTableViewCell: UITableViewCell {
      */
     override func prepareForReuse() {
         
+        if (self.videoPlayer != nil) {
+            NSNotificationCenter.defaultCenter().removeObserver(self.videoPlayer.currentItem!)
+            self.videoPlayer = nil
+            self.videoItem = nil
+        }
+        
         self.activityIndicatorView.startAnimating()
         
         if (self.profileImageView.image != nil) {
             profileImageView.image = nil
         }
+        
         if (self.screenNameLabel.text?.isEmpty == false) {
             self.screenNameLabel.text = ""
         }
+        
         if (self.textView.text?.isEmpty == false) {
             self.textView.text = ""
         }
+        
         for subview in self.mediaView.subviews {
             subview.removeFromSuperview()
         }
@@ -61,11 +105,6 @@ class TweetTableViewCell: UITableViewCell {
                 sublayer.removeFromSuperlayer()
             }
         }
-        if (self.videoPlayer != nil) {
-            self.videoPlayer = nil
-        }
-        if (self.videoItem != nil) {
-            self.videoItem = nil
-        }
+
     }
 }
