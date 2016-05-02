@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyJSON
 
-enum TweetType {
+enum TweetType: Int {
     case Gif
     case Text
     case Video
@@ -118,24 +118,37 @@ class TweetsModel: NSObject {
      */
     func insertTweet(tweet: JSON, completion: (filtered: Bool, key: Int?) -> ()) {
         
-        // get tweet type
+        // Get tweet type
         let type = getTypeForTweet(tweet)
         
-        // get next key for hash
+        // Get next key for hash
         let key = self.tweetHash.count
         
-        // set tweet hash
+        // Set tweet hash
         self.tweetHash[key] = tweet
         
-        // append key to type list
+        // Append key to type list.
+        // If first tweet for type, turn on filter UI.
         switch (type) {
         case .Text:
+            if (self.textList.count == 0) {
+                turnOnFilterButtonForTweetType(.Text)
+            }
             self.textList.append(key)
         case .Gif:
+            if (self.gifList.count == 0) {
+                turnOnFilterButtonForTweetType(.Gif)
+            }
             self.gifList.append(key)
         case .Video:
+            if (self.videoList.count == 0) {
+                turnOnFilterButtonForTweetType(.Video)
+            }
             self.videoList.append(key)
         case .Photo:
+            if (self.photoList.count == 0) {
+                turnOnFilterButtonForTweetType(.Photo)
+            }
             self.photoList.append(key)
         }
         
@@ -210,16 +223,13 @@ class TweetsModel: NSObject {
     }
     
     /**
-        MARK: - Notifications 
-     
-        When a tweet of a certain type is added for the first time.
-        Notify the filter view to change the image to "On" for that type.
-     */
-    private func setupNotifications() {
-        
-    }
+        Update UI when the first tweet of a certain type is received.
     
-    deinit {
-        
+        - Parameter type: A tweet type.
+     */
+    private func turnOnFilterButtonForTweetType(type: TweetType) {
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            NSNotificationCenter.defaultCenter().postNotificationName(kFIRST_TWEET_FOR_TYPE_NOTIFICATION, object: type.hashValue)
+        }
     }
 }

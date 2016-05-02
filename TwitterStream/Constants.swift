@@ -7,3 +7,8 @@
 //
 
 import Foundation
+
+/** 
+    Notifications
+ */
+let kFIRST_TWEET_FOR_TYPE_NOTIFICATION = "com.lawrnce.FirstTweetForTypeNotification"

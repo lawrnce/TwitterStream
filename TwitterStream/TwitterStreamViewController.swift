@@ -37,6 +37,7 @@ class TwitterStreamViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNotification()
         setupTwitterManager()
         setupSearchBar()
         setupFilterView()
@@ -47,6 +48,24 @@ class TwitterStreamViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
+    /**
+        MARK: - Selectors
+     */
+    func firstTweetOfType(notification: NSNotification) {
+        
+        // get tweet type
+        let typeHash = (notification.object as! Int)
+        
+        let type = TweetType(rawValue: typeHash)
+        
+        // update UI
+        self.filterView.setFilterButtonImageForFilterType(type!, forState: true)
+    }
+     
     /**
         MARK: - Setup
      */
@@ -69,6 +88,14 @@ class TwitterStreamViewController: UIViewController {
     private func setupFilterView() {
         self.filterView.delegate = self
     }
+    
+    /**
+        Setup Notifications
+     */
+    private func setupNotification() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "firstTweetOfType:", name: kFIRST_TWEET_FOR_TYPE_NOTIFICATION, object: nil)
+    }
+    
     
     /**
         Setup tweet processing queue. This is the queue were we add and filter tweets.
