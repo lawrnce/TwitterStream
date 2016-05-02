@@ -64,7 +64,6 @@
                     <connections>
                         <outlet property="filterView" destination="97i-Hw-ro9" id="SuD-Za-Nur"/>
                         <outlet property="tableView" destination="8w0-Yi-eT3" id="mlX-V6-KIw"/>
-                        <segue destination="rfo-M7-ieQ" kind="show" identifier="showVideo" animates="NO" id="N8Y-Fh-dVz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -80,7 +79,7 @@
                         <viewControllerLayoutGuide type="bottom" id="9Mp-Ae-8Hm"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ubJ-zB-3Vv">
-                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>

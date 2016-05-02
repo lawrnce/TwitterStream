@@ -67,14 +67,7 @@ class TwitterStreamViewController: UIViewController {
     // MARK: - Navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        // Video segue
-        if (segue.identifier == "showVideo") {
-
-            let destinationVC = segue.destinationViewController as! VideoPlayerViewController
-            destinationVC.url = sender as! NSURL
-            
-        // Photo segue
-        } else if (segue.identifier == "showPhoto") {
+        if (segue.identifier == "showPhoto") {
             
         }
     }
@@ -568,6 +561,12 @@ extension TwitterStreamViewController: TweetTableViewCellDelegate {
         Download and play the video file.
      */
     func tweetTableViewCell(tweetTableViewCell: TweetTableViewCell, didPressPlayButton url: NSURL) {
-        self.performSegueWithIdentifier("showVideo", sender: url)
+        
+        // show video
+        let videoViewController = VideoPlayerViewController()
+        videoViewController.url = url
+        self.presentViewController(videoViewController, animated: false) { () -> Void in
+            
+        }
     }
 }

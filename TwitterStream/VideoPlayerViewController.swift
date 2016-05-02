@@ -18,16 +18,22 @@ class VideoPlayerViewController: UIViewController {
         super.viewDidLoad()
 
         moviePlayer = MPMoviePlayerController(contentURL: url)
-        moviePlayer.view.frame = CGRect(x: 0, y: 0, width: kSCREEN_, height: <#T##CGFloat#>)
+        moviePlayer.view.frame = self.view.bounds
         
         self.view.addSubview(moviePlayer.view)
         moviePlayer.fullscreen = true
-        moviePlayer.controlStyle = .Embedded
-        
-        // disable swipe back
-        self.navigationController?.interactivePopGestureRecognizer?.enabled = false
+        moviePlayer.controlStyle = .Fullscreen
+   
+        // Set notification for done button
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("donePressed:"), name: MPMoviePlayerPlaybackDidFinishNotification, object: self.moviePlayer)
     }
 
+    func donePressed(notification: NSNotification) {
+        self.dismissViewControllerAnimated(false) { () -> Void in
+            
+        }
+    }
+    
     // Stop video when view closes
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
@@ -39,7 +45,7 @@ class VideoPlayerViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    override func prefersStatusBarHidden() -> Bool {
-        return true
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 }
