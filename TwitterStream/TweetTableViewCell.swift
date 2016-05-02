@@ -29,6 +29,7 @@ class TweetTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -39,6 +40,8 @@ class TweetTableViewCell: UITableViewCell {
         Cell data on reuse
      */
     override func prepareForReuse() {
+        
+        self.activityIndicatorView.startAnimating()
         
         if (self.profileImageView.image != nil) {
             profileImageView.image = nil

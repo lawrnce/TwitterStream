@@ -118,7 +118,7 @@ class TwitterStreamViewController: UIViewController {
         setupTweetQueue()
         
         // Testing
-        self.twitterManager.createStreamConnectionForKeyword("popular")
+        self.twitterManager.createStreamConnectionForKeyword("gif")
     }
     
     /**
@@ -213,32 +213,6 @@ class TwitterStreamViewController: UIViewController {
             }
         }
         
-        return nil
-    }
-    
-    /**
-        Returns a url for a media type.
-     
-        - Parameter data: The tweet data.
-        -
-        - Returns: A NSURL of the media.
-     */
-    private func getUrlFromData(data: SwiftyJSON.JSON, forType type: TweetType) -> NSURL? {
-        
-        if (type == .Gif) {
-            
-            for (_, subJson) in data["media"] {
-                
-                // if type is gif
-                if (subJson["type"] == "animated_gif") {
-                    return NSURL(string: subJson["url"].stringValue)
-                }
-            }
-            
-        } else if (type == .Photo) {
-            return NSURL(string: data["photos"].arrayValue.first!["url"].stringValue)
-        }
-
         return nil
     }
 }
@@ -398,15 +372,13 @@ extension TwitterStreamViewController: UITableViewDataSource {
                         cell.avLayer.videoGravity = AVLayerVideoGravityResizeAspect
                         cell.avLayer.frame = cell.mediaView.bounds
                         cell.mediaView.layer.addSublayer(cell.avLayer)
+                        cell.activityIndicatorView.stopAnimating()
                         
                         // play and loop
                         cell.videoPlayer.play()
                         self.loopVideo(cell.videoPlayer)
                     })
-                    // Error
-                    .onFailure({ (error) -> () in
-                    
-                    })
+                
             }
         case .Text:
             break
@@ -414,10 +386,18 @@ extension TwitterStreamViewController: UITableViewDataSource {
 //            cell.backgroundColor = UIColor.purpleColor()
             break
         case .Photo:
+            
+            // Create photo view and add it
             cell.photoImageView = UIImageView(frame: cell.mediaView.bounds)
             cell.photoImageView.contentMode = .ScaleAspectFit
             cell.mediaView.addSubview(cell.photoImageView)
-            cell.photoImageView.hnk_setImageFromURL(NSURL(string: tweet.data["photos"].arrayValue.first!["url"].stringValue)!)
+            
+            // Fetch and cache image
+            self.imageCache.fetch(URL: NSURL(string: tweet.data["photos"].arrayValue.first!["url"].stringValue)!)
+                .onSuccess({ (image) -> () in
+                    cell.activityIndicatorView.stopAnimating()
+                    cell.photoImageView.image = image
+                })
         }
     
         return cell
