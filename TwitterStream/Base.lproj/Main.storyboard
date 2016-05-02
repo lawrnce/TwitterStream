@@ -25,14 +25,14 @@
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="image" keyPath="playbackButtonImage" value="PlaybackButtonImagePlaying"/>
-                                    <userDefinedRuntimeAttribute type="image" keyPath="gifFilterButtonImage" value="GifFilterImageOff"/>
-                                    <userDefinedRuntimeAttribute type="image" keyPath="videoFilterButtonImage" value="VideoFilterImageOff"/>
-                                    <userDefinedRuntimeAttribute type="image" keyPath="photoFilterButtonImage" value="PhotoFilterImageOff"/>
-                                    <userDefinedRuntimeAttribute type="image" keyPath="textFilterButtonImage" value="TextFilterImageOff"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="gifFilterButtonImage" value="GifFilterImageEmpty"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="videoFilterButtonImage" value="VideoFilterImageEmpty"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="photoFilterButtonImage" value="PhotoFilterImageEmpty"/>
+                                    <userDefinedRuntimeAttribute type="image" keyPath="textFilterButtonImage" value="TextFilterImageEmpty"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8w0-Yi-eT3">
-                                <rect key="frame" x="0.0" y="-91" width="375" height="559"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="8w0-Yi-eT3">
+                                <rect key="frame" x="0.0" y="44" width="375" height="559"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="aIG-vO-pkl"/>
@@ -92,10 +92,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="GifFilterImageOff" width="48" height="20"/>
-        <image name="PhotoFilterImageOff" width="71" height="20"/>
+        <image name="GifFilterImageEmpty" width="48" height="20"/>
+        <image name="PhotoFilterImageEmpty" width="71" height="20"/>
         <image name="PlaybackButtonImagePlaying" width="16" height="21"/>
-        <image name="TextFilterImageOff" width="57" height="20"/>
-        <image name="VideoFilterImageOff" width="65" height="20"/>
+        <image name="TextFilterImageEmpty" width="57" height="20"/>
+        <image name="VideoFilterImageEmpty" width="65" height="20"/>
     </resources>
 </document>
