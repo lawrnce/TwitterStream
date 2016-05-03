@@ -8,6 +8,10 @@
 
 import UIKit
 
+/**
+    Basic UI constants
+ */
+
 let kSCREEN_WIDTH = UIScreen.mainScreen().bounds.width
 let kSCREEN_HEIGHT = UIScreen.mainScreen().bounds.height
 
