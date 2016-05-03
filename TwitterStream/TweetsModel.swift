@@ -171,7 +171,7 @@ class TweetsModel: NSObject {
     func insertTweet(tweet: JSON, completion: ((filtered: Bool, key: Int?, type: TweetType?) -> ())?) {
         
         // Get tweet type
-        let type = getTypeForTweet(tweet)
+        let type = typeForTweet(tweet)
         
         // Get next key for hash
         let key = self.tweetHash.count
@@ -218,7 +218,16 @@ class TweetsModel: NSObject {
         - Returns: A boolean value for the fileter type.
      */
     func filterValueForType(type: TweetType) -> Bool {
-        
+        switch(type) {
+        case .Gif:
+            return self.filter.gif
+        case .Text:
+            return self.filter.text
+        case .Video:
+            return self.filter.video
+        case .Photo:
+            return self.filter.photo
+        }
     }
     
     /**
@@ -227,7 +236,7 @@ class TweetsModel: NSObject {
         - Parameter filter: The set of booleans representing which filters are active.
         - Returns: An array of keys for the filtered tweets.
      */
-    func getFilteredTweets() -> [Int] {
+    func filteredTweets() -> [Int] {
         
         var keys = [Int]()
         
@@ -264,7 +273,7 @@ class TweetsModel: NSObject {
         - Parameter key: The primary key of the tweet.
         - Returns: The image url. Nil if Tweet has no images
      */
-    func getImageUrlForTweet(key: Int) -> NSURL? {
+    func imageUrlForTweet(key: Int) -> NSURL? {
         
         let tweet = (self.tweetHash?[key])!
         
@@ -296,7 +305,7 @@ class TweetsModel: NSObject {
         - Parameter key: The primary key of the tweet.
         - Returns: The media url. Nil if Tweet has no media
      */
-    func getMediaUrlForTweet(key: Int) -> NSURL? {
+    func mediaUrlForTweet(key: Int) -> NSURL? {
         
         let tweet = (self.tweetHash?[key])!
         
@@ -339,7 +348,7 @@ class TweetsModel: NSObject {
         - Parameter tweet: A tweet in JSON format.
         - Returns: The type for the tweet.
      */
-    private func getTypeForTweet(tweet: JSON) -> TweetType {
+    private func typeForTweet(tweet: JSON) -> TweetType {
         
         // case JSON array
         let tags = tweet["tags"].arrayObject as! [String]

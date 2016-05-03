@@ -82,7 +82,7 @@ class TwitterStreamViewController: UIViewController {
      */
     func playVideo(sender: UIButton) {
         let videoViewController = VideoPlayerViewController()
-        videoViewController.url = self.tweets.getMediaUrlForTweet(sender.tag)
+        videoViewController.url = self.tweets.mediaUrlForTweet(sender.tag)
         self.presentViewController(videoViewController, animated: false, completion: nil)
     }
     
@@ -379,7 +379,7 @@ extension TwitterStreamViewController: FilterViewDelegate {
     
             // Toggle tweets filter
             self.tweets.toggleFilterForType(type)
-            let newList = self.tweets.getFilteredTweets()
+            let newList = self.tweets.filteredTweets()
             let filterState = self.tweets.filterStateForType(type)
             
             // update ui
@@ -455,7 +455,7 @@ extension TwitterStreamViewController: UITableViewDataSource {
         case .Gif:
             
             // Get gif url
-            if let gifURL = self.tweets.getMediaUrlForTweet(key) {
+            if let gifURL = self.tweets.mediaUrlForTweet(key) {
                 
                 cell.mediaView.hidden = false
                 
@@ -495,7 +495,7 @@ extension TwitterStreamViewController: UITableViewDataSource {
         case .Video:
 
             // Get thumbnail
-            if let thumbnailURL = self.tweets.getImageUrlForTweet(key) {
+            if let thumbnailURL = self.tweets.imageUrlForTweet(key) {
    
                 cell.mediaView.hidden = false
                 
@@ -526,7 +526,7 @@ extension TwitterStreamViewController: UITableViewDataSource {
         case .Photo:
             
             // Get image
-            if let imageURL = self.tweets.getImageUrlForTweet(key) {
+            if let imageURL = self.tweets.imageUrlForTweet(key) {
                 
                 // Adjust cell view
                 cell.mediaView.hidden = false

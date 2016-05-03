@@ -14,26 +14,28 @@ import SwiftyJSON
 class TweetsModelTests: XCTestCase {
     
     var tweets: TweetsModel!
-    
-    // Test Data
-    let videoTweet = JSON([ "tags": ["video"],
-        "media": [["type": "video", "thumbnail_url": "some_url", "url": "some_url"]]])
-    
-    let photoTweet = JSON([ "tags": ["photo"],
-        "photos": [["type": "photo", "url": "some_url"]]])
-    
-    let gifTweet = JSON([   "tags": ["animated_gif"],
-        "media": [["type": "animated_gif", "url": "some_url"]]])
-    
-    let textTweet = JSON([   "tags": [], "media": []])
-    
+    var videoTweet: JSON!
+    var photoTweet: JSON!
+    var gifTweet: JSON!
+    var textTweet: JSON!
+
     override func setUp() {
         super.setUp()
         self.tweets = TweetsModel()
+        self.videoTweet = JSON([ "tags": ["video"],
+            "media": [["type": "video", "thumbnail_url": "some_url", "url": "some_url"]]])
+        self.photoTweet = JSON([ "tags": ["photo"],
+            "photos": [["type": "photo", "url": "some_url"]]])
+        self.gifTweet = JSON([   "tags": ["animated_gif"],
+            "media": [["type": "animated_gif", "url": "some_url"]]])
+        self.textTweet = JSON([   "tags": [], "media": []])
     }
     
     override func tearDown() {
         self.tweets = nil
+        self.videoTweet = nil
+        self.photoTweet = nil
+        self.textTweet = nil
         super.tearDown()
     }
     
@@ -43,11 +45,9 @@ class TweetsModelTests: XCTestCase {
         Inserting tweets into model should add to hash.
      */
     func test_tweets_model_inserts_tweet_into_hash() {
-        
         self.tweets.insertTweet(videoTweet, completion: nil)
         self.tweets.insertTweet(photoTweet, completion: nil)
         self.tweets.insertTweet(gifTweet, completion: nil)
-        
         expect(self.tweets.count).to(equal(3))
     }
     
@@ -56,9 +56,7 @@ class TweetsModelTests: XCTestCase {
         Inserting a gif tweet should append to gif list.
      */
     func test_tweets_model_insert_gif_tweet_appends_to_gif_list() {
-        
         self.tweets.insertTweet(gifTweet, completion: nil)
-        
         expect(self.tweets.countForType(.Gif)).to(equal(1))
     }
     
@@ -66,9 +64,7 @@ class TweetsModelTests: XCTestCase {
         Inserting a text tweet should append to text list.
      */
     func test_tweets_model_insert_text_tweet_appends_to_text_list() {
-        
         self.tweets.insertTweet(textTweet, completion: nil)
-        
         expect(self.tweets.countForType(.Text)).to(equal(1))
     }
     
@@ -76,9 +72,7 @@ class TweetsModelTests: XCTestCase {
         Inserting a video tweet should append to video list.
      */
     func test_tweets_model_insert_video_tweet_appends_to_video_list() {
-        
         self.tweets.insertTweet(videoTweet, completion: nil)
-        
         expect(self.tweets.countForType(.Video)).to(equal(1))
     }
     
@@ -86,9 +80,7 @@ class TweetsModelTests: XCTestCase {
         Inserting a photo tweet should append to photo list.
      */
     func test_tweets_model_insert_photo_tweet_appends_to_photo_list() {
-        
         self.tweets.insertTweet(photoTweet, completion: nil)
-        
         expect(self.tweets.countForType(.Photo)).to(equal(1))
     }
     
@@ -98,12 +90,8 @@ class TweetsModelTests: XCTestCase {
         Get gif tweet should return Gif type.
      */
     func test_get_gif_tweet_should_return_gif_type() {
-        
         self.tweets.insertTweet(gifTweet, completion: nil)
-        
-        // only 1 tweet with key 0
         let type: TweetType = self.tweets.typeForKey(0)
-        
         expect(type).to(equal(TweetType.Gif))
     }
     
@@ -111,12 +99,8 @@ class TweetsModelTests: XCTestCase {
         Get text tweet should return Text type.
      */
     func test_get_text_tweet_should_return_text_type() {
-        
         self.tweets.insertTweet(textTweet, completion: nil)
-        
-        // only 1 tweet with key 0
         let type: TweetType = self.tweets.typeForKey(0)
-        
         expect(type).to(equal(TweetType.Text))
     }
     
@@ -124,12 +108,8 @@ class TweetsModelTests: XCTestCase {
         Get video tweet should return Video type.
      */
     func test_get_video_tweet_should_return_video_type() {
-        
         self.tweets.insertTweet(videoTweet, completion: nil)
-        
-        // only 1 tweet with key 0
         let type: TweetType = self.tweets.typeForKey(0)
-        
         expect(type).to(equal(TweetType.Video))
     }
     
@@ -137,12 +117,8 @@ class TweetsModelTests: XCTestCase {
         Get photo tweet should return Photo type.
      */
     func test_get_photo_tweet_should_return_photo_type() {
-        
         self.tweets.insertTweet(photoTweet, completion: nil)
-        
-        // only 1 tweet with key 0
         let type: TweetType = self.tweets.typeForKey(0)
-        
         expect(type).to(equal(TweetType.Photo))
     }
     
@@ -152,33 +128,93 @@ class TweetsModelTests: XCTestCase {
         Gif filter should toggle.
      */
     func test_gif_filter_should_return_false_after_toggle() {
-        
         self.tweets.toggleFilterForType(.Gif)
-        
-        
+        expect(self.tweets.filterStateForType(.Gif)).to(beFalse())
     }
     
     /**
-        Test tweet filtering.
+        Text filter should toggle.
+     */
+    func test_text_filter_should_return_false_after_toggle() {
+        self.tweets.toggleFilterForType(.Text)
+        expect(self.tweets.filterStateForType(.Text)).to(beFalse())
+    }
+    
+    /**
+        Video filter should toggle.
+     */
+    func test_video_filter_should_return_false_after_toggle() {
+        self.tweets.toggleFilterForType(.Video)
+        expect(self.tweets.filterStateForType(.Video)).to(beFalse())
+    }
+    
+    /**
+        Photo filter should toggle.
+     */
+    func test_photo_filter_should_return_false_after_toggle() {
+        self.tweets.toggleFilterForType(.Photo)
+        expect(self.tweets.filterStateForType(.Photo)).to(beFalse())
+    }
+    
+    /**
+        Tweet filter should return according keys.
      */
     func test_tweets_model_filters_order_ascending() {
     
-        // add dummy tweet data
-//        self.tweets.insertTweet([String: String](), forType: .Text)   // 0
-//        self.tweets.insertTweet([String: String](), forType: .Gif)    // 1
-//        self.tweets.insertTweet([String: String](), forType: .Gif)    // 2
-//        self.tweets.insertTweet([String: String](), forType: .Text)   // 3
-//        self.tweets.insertTweet([String: String](), forType: .Photo)  // 4
-//        self.tweets.insertTweet([String: String](), forType: .Text)   // 5
-//        self.tweets.insertTweet([String: String](), forType: .Video)  // 6
+        // Add tweets
+        self.tweets.insertTweet(videoTweet, completion: nil)    // 0
+        self.tweets.insertTweet(gifTweet, completion: nil)      // 1
+        self.tweets.insertTweet(textTweet, completion: nil)     // 2
+        self.tweets.insertTweet(gifTweet, completion: nil)      // 3
+        self.tweets.insertTweet(photoTweet, completion: nil)    // 4
+        self.tweets.insertTweet(videoTweet, completion: nil)    // 5
+        self.tweets.insertTweet(gifTweet, completion: nil)      // 6
         
-        // filter gif text
-//        let filter = (true, true, false, false)
-//        
-//        let filteredList = self.tweets.filterTweets(filter)
-//        
-//        expect(filteredList).to(equal([0, 1, 2, 3, 5]))
+        // Set filter for only gif and text
+        self.tweets.toggleFilterForType(.Video)
+        self.tweets.toggleFilterForType(.Photo)
+
+        expect(self.tweets.filteredTweets()).to(equal([6, 3, 2, 1]))
     }
     
     // MARK: - Performance tests
+    
+    /**
+        Insert tweet performance
+        est: 0.074 sec (37% STDEV)
+     */
+    func test_performance_insert_1000_tweets() {
+        self.measureBlock {
+            for _ in 0...250 {
+                self.tweets.insertTweet(self.gifTweet, completion: nil)
+                self.tweets.insertTweet(self.textTweet, completion: nil)
+                self.tweets.insertTweet(self.videoTweet, completion: nil)
+                self.tweets.insertTweet(self.photoTweet, completion: nil)
+                
+            }
+        }
+    }
+    
+    /**
+        Filter tweets performance
+        est: 0.004 sec (27% STDEV)
+     */
+    func test_perforrmance_filter_1000_tweets() {
+        
+        // insert 1000 tweets
+        for _ in 0...250 {
+            self.tweets.insertTweet(self.gifTweet, completion: nil)
+            self.tweets.insertTweet(self.textTweet, completion: nil)
+            self.tweets.insertTweet(self.videoTweet, completion: nil)
+            self.tweets.insertTweet(self.photoTweet, completion: nil)
+            
+        }
+        
+        // set a filter
+        self.tweets.toggleFilterForType(.Gif)
+        
+        self.measureBlock { () -> Void in
+            self.tweets.filteredTweets()
+        }
+    }
 }
