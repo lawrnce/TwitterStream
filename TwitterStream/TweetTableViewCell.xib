@@ -62,8 +62,12 @@
                             </mask>
                         </variation>
                     </view>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEk-ga-PHt">
-                        <rect key="frame" x="209" y="175" width="55" height="55"/>
+                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEk-ga-PHt">
+                        <rect key="frame" x="207" y="173" width="60" height="60"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="60" id="mvp-OS-dbD"/>
+                            <constraint firstAttribute="height" constant="60" id="z5Y-bW-5n6"/>
+                        </constraints>
                         <state key="normal" image="VideoPlayButton"/>
                         <connections>
                             <action selector="playButtonDidPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="k89-Z7-yA1"/>
@@ -106,6 +110,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="VideoPlayButton" width="55" height="55"/>
+        <image name="VideoPlayButton" width="44" height="44"/>
     </resources>
 </document>

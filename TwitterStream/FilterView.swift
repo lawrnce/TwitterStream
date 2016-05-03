@@ -29,7 +29,7 @@ protocol FilterViewDelegate {
     @IBOutlet weak var gifFilterButton: UIButton!
     @IBOutlet weak var textFilterButton: UIButton!
     @IBOutlet weak var photoFilterButton: UIButton!
-    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     // inspectable
     @IBInspectable dynamic var playbackButtonImage: UIImage? {
@@ -77,6 +77,8 @@ protocol FilterViewDelegate {
         }
     }
     
+    // MARK: - Methods
+    
     /**
         Set initial UI images
      */
@@ -85,6 +87,7 @@ protocol FilterViewDelegate {
         self.textFilterButtonImage = UIImage(named: "TextFilterImageEmpty")
         self.videoFilterButtonImage = UIImage(named: "VideoFilterImageEmpty")
         self.photoFilterButtonImage = UIImage(named: "PhotoFilterImageEmpty")
+        self.playbackButton.hidden = true
     }
      
     /**
@@ -116,9 +119,7 @@ protocol FilterViewDelegate {
         }
     }
     
-    /**
-        Actions
-     */
+    // MARK: - Actions
     @IBAction func playbackButtonDidPress(sender: AnyObject) {
         self.delegate?.didTogglePlayback()
     }
@@ -139,9 +140,8 @@ protocol FilterViewDelegate {
         self.delegate?.filterView(self, didToggleFilterForType: .Photo)
     }
     
-    /**
-        Setup for nib
-     */
+    
+    // MARK: - Setup
     override init(frame: CGRect) {
         super.init(frame: frame)
         xibSetup()

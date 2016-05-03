@@ -8,6 +8,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FilterView" customModule="TwitterStream" customModuleProvider="target">
             <connections>
+                <outlet property="activityIndicator" destination="8QC-ZE-LuA" id="Q9o-sZ-zWZ"/>
                 <outlet property="gifFilterButton" destination="nGI-6Z-hfM" id="xy3-4F-1cE"/>
                 <outlet property="photoFilterButton" destination="qBI-01-frd" id="n1r-tL-QvC"/>
                 <outlet property="playbackButton" destination="mEn-dD-AbD" id="W4d-6x-3Gy"/>
@@ -114,12 +115,17 @@
                         <action selector="playbackButtonDidPress:" destination="-1" eventType="touchUpInside" id="CTu-Vc-2fn"/>
                     </connections>
                 </button>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="8QC-ZE-LuA">
+                    <rect key="frame" x="20" y="10" width="20" height="20"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
                 <constraint firstItem="mEn-dD-AbD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="6YH-Tt-eRt"/>
+                <constraint firstItem="8QC-ZE-LuA" firstAttribute="centerY" secondItem="mEn-dD-AbD" secondAttribute="centerY" id="Dvs-Sl-PVH"/>
                 <constraint firstAttribute="bottom" secondItem="mEn-dD-AbD" secondAttribute="bottom" constant="4" id="VRz-qy-Jce"/>
                 <constraint firstAttribute="trailing" secondItem="LFc-ci-6df" secondAttribute="trailing" id="a33-Wg-snZ"/>
+                <constraint firstItem="8QC-ZE-LuA" firstAttribute="centerX" secondItem="mEn-dD-AbD" secondAttribute="centerX" id="br9-uT-WmI"/>
                 <constraint firstItem="mEn-dD-AbD" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="fVA-Ks-iNV"/>
                 <constraint firstAttribute="bottom" secondItem="LFc-ci-6df" secondAttribute="bottom" constant="4" id="io2-SR-3zm"/>
                 <constraint firstItem="mEn-dD-AbD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="pWq-K9-GlM"/>

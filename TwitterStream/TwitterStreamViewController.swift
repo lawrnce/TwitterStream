@@ -130,7 +130,7 @@ class TwitterStreamViewController: UIViewController {
         self.currentList = nil
         self.filterView.resetUIState()
         self.tableView.reloadData()
-        self.twitterManager.createStreamConnectionForKeyword(keyword)
+        self.twitterManager.createConnectionWithKeyword(keyword)
     }
     
     /**
@@ -184,6 +184,7 @@ class TwitterStreamViewController: UIViewController {
      */
     private func setupFilterView() {
         self.filterView.delegate = self
+        self.filterView.resetUIState()
     }
     
     /**
@@ -311,6 +312,13 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
      */
     func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: SwiftyJSON.JSON) {
         
+        // Update filter UI if needed
+        if (self.filterView.playbackButton.hidden == true) {
+            self.filterView.playbackButton.hidden = false
+            self.filterView.setPlaybackButtonImageForState(true)
+            self.filterView.activityIndicator.stopAnimating()
+        }
+        
         // lazy load a tweets data structure
         if (self.tweets == nil) {
             self.tweets = TweetsModel()
@@ -334,6 +342,30 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
             })
         }
     }
+    
+    /**
+        Handle errors
+     */
+    func twitterManager(twitterManager: TwitterManager, failedWithErrorMessage error: String) {
+        
+        print(error)
+        
+        // Alert UI
+        if (error == kTWITTER_ACCESS_DENIED) {
+            
+        } else if (error == kNO_TWITTER_ACCOUNT){
+            
+        } else if (error == kCONNECTION_ERROR) {
+            
+        }
+    }
+    
+    /**
+        Stream reconnected after error
+     */
+    func reconnectedToStream() {
+        print("Stream Reconnected")
+    }
 }
 
 // MARK: - Search Bar Delegate
@@ -355,6 +387,7 @@ extension TwitterStreamViewController: UISearchControllerDelegate, UISearchBarDe
         let searchTerm = searchBar.text!
         self.searchController.searchBar.placeholder = "\"" + searchTerm + "\""
         self.searchController.active = false
+        self.filterView.activityIndicator.startAnimating()
         newStreamWithKeyword(searchTerm)
     }
 }
@@ -401,7 +434,7 @@ extension TwitterStreamViewController: FilterViewDelegate {
     func didTogglePlayback() {
         
         // Playback can only be toggled if connected to stream
-        if (self.twitterManager.isConnected == true) {
+        if (self.twitterManager.connected == true) {
             
             self.playback = !self.playback
             self.filterView.setPlaybackButtonImageForState(self.playback)
@@ -558,15 +591,11 @@ extension TwitterStreamViewController: UITableViewDelegate {
 extension TwitterStreamViewController: TweetTableViewCellDelegate {
     
     /**
-        Download and play the video file.
+        Play the video file.
      */
     func tweetTableViewCell(tweetTableViewCell: TweetTableViewCell, didPressPlayButton url: NSURL) {
-        
-        // show video
         let videoViewController = VideoPlayerViewController()
         videoViewController.url = url
-        self.presentViewController(videoViewController, animated: false) { () -> Void in
-            
-        }
+        self.presentViewController(videoViewController, animated: false, completion: nil)
     }
 }

@@ -28,10 +28,9 @@ class VideoPlayerViewController: UIViewController {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("donePressed:"), name: MPMoviePlayerPlaybackDidFinishNotification, object: self.moviePlayer)
     }
 
+    // Selector
     func donePressed(notification: NSNotification) {
-        self.dismissViewControllerAnimated(false) { () -> Void in
-            
-        }
+        self.dismissViewControllerAnimated(false, completion: nil)
     }
     
     // Stop video when view closes

@@ -13,26 +13,53 @@ import SwiftyJSON
 
 protocol TwitterManagerDelegate {
     func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: JSON)
+    func twitterManager(twitterManager: TwitterManager, failedWithErrorMessage error: String)
+    func reconnectedToStream()
 }
 
 class TwitterManager: NSObject {
     
-    var isConnected: Bool!
-    var isTryingToConnect: Bool!
+    var connected: Bool!
+    var tryingToConnect: Bool!
     
     var delegate: TwitterManagerDelegate?
     
-    // Retrain current keyword to resume stream
-    private var currentKeyword: String!
+    // The current keyword to stream
+    private var keyword: String!
     
     // Boolean to check if user paused the stream
     private var shouldPause: Bool!
     
+    private var shouldReset: Bool!
+    
+    private var connection: NSURLConnection!
+    
     override init() {
         super.init()
-        self.isConnected = false
-        self.isTryingToConnect = false
+        self.connected = false
+        self.tryingToConnect = false
         self.shouldPause = false
+        self.shouldReset = false
+    }
+    
+    /**
+        Creates a new connection with a given keyword.
+     
+        - Parameter keyword: The keyword to track.
+     */
+    func createConnectionWithKeyword(keyword: String) {
+        self.keyword = keyword
+        
+        if (self.shouldPause == true) {
+            resumeStream()
+            
+        // Reset stream with new keyword if currently connected
+        } else if (self.shouldReset == false && self.connection != nil) {
+            self.shouldReset = true
+            
+        } else {
+            createConnection()
+        }
     }
     
     /**
@@ -47,16 +74,19 @@ class TwitterManager: NSObject {
      */
     func resumeStream() {
         self.shouldPause = false
-        createStreamConnectionForKeyword(self.currentKeyword)
+        createConnection()
     }
-    
 
     /**
         Creates a real time stream for a keyword.
      
         - Parameter keyword: The keyword to stream.
      */
-    func createStreamConnectionForKeyword(keyword: String) {
+    func createConnection() {
+        
+        guard self.keyword != nil else {
+            return
+        }
         
         // User has access to Twitter
         if (self.userHasAccessToTwitter() == true) {
@@ -78,6 +108,7 @@ class TwitterManager: NSObject {
                     // User denies access to Twitter
                     if (granted == false) {
                         
+                        self.delegate?.twitterManager(self, failedWithErrorMessage: kTWITTER_ACCESS_DENIED)
                         
                     // User grants access to Twitter
                     } else {
@@ -91,15 +122,14 @@ class TwitterManager: NSObject {
                             
                             // Connect to Twitter endpoint
                             let url = NSURL(string: "https://stream.twitter.com/1.1/statuses/filter.json")
-                            let params = [  "track": keyword,
+                            let params = [  "track": self.keyword,
                                             "filter_level": "low"]
                             let request = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: .POST, URL: url, parameters: params)
                             request.account = account
                             
                             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                let connection = NSURLConnection(request: request.preparedURLRequest(), delegate: self)
-                                connection?.start()
-                                self.currentKeyword = keyword
+                                self.connection = NSURLConnection(request: request.preparedURLRequest(), delegate: self)
+                                self.connection?.start()
                             })
                             
                         }
@@ -107,10 +137,9 @@ class TwitterManager: NSObject {
                 }
             })
             
-        // User has no Twitter accounts
+        // User has no Twitter accounts. Notify the delegate.
         } else {
-            
-            
+            self.delegate?.twitterManager(self, failedWithErrorMessage: kNO_TWITTER_ACCOUNT)
         }
     }
     
@@ -131,6 +160,16 @@ extension TwitterManager: NSURLConnectionDataDelegate {
      */
     func connection(connection: NSURLConnection, didReceiveData data: NSData) {
         
+        // Connection is async, so guarantee that the old stream is killed
+        
+        // Check if stream should reset with new keyword
+        if (self.shouldReset == true) {
+            self.shouldReset = false
+            connection.cancel()
+            createConnection()
+            return
+        }
+        
         // Check if user paused stream
         if (self.shouldPause == true) {
             connection.cancel()
@@ -145,10 +184,11 @@ extension TwitterManager: NSURLConnectionDataDelegate {
         if (json != nil) {
             
             // Stream is connected
-            self.isConnected = true
+            self.connected = true
             
-            if (self.isTryingToConnect == true) {
-                self.isTryingToConnect = false
+            if (self.tryingToConnect == true) {
+                self.tryingToConnect = false
+                self.delegate?.reconnectedToStream()
                 print("Connected to stream")
             }
             
@@ -169,16 +209,16 @@ extension TwitterManager: NSURLConnectionDataDelegate {
         }
     }
     
-    func connection(connection: NSURLConnection, didCancelAuthenticationChallenge challenge: NSURLAuthenticationChallenge) {
-        
-    }
-    
-    func connectionDidFinishLoading(connection: NSURLConnection) {
-        
-    }
-    
     func connection(connection: NSURLConnection, didFailWithError error: NSError) {
         
-        print(error)
+        self.connection = nil
+        
+        self.delegate?.twitterManager(self, failedWithErrorMessage: kCONNECTION_ERROR)
+        
+        self.connected = false
+        self.tryingToConnect = true
+        
+        // reconnect to stream after 3 seconds
+        self.performSelector(Selector("beginTwitterStream"), withObject: nil, afterDelay: 3)
     }
 }
