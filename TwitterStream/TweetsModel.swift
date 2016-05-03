@@ -51,6 +51,8 @@ class TweetsModel: NSObject {
         self.filter = (true, true, true, true)
     }
     
+    // MARK: - Methods
+    
     /**
         Returns the tweet data for a key.
      
@@ -214,6 +216,81 @@ class TweetsModel: NSObject {
         
         return keys
     }
+    
+    /**
+        Returns an image or a thumbnail image (depending tweet type)
+        for a tweet.
+        
+        - Parameter key: The primary key of the tweet.
+        - Returns: The image url. Nil if Tweet has no images
+     */
+    func getImageUrlForTweet(key: Int) -> NSURL? {
+        
+        let tweet = (self.tweetHash?[key])!
+        
+        switch(tweet.type) {
+        case .Gif:
+            return nil
+        case .Text:
+            return nil
+            
+        // Get the thumbnail image
+        case .Video:
+            for (_, subJson) in tweet.data["media"] {
+                if (subJson["type"] == "video") {
+                    return NSURL(string: subJson["thumbnail_url"].stringValue)!
+                }
+            }
+        
+        // Get image url
+        case .Photo:
+             return NSURL(string: tweet.data["photos"].arrayValue.first!["url"].stringValue)!
+        }
+    
+        return nil
+    }
+    
+    /**
+        Returns the media url for a tweet.
+     
+        - Parameter key: The primary key of the tweet.
+        - Returns: The media url. Nil if Tweet has no media
+     */
+    func getMediaUrlForTweet(key: Int) -> NSURL? {
+        
+        let tweet = (self.tweetHash?[key])!
+        
+        switch(tweet.type) {
+        
+        // Get gif url
+        case .Gif:
+            for (_, subJson) in tweet.data["media"] {
+                
+                // if type is gif
+                if (subJson["type"] == "animated_gif") {
+                    return NSURL(string: subJson["url"].stringValue)
+                }
+            }
+        case .Text:
+            return nil
+            
+        // Get video url
+        case .Video:
+            for (_, subJson) in tweet.data["media"] {
+                
+                // if type is video
+                if (subJson["type"] == "video") {
+                    return NSURL(string: subJson["url"].stringValue)!
+                }
+            }
+        case .Photo:
+            return nil
+        }
+        
+        return nil
+    }
+    
+    // MARK: - Private Helpers
     
     /**
         Get the type for the tweet. If tweet has multiple types then

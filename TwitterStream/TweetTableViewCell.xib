@@ -31,7 +31,7 @@
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="lTJ-xA-DR0">
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lTJ-xA-DR0">
                         <rect key="frame" x="56" y="28" width="415" height="80"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="80" id="BWE-Vb-z2P"/>
@@ -62,17 +62,6 @@
                             </mask>
                         </variation>
                     </view>
-                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEk-ga-PHt">
-                        <rect key="frame" x="207" y="173" width="60" height="60"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="60" id="mvp-OS-dbD"/>
-                            <constraint firstAttribute="height" constant="60" id="z5Y-bW-5n6"/>
-                        </constraints>
-                        <state key="normal" image="VideoPlayButton"/>
-                        <connections>
-                            <action selector="playButtonDidPress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="k89-Z7-yA1"/>
-                        </connections>
-                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="QQM-nZ-YQi" firstAttribute="centerY" secondItem="CFZ-Gf-SSd" secondAttribute="centerY" id="5LH-OP-V8J"/>
@@ -81,8 +70,6 @@
                     <constraint firstItem="CFZ-Gf-SSd" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="4" id="9hW-il-HNG"/>
                     <constraint firstAttribute="bottom" secondItem="CFZ-Gf-SSd" secondAttribute="bottom" constant="8" id="CQ6-tJ-vkF"/>
                     <constraint firstAttribute="trailing" secondItem="CFZ-Gf-SSd" secondAttribute="trailing" constant="4" id="FTk-SJ-8Lq"/>
-                    <constraint firstItem="YEk-ga-PHt" firstAttribute="centerX" secondItem="CFZ-Gf-SSd" secondAttribute="centerX" id="RTB-vv-VJ4"/>
-                    <constraint firstItem="YEk-ga-PHt" firstAttribute="centerY" secondItem="CFZ-Gf-SSd" secondAttribute="centerY" id="Ygb-wx-9k9"/>
                     <constraint firstItem="lTJ-xA-DR0" firstAttribute="top" secondItem="wIH-0Y-71i" secondAttribute="bottom" id="gpQ-OH-z0B"/>
                     <constraint firstItem="wIH-0Y-71i" firstAttribute="leading" secondItem="eM8-Tb-XK1" secondAttribute="trailing" constant="8" id="hYH-zu-rBD"/>
                     <constraint firstItem="eM8-Tb-XK1" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="iTn-hG-ifL"/>
@@ -101,7 +88,6 @@
             <connections>
                 <outlet property="activityIndicatorView" destination="QQM-nZ-YQi" id="f45-hI-TsE"/>
                 <outlet property="mediaView" destination="CFZ-Gf-SSd" id="xId-Qw-y76"/>
-                <outlet property="playButton" destination="YEk-ga-PHt" id="0lf-AO-Vvw"/>
                 <outlet property="profileImageView" destination="eM8-Tb-XK1" id="Yn9-Ei-ufU"/>
                 <outlet property="screenNameLabel" destination="wIH-0Y-71i" id="P9h-g7-nDE"/>
                 <outlet property="textView" destination="lTJ-xA-DR0" id="Gii-JQ-tDU"/>
@@ -109,7 +95,4 @@
             <point key="canvasLocation" x="331.5" y="400"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="VideoPlayButton" width="44" height="44"/>
-    </resources>
 </document>

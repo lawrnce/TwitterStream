@@ -9,13 +9,6 @@
 import UIKit
 import AVFoundation
 
-/**
-    The tweet's delegate
- */
-protocol TweetTableViewCellDelegate {
-    func tweetTableViewCell(tweetTableViewCell: TweetTableViewCell, didPressPlayButton url: NSURL)
-}
-
 class TweetTableViewCell: UITableViewCell {
 
     // Outlets
@@ -24,28 +17,13 @@ class TweetTableViewCell: UITableViewCell {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var mediaView: UIView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet weak var playButton: UIButton!
-    
-    var delegate: TweetTableViewCellDelegate?
-    
-    // If tweet contains video, store the url path
-    var videoURL: NSURL!
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
-        self.playButton.hidden = true
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-    }
-    
-    // Notify the delegate that play button was pressed
-    @IBAction func playButtonDidPress(sender: AnyObject) {
-        if (self.videoURL != nil) {
-            delegate?.tweetTableViewCell(self, didPressPlayButton: self.videoURL)
-        }
     }
     
     /**
@@ -53,10 +31,7 @@ class TweetTableViewCell: UITableViewCell {
      */
     override func prepareForReuse() {
         
-        // Initially hide play button
-        self.playButton.hidden = true
-        self.videoURL = nil
-        
+        // Start activity indicator
         self.activityIndicatorView.startAnimating()
         
         // Remove any subviews
@@ -74,14 +49,17 @@ class TweetTableViewCell: UITableViewCell {
             }
         }
         
+        // Clear profile image
         if (self.profileImageView.image != nil) {
             self.profileImageView.image = nil
         }
         
+        // Clear screen name
         if (self.screenNameLabel.text?.isEmpty == false) {
             self.screenNameLabel.text = ""
         }
         
+        // Clear text
         if (self.textView.text?.isEmpty == false) {
             self.textView.text = ""
         }

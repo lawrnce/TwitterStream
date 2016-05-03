@@ -18,7 +18,6 @@ enum TweetError: ErrorType {
     case TweetTextError
 }
 
-
 class TweetParser: NSObject {
 
     /**

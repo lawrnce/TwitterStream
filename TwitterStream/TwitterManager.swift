@@ -173,6 +173,7 @@ extension TwitterManager: NSURLConnectionDataDelegate {
         // Check if user paused stream
         if (self.shouldPause == true) {
             connection.cancel()
+            self.connected = false
             print("Connection Paused")
             return
         }
@@ -184,7 +185,11 @@ extension TwitterManager: NSURLConnectionDataDelegate {
         if (json != nil) {
             
             // Stream is connected
-            self.connected = true
+            if (self.connected == false) {
+                self.connected = true
+                print("Streaming keyword: ", self.keyword)
+            }
+            
             
             if (self.tryingToConnect == true) {
                 self.tryingToConnect = false

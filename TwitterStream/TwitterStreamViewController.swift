@@ -39,7 +39,7 @@ class TwitterStreamViewController: UIViewController {
     var searchController: UISearchController!
     
     // Playback is initially false
-    var playback: Bool = false
+    var playback: Bool = true
     
     // Tweet processing is handled on this queue
     var tweetQueue: dispatch_queue_t!
@@ -64,14 +64,6 @@ class TwitterStreamViewController: UIViewController {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
-    // MARK: - Navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if (segue.identifier == "showPhoto") {
-            
-        }
-    }
-    
     // MARK: - Key Value Observing
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         
@@ -81,6 +73,17 @@ class TwitterStreamViewController: UIViewController {
                 (object as! AVPlayer).play()
             }
         }
+    }
+    
+    // MARK: - Selectors
+    
+    /**
+        Plays the selected video. The button's tag matches the tweet's key.
+     */
+    func playVideo(sender: UIButton) {
+        let videoViewController = VideoPlayerViewController()
+        videoViewController.url = self.tweets.getMediaUrlForTweet(sender.tag)
+        self.presentViewController(videoViewController, animated: false, completion: nil)
     }
     
     // MARK: - Notifications
@@ -128,6 +131,7 @@ class TwitterStreamViewController: UIViewController {
         flushCache()
         self.tweets = nil
         self.currentList = nil
+        self.playback = true
         self.filterView.resetUIState()
         self.tableView.reloadData()
         self.twitterManager.createConnectionWithKeyword(keyword)
@@ -214,7 +218,6 @@ class TwitterStreamViewController: UIViewController {
         self.searchController.searchBar.subviews[0].subviews.flatMap(){ $0 as? UITextField }.first?.tintColor = UIColor.blueColor()
     }
     
-    
     // MARK: - Animations
     
     /**
@@ -260,47 +263,6 @@ class TwitterStreamViewController: UIViewController {
             }
         }
     }
-    
-    // MARK: - Helpers
-    
-    /**
-        Return the url for an animated gif.
-    
-        - Parameter data: The "media" entry in the tweet JSON.
-        - Returns: A NSURL of the gif.
-     */
-    private func getGifUrlFromData(data: SwiftyJSON.JSON) -> NSURL? {
-        
-        for (_, subJson) in data["media"] {
-            
-            // if type is gif
-            if (subJson["type"] == "animated_gif") {
-                return NSURL(string: subJson["url"].stringValue)
-            }
-        }
-        
-        return nil
-    }
-    
-    /**
-        Returns the url for a video.
-        - Parameter data: The "media" entry in the tweet JSON.
-        - Returns: A tuple containing the thumbnail image url and the video file url.
-     */
-    private func getVideoUrlsFromData(data: SwiftyJSON.JSON) -> (url: NSURL, thumbnailURL: NSURL)? {
-        
-        for (_, subJson) in data["media"] {
-            
-            // if type is video
-            if (subJson["type"] == "video") {
-                let videoURL = NSURL(string: subJson["url"].stringValue)!
-                let thumbnailURL = NSURL(string: subJson["thumbnail_url"].stringValue)!
-                return (videoURL, thumbnailURL)
-            }
-        }
-        
-        return nil
-    }
 }
 
 // MARK: - Twitter Manager Delegate
@@ -311,13 +273,6 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
         On receiving a tweet. Process it in the background.
      */
     func twitterManager(twitterManager: TwitterManager, didStreamTweet tweet: SwiftyJSON.JSON) {
-        
-        // Update filter UI if needed
-        if (self.filterView.playbackButton.hidden == true) {
-            self.filterView.playbackButton.hidden = false
-            self.filterView.setPlaybackButtonImageForState(true)
-            self.filterView.activityIndicator.stopAnimating()
-        }
         
         // lazy load a tweets data structure
         if (self.tweets == nil) {
@@ -337,6 +292,13 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         self.currentList.insert(key!, atIndex: 0)
                         self.animateNewTweetIfNeededForType(type!)
+                        
+                        // Update filter UI if needed
+                        if (self.filterView.playbackButton.hidden == true) {
+                            self.filterView.playbackButton.hidden = false
+                            self.filterView.setPlaybackButtonImageForState(true)
+                            self.filterView.activityIndicator.stopAnimating()
+                        }
                     })
                 }
             })
@@ -348,16 +310,25 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
      */
     func twitterManager(twitterManager: TwitterManager, failedWithErrorMessage error: String) {
         
-        print(error)
-        
-        // Alert UI
-        if (error == kTWITTER_ACCESS_DENIED) {
+        // Handle errors
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            self.filterView.activityIndicator.stopAnimating()
             
-        } else if (error == kNO_TWITTER_ACCOUNT){
-            
-        } else if (error == kCONNECTION_ERROR) {
-            
-        }
+            // Alert UI
+            if (error == kTWITTER_ACCESS_DENIED) {
+                let alert = UIAlertController(title: "Access Denied", message: kTWITTER_ACCESS_DENIED, preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: .Cancel, handler: { (action) -> Void in
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
+            } else if (error == kNO_TWITTER_ACCOUNT){
+                let alert = UIAlertController(title: "No Twitter Account Detected", message: kNO_TWITTER_ACCOUNT, preferredStyle: .Alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: .Cancel, handler: { (action) -> Void in
+                }))
+                self.presentViewController(alert, animated: true, completion: nil)
+            } else if (error == kCONNECTION_ERROR) {
+                print(error)
+            }
+        })
     }
     
     /**
@@ -371,14 +342,6 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
 // MARK: - Search Bar Delegate
 // Processes search terms
 extension TwitterStreamViewController: UISearchControllerDelegate, UISearchBarDelegate {
-    
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
-//        self.twitterManager.pauseStream()
-    }
-    
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-//        self.twitterManager.resumeStream()
-    }
     
     /**
         Take search term as "track" in HTTP stream.
@@ -442,6 +405,10 @@ extension TwitterStreamViewController: FilterViewDelegate {
             // Resume Stream
             if (self.playback == true) {
                 self.twitterManager.resumeStream()
+                
+                // Animate activity indicator until stream reconnects
+                self.filterView.playbackButton.hidden = true
+                self.filterView.activityIndicator.startAnimating()
             
             // Pause Stream
             } else {
@@ -467,8 +434,14 @@ extension TwitterStreamViewController: UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCellWithIdentifier(kTweetTableViewCellReuseIdentifier, forIndexPath: indexPath) as! TweetTableViewCell
         
+        // get key
+        let key = self.currentList[indexPath.row]
+        
         // Get tweet data from the TweetsModel
-        let tweet: (data: SwiftyJSON.JSON, type: TweetType) = self.tweets.tweetForKey(self.currentList[indexPath.row])
+        let tweet: (data: SwiftyJSON.JSON, type: TweetType) = self.tweets.tweetForKey(key)
+        
+        // Set cell tag as tweet key
+        cell.tag = key
         
         // Fetch profile image
         // Haneke will cache it for later
@@ -485,19 +458,19 @@ extension TwitterStreamViewController: UITableViewDataSource {
         switch(tweet.type) {
         case .Gif:
             
-            cell.mediaView.hidden = false
-            
             // Get gif url
-            if let url = getGifUrlFromData(tweet.data) {
+            if let gifURL = self.tweets.getMediaUrlForTweet(key) {
+                
+                cell.mediaView.hidden = false
                 
                 // Fetch and cache data
-                self.mediaCache.fetch(URL: url)
+                self.mediaCache.fetch(URL: gifURL)
                     
                     // Downloaded
                     .onSuccess({ (data) -> () in
                         
                         // get file url
-                        let file = self.getUrlForCachedKey(url.absoluteString)
+                        let file = self.getUrlForCachedKey(gifURL.absoluteString)
                       
                         // Create video item
                         let videoPlayer = AVPlayer(URL: file)
@@ -520,18 +493,19 @@ extension TwitterStreamViewController: UITableViewDataSource {
             
         case .Text:
             
+            // Adjust cell for text only
             cell.activityIndicatorView.stopAnimating()
             cell.mediaView.hidden = true
             
         case .Video:
 
-            cell.mediaView.hidden = false
-            
-            // Get thumbnail and content url
-            if let urls: (url: NSURL, thumbnailURL: NSURL) = self.getVideoUrlsFromData(tweet.data) {
+            // Get thumbnail
+            if let thumbnailURL = self.tweets.getImageUrlForTweet(key) {
    
+                cell.mediaView.hidden = false
+                
                 // Fetch thumbnail
-                self.imageCache.fetch(URL: urls.thumbnailURL)
+                self.imageCache.fetch(URL: thumbnailURL)
                     .onSuccess({ (image) -> () in
                         
                         // Set thumbnail image
@@ -539,28 +513,38 @@ extension TwitterStreamViewController: UITableViewDataSource {
                         imageView.contentMode = .ScaleAspectFit
                         imageView.image = image
                         cell.mediaView.addSubview(imageView)
-                        
-                        // Set video url and play button
-                        cell.videoURL = urls.url
-                        cell.delegate = self
-                        cell.playButton.hidden = false
                         cell.activityIndicatorView.stopAnimating()
+                        
+                        // Set play button
+                        let playButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60.0, height: 60.0))
+                        playButton.center = imageView.center
+                        playButton.tag = key
+                        playButton.setImage(UIImage(named: "VideoPlayButton"), forState: .Normal)
+                        playButton.addTarget(self, action: Selector("playVideo:"), forControlEvents: .TouchUpInside)
+                        cell.mediaView.addSubview(playButton)
                     })
             }
             
         case .Photo:
             
-            // Show media view and fetch image
-            cell.mediaView.hidden = false
-            self.imageCache.fetch(URL: NSURL(string: tweet.data["photos"].arrayValue.first!["url"].stringValue)!)
-                .onSuccess({ (image) -> () in
-                    
-                    let imageView = UIImageView(frame: cell.mediaView.bounds)
-                    imageView.contentMode = .ScaleAspectFit
-                    imageView.image = image
-                    cell.mediaView.addSubview(imageView)
-                    cell.activityIndicatorView.stopAnimating()
-                })
+            // Get image
+            if let imageURL = self.tweets.getImageUrlForTweet(key) {
+                
+                // Adjust cell view
+                cell.mediaView.hidden = false
+                
+                // Fetch image
+                self.imageCache.fetch(URL: imageURL)
+                    .onSuccess({ (image) -> () in
+                        
+                        // Set image
+                        let imageView = UIImageView(frame: cell.mediaView.bounds)
+                        imageView.contentMode = .ScaleAspectFit
+                        imageView.image = image
+                        cell.mediaView.addSubview(imageView)
+                        cell.activityIndicatorView.stopAnimating()
+                    })
+            }
         }
     
         return cell
@@ -584,18 +568,5 @@ extension TwitterStreamViewController: UITableViewDelegate {
         } else {
             return kMEDIA_TWEET_BASE_HEIGHT
         }
-    }
-}
-
-// MARK: - Tweet table view cell delegate
-extension TwitterStreamViewController: TweetTableViewCellDelegate {
-    
-    /**
-        Play the video file.
-     */
-    func tweetTableViewCell(tweetTableViewCell: TweetTableViewCell, didPressPlayButton url: NSURL) {
-        let videoViewController = VideoPlayerViewController()
-        videoViewController.url = url
-        self.presentViewController(videoViewController, animated: false, completion: nil)
     }
 }

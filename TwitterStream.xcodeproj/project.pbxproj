@@ -13,7 +13,6 @@
 		E60570FC1CD477D0006B5E4F /* TweetParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60570FB1CD477D0006B5E4F /* TweetParser.swift */; };
 		E60570FF1CD47839006B5E4F /* TwitterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E60570FE1CD47839006B5E4F /* TwitterTests.swift */; };
 		E61B3CB11CD80E9600AE15B5 /* VideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61B3CB01CD80E9600AE15B5 /* VideoPlayerViewController.swift */; };
-		E61B3CB31CD8102F00AE15B5 /* PhotoDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61B3CB21CD8102F00AE15B5 /* PhotoDetailViewController.swift */; };
 		E6765F431CD6752C004A373F /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6765F421CD6752C004A373F /* FilterView.swift */; };
 		E6765F451CD6754E004A373F /* FilterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E6765F441CD6754E004A373F /* FilterView.xib */; };
 		E6A9118B1CD6C87E008FD4B3 /* TweetsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6A9118A1CD6C87E008FD4B3 /* TweetsModel.swift */; };
@@ -61,7 +60,6 @@
 		E60570FB1CD477D0006B5E4F /* TweetParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetParser.swift; sourceTree = "<group>"; };
 		E60570FE1CD47839006B5E4F /* TwitterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TwitterTests.swift; sourceTree = "<group>"; };
 		E61B3CB01CD80E9600AE15B5 /* VideoPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerViewController.swift; sourceTree = "<group>"; };
-		E61B3CB21CD8102F00AE15B5 /* PhotoDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoDetailViewController.swift; sourceTree = "<group>"; };
 		E6765F421CD6752C004A373F /* FilterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
 		E6765F441CD6754E004A373F /* FilterView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FilterView.xib; sourceTree = "<group>"; };
 		E6A9118A1CD6C87E008FD4B3 /* TweetsModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsModel.swift; sourceTree = "<group>"; };
@@ -161,7 +159,6 @@
 			children = (
 				E6B668B71CD46C17000992FE /* TwitterStreamViewController.swift */,
 				E61B3CB01CD80E9600AE15B5 /* VideoPlayerViewController.swift */,
-				E61B3CB21CD8102F00AE15B5 /* PhotoDetailViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -505,7 +502,6 @@
 				E6A911901CD6F0C6008FD4B3 /* Constants.swift in Sources */,
 				E6765F431CD6752C004A373F /* FilterView.swift in Sources */,
 				E6B668B61CD46C17000992FE /* AppDelegate.swift in Sources */,
-				E61B3CB31CD8102F00AE15B5 /* PhotoDetailViewController.swift in Sources */,
 				E6A911931CD6F8B9008FD4B3 /* TweetTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

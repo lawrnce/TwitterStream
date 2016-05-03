@@ -36,6 +36,6 @@ let kMEDIA_TWEET_BASE_HEIGHT = kTWEET_CELL_PADDING * 2.0 + kTWEET_SCREEN_NAME_HE
 /**
     Error Messages
  */
-let kTWITTER_ACCESS_DENIED = "Access to Twitter is required."
+let kTWITTER_ACCESS_DENIED = "Twitter access is denied. Allows access in Settings under Twitter."
 let kNO_TWITTER_ACCOUNT = "No twitter account detected. You must have a Twitter account on this phone."
 let kCONNECTION_ERROR = "Connection failed. Attempting to reconnect."
