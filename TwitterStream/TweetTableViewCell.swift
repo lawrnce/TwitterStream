@@ -40,14 +40,14 @@ class TweetTableViewCell: UITableViewCell {
         }
         
         // Remove any gifs
-        if let sublayers = self.mediaView.layer.sublayers {
-            for layer in sublayers {
-                if (layer.classForCoder == AVPlayerLayer.self) {
-                    (layer as! AVPlayerLayer).player = nil
-                    layer.removeFromSuperlayer()
-                }
-            }
-        }
+//        if let sublayers = self.mediaView.layer.sublayers {
+//            for layer in sublayers {
+//                if (layer.classForCoder == AVPlayerLayer.self) {
+//                    (layer as! AVPlayerLayer).player = nil
+//                    layer.removeFromSuperlayer()
+//                }
+//            }
+//        }
         
         // Clear profile image
         if (self.profileImageView.image != nil) {
