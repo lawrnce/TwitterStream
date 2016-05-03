@@ -397,8 +397,8 @@ extension TwitterStreamViewController: FilterViewDelegate {
     func didTogglePlayback() {
         
         // Playback can only be toggled if connected to stream
-        if (self.twitterManager.connected == true) {
-            
+//        if (self.twitterManager.connected == true) {
+        
             self.playback = !self.playback
             self.filterView.setPlaybackButtonImageForState(self.playback)
             
@@ -414,7 +414,7 @@ extension TwitterStreamViewController: FilterViewDelegate {
             } else {
                 self.twitterManager.pauseStream()
             }
-        }
+//        }
     }
 }
 
