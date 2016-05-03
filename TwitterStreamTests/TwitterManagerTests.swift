@@ -11,7 +11,7 @@ import Nimble
 
 @testable import TwitterStream
 
-class TwitterTests: XCTestCase {
+class TwitterManagerTests: XCTestCase {
     
     var twitterManager: TwitterManager!
     

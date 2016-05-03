@@ -181,7 +181,7 @@ class TweetsModelTests: XCTestCase {
     
     /**
         Insert tweet performance
-        est: 0.074 sec (37% STDEV)
+        ~ 0.074 sec (37% STDEV) on iPhone 6+
      */
     func test_performance_insert_1000_tweets() {
         self.measureBlock {
@@ -197,7 +197,7 @@ class TweetsModelTests: XCTestCase {
     
     /**
         Filter tweets performance
-        est: 0.004 sec (27% STDEV)
+        ~ 0.004 sec (27% STDEV) on iPhone 6+
      */
     func test_perforrmance_filter_1000_tweets() {
         
