@@ -39,16 +39,6 @@ class TweetTableViewCell: UITableViewCell {
             subview.removeFromSuperview()
         }
         
-        // Remove any gifs
-//        if let sublayers = self.mediaView.layer.sublayers {
-//            for layer in sublayers {
-//                if (layer.classForCoder == AVPlayerLayer.self) {
-//                    (layer as! AVPlayerLayer).player = nil
-//                    layer.removeFromSuperlayer()
-//                }
-//            }
-//        }
-        
         // Clear profile image
         if (self.profileImageView.image != nil) {
             self.profileImageView.image = nil

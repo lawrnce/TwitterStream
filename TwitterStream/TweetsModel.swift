@@ -22,6 +22,17 @@ typealias TweetFilter = (gif: Bool, text: Bool, video: Bool, photo: Bool)
     Data structure to store tweets and allow for fast filtering.
  */
 class TweetsModel: NSObject {
+    
+    // MARK: - Public Variables
+    
+    // The number of tweets
+    var count: Int {
+        get {
+            return self.tweetHash.count
+        }
+    }
+    
+    // MARK: - Private variables
 
     // Map each tweet to an integer string key.
     private var tweetHash: [Int: (data: JSON, type: TweetType)]!
@@ -61,6 +72,25 @@ class TweetsModel: NSObject {
      */
     func tweetForKey(key: Int) -> (data: JSON, type: TweetType) {
         return (self.tweetHash?[key])!
+    }
+    
+    /**
+        Returns the keys for a tweet type.
+     
+        - Parameter type: The tweet type to be returned.
+        - Returns: An array with the tweets' keys.
+     */
+    func tweetsForType(type: TweetType) -> [Int] {
+        switch(type) {
+        case .Gif:
+            return self.gifList
+        case .Text:
+            return self.textList
+        case .Video:
+            return self.videoList
+        case .Photo:
+            return self.photoList
+        }
     }
     
     /**
@@ -134,11 +164,11 @@ class TweetsModel: NSObject {
         falls under the current filter, pass the key to the caller.
      
         - Parameter tweet: The tweet to be inserted.
-        - Parameter completion: The block to be executed after the tweet is inserted.
+        - Parameter completion: An optional block to be executed after the tweet is inserted.
                                 If the current filter allows the new tweet, the key is 
                                 passed to the block.
      */
-    func insertTweet(tweet: JSON, completion: (filtered: Bool, key: Int?, type: TweetType?) -> ()) {
+    func insertTweet(tweet: JSON, completion: ((filtered: Bool, key: Int?, type: TweetType?) -> ())?) {
         
         // Get tweet type
         let type = getTypeForTweet(tweet)
@@ -176,9 +206,19 @@ class TweetsModel: NSObject {
         
         // Determine if new tweet falls within current filter
         // If so pass the key to completion handler
-        if (filterStateForType(type) == true) {
-            completion(filtered: true, key: key, type: type)
+        if (filterStateForType(type) == true && completion != nil) {
+            completion!(filtered: true, key: key, type: type)
         }
+    }
+    
+    /**
+        Returns the filter value for the given type.
+     
+        - Parameter type: The tweet type.
+        - Returns: A boolean value for the fileter type.
+     */
+    func filterValueForType(type: TweetType) -> Bool {
+        
     }
     
     /**

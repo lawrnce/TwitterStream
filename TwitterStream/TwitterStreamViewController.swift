@@ -519,7 +519,6 @@ extension TwitterStreamViewController: UITableViewDataSource {
                             playButton.setImage(UIImage(named: "VideoPlayButton"), forState: .Normal)
                             playButton.addTarget(self, action: Selector("playVideo:"), forControlEvents: .TouchUpInside)
                             cell.mediaView.addSubview(playButton)
-                            
                         })
                     })
             }

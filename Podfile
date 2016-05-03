@@ -14,6 +14,7 @@ end
 
 target 'TwitterStreamTests' do
   testing_pods
+  pod 'SwiftyJSON'
 end
 
 target 'TwitterStreamUITests' do

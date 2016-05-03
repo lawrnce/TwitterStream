@@ -29,7 +29,7 @@ class TwitterTests: XCTestCase {
         Check if Twitter stream connects.
      */
     func test_twitter_stream_responds_with_data_type_json() {
-        self.twitterManager.createStreamConnectionForKeyword("test")
-        expect(self.twitterManager.isConnected).toEventually(beTruthy(), timeout: 5)
+        self.twitterManager.createConnectionWithKeyword("test")
+        expect(self.twitterManager.connected).toEventually(beTruthy(), timeout: 5)
     }
 }
