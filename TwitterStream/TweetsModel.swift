@@ -174,13 +174,16 @@ class TweetsModel: NSObject {
      */
     func insertTweet(tweet: JSON, completion: ((filtered: Bool, key: Int?, type: TweetType?) -> ())?) {
         
-        // Only allow unique tweets
-        guard (self.tweetIds.contains(tweet["id"].int!) == false) else {
-            return
+        // Check if an id exists.
+        if (tweet["id"].isExists()) {
+            
+            // if so then only allow unique ones
+            guard (self.tweetIds.contains(tweet["id"].int!) == false) else {
+                return
+            }
+            
+            self.tweetIds.append(tweet["id"].int!)
         }
-        
-        // Add new id
-        self.tweetIds.append(tweet["id"].int!)
         
         // Get tweet type
         let type = typeForTweet(tweet)

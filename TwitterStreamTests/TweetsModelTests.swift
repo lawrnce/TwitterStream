@@ -207,7 +207,6 @@ class TweetsModelTests: XCTestCase {
             self.tweets.insertTweet(self.textTweet, completion: nil)
             self.tweets.insertTweet(self.videoTweet, completion: nil)
             self.tweets.insertTweet(self.photoTweet, completion: nil)
-            
         }
         
         // set a filter
