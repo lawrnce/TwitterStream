@@ -467,6 +467,10 @@ extension TwitterStreamViewController: UITableViewDataSource {
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                            
+                            // Sometimes gifs will not be removed in reuse if gifs come in too fast
+                            // Force a refresh
+                            cell.clearMediaView()
+                            
                             // Get file url
                             let file = self.getUrlForCachedKey(gifURL.absoluteString)
                       

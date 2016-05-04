@@ -18,6 +18,16 @@ class TweetTableViewCell: UITableViewCell {
     @IBOutlet weak var mediaView: UIView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
+    /**
+        Clears any media subviews.
+     */
+    func clearMediaView() {
+        // Remove any subviews
+        for subview in self.mediaView.subviews {
+            subview.removeFromSuperview()
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -34,10 +44,7 @@ class TweetTableViewCell: UITableViewCell {
         // Start activity indicator
         self.activityIndicatorView.startAnimating()
         
-        // Remove any subviews
-        for subview in self.mediaView.subviews {
-            subview.removeFromSuperview()
-        }
+        clearMediaView()
         
         // Clear profile image
         if (self.profileImageView.image != nil) {
