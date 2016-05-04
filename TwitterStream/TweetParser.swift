@@ -13,6 +13,7 @@ import SwiftyJSON
     Tweet Error Types
  */
 enum TweetError: ErrorType {
+    case TweetIdError
     case TweetScreenNameError
     case TweetProfileImageURLError
     case TweetTextError
@@ -34,7 +35,8 @@ class TweetParser: NSObject {
         
         // Try to parse basic tweet info
         do {
-            let basicTweet: (screenName: String, profileImageURL: String, text: String) = try parseBasicInfo(data)
+            let basicTweet: (id: Int, screenName: String, profileImageURL: String, text: String) = try parseBasicInfo(data)
+            tweet["id"] = basicTweet.id
             tweet["screen_name"] = basicTweet.screenName
             tweet["profile_image_url"] = basicTweet.profileImageURL
             tweet["text"] = basicTweet.text
@@ -88,13 +90,21 @@ class TweetParser: NSObject {
         - Parameter data: Raw JSON data from a Twitter Stream.
         - Returns: A triple containing screen name, profile image url, and text. Nil if invalid.
      */
-    private func parseBasicInfo(data: JSON) throws -> (screenName: String, profileImageURL: String, text: String) {
+    private func parseBasicInfo(data: JSON) throws -> (id: Int, screenName: String, profileImageURL: String, text: String) {
         
+        var id: Int!
         var screenName: String!
         var profileImageURL: String!
         var text: String!
         
-         // Check valid screen name
+        // Check valid id
+        if (data["id"].isExists() && data["id"].int != -1){
+            id = data["id"].int
+        } else {
+            throw TweetError.TweetIdError
+        }
+        
+        // Check valid screen name
         if (data["user"]["screen_name"].isExists() && data["user"]["screen_name"].stringValue != "-1") {
             screenName = data["user"]["screen_name"].stringValue
         } else {
@@ -115,7 +125,7 @@ class TweetParser: NSObject {
             throw TweetError.TweetTextError
         }
 
-        return (screenName, profileImageURL, text)
+        return (id, screenName, profileImageURL, text)
     }
     
     /**

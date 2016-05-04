@@ -41,6 +41,9 @@ class TwitterStreamViewController: UIViewController {
     // Playback is initially false
     var playback: Bool = true
     
+    // Should animate new cell
+    var shouldAnimate: Bool = true
+    
     // Tweet processing is handled on this queue
     var tweetQueue: dispatch_queue_t!
     
@@ -283,6 +286,8 @@ extension TwitterStreamViewController: TwitterManagerDelegate {
         // Insert tweet
         dispatch_async(self.tweetQueue) { () -> Void in
             
+            print(tweet)
+            
             self.tweets.insertTweet(tweet, completion: { (filtered, key, type) -> () in
                 
                 // Current filter allows new tweet
@@ -396,6 +401,8 @@ extension TwitterStreamViewController: FilterViewDelegate {
      */
     func didTogglePlayback() {
         
+//        print(self.currentList)
+        
         self.playback = !self.playback
         self.filterView.setPlaybackButtonImageForState(self.playback)
             
@@ -466,22 +473,26 @@ extension TwitterStreamViewController: UITableViewDataSource {
                     .onSuccess({ (data) -> () in
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                           
-                            // Sometimes gifs will not be removed in reuse if gifs come in too fast
-                            // Force a refresh
-                            cell.clearMediaView()
                             
-                            // Get file url
-                            let file = self.getUrlForCachedKey(gifURL.absoluteString)
-                      
-                            // Create gif view
-                            let gifView = GifView(frame: cell.mediaView.bounds)
-                            gifView.gifURL = file
-                            cell.mediaView.addSubview(gifView)
-                            
-                            // Set KVO and Notification
-                            gifView.player.addObserver(self, forKeyPath: "status", options: .New, context: nil)
-                            self.loopVideoPlayer(gifView.player)
+                            // If the cell is visible
+                            if ((self.tableView.indexPathsForVisibleRows?.contains(indexPath))!) {
+                                
+                                // Sometimes gifs will not be removed in reuse if gifs come in too fast
+                                // Force a refresh
+                                cell.clearMediaView()
+                                
+                                // Get file url
+                                let file = self.getUrlForCachedKey(gifURL.absoluteString)
+                                
+                                // Create gif view
+                                let gifView = GifView(frame: cell.mediaView.bounds)
+                                gifView.gifURL = file
+                                cell.mediaView.addSubview(gifView)
+                                
+                                // Set KVO and Notification
+                                gifView.player.addObserver(self, forKeyPath: "status", options: .New, context: nil)
+                                self.loopVideoPlayer(gifView.player)
+                            }
                         })
                     })
                 
@@ -508,21 +519,25 @@ extension TwitterStreamViewController: UITableViewDataSource {
                     .onSuccess({ (image) -> () in
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        
-                            // Set thumbnail image
-                            let imageView = UIImageView(frame: cell.mediaView.bounds)
-                            imageView.contentMode = .ScaleAspectFit
-                            imageView.image = image
-                            cell.mediaView.addSubview(imageView)
-                            cell.activityIndicatorView.stopAnimating()
-                        
-                            // Set play button
-                            let playButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60.0, height: 60.0))
-                            playButton.center = imageView.center
-                            playButton.tag = key
-                            playButton.setImage(UIImage(named: "VideoPlayButton"), forState: .Normal)
-                            playButton.addTarget(self, action: Selector("playVideo:"), forControlEvents: .TouchUpInside)
-                            cell.mediaView.addSubview(playButton)
+                            
+                            // If the cell is visible
+                            if ((self.tableView.indexPathsForVisibleRows?.contains(indexPath))!) {
+                                
+                                // Set thumbnail image
+                                let imageView = UIImageView(frame: cell.mediaView.bounds)
+                                imageView.contentMode = .ScaleAspectFit
+                                imageView.image = image
+                                cell.mediaView.addSubview(imageView)
+                                cell.activityIndicatorView.stopAnimating()
+                                
+                                // Set play button
+                                let playButton = UIButton(frame: CGRect(x: 0, y: 0, width: 60.0, height: 60.0))
+                                playButton.center = imageView.center
+                                playButton.tag = key
+                                playButton.setImage(UIImage(named: "VideoPlayButton"), forState: .Normal)
+                                playButton.addTarget(self, action: Selector("playVideo:"), forControlEvents: .TouchUpInside)
+                                cell.mediaView.addSubview(playButton)
+                            }
                         })
                     })
             }
@@ -541,13 +556,16 @@ extension TwitterStreamViewController: UITableViewDataSource {
                         
                         dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         
-                            // Set image
-                            let imageView = UIImageView(frame: cell.mediaView.bounds)
-                            imageView.contentMode = .ScaleAspectFit
-                            imageView.image = image
-                            cell.mediaView.addSubview(imageView)
-                            cell.activityIndicatorView.stopAnimating()
-                        
+                            // If the cell is visible
+                            if ((self.tableView.indexPathsForVisibleRows?.contains(indexPath))!) {
+                              
+                                // Set image
+                                let imageView = UIImageView(frame: cell.mediaView.bounds)
+                                imageView.contentMode = .ScaleAspectFit
+                                imageView.image = image
+                                cell.mediaView.addSubview(imageView)
+                                cell.activityIndicatorView.stopAnimating()
+                            }
                         })
                     })
             }

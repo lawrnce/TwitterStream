@@ -37,6 +37,9 @@ class TweetsModel: NSObject {
     // Map each tweet to an integer string key.
     private var tweetHash: [Int: (data: JSON, type: TweetType)]!
     
+    // A list of the tweet's unique ids
+    private var tweetIds: [Int]!
+    
     // List of gif tweets
     private var gifList: [Int]!
     
@@ -55,6 +58,7 @@ class TweetsModel: NSObject {
     override init() {
         super.init()
         self.tweetHash = [Int: (data: JSON, type: TweetType)]()
+        self.tweetIds = [Int]()
         self.textList = [Int]()
         self.gifList = [Int]()
         self.videoList = [Int]()
@@ -169,6 +173,14 @@ class TweetsModel: NSObject {
                                 passed to the block.
      */
     func insertTweet(tweet: JSON, completion: ((filtered: Bool, key: Int?, type: TweetType?) -> ())?) {
+        
+        // Only allow unique tweets
+        guard (self.tweetIds.contains(tweet["id"].int!) == false) else {
+            return
+        }
+        
+        // Add new id
+        self.tweetIds.append(tweet["id"].int!)
         
         // Get tweet type
         let type = typeForTweet(tweet)
